@@ -17,11 +17,20 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000;
-  cursor: pointer;
   flex-shrink: 0;
   /* Cap height so controls are always visible without scrolling */
   max-height: 72vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Clickzone fills the video area; separated from double-click on the wrapper */
+.player-page__video-clickzone {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .player-page__backdrop {
@@ -236,4 +245,77 @@
     flex-wrap: wrap;
     gap: 20px;
   }
+}
+
+/* ── Volume control ───────────────────────────────────────────────────────── */
+.player-page__volume-icon {
+  color: #aaa;
+  font-size: 18px;
+}
+
+.player-page__volume-icon--muted {
+  color: #e50914;
+  font-size: 18px;
+}
+
+.player-page__btn-mute {
+  color: #aaa !important;
+  transition: color 0.15s ease;
+}
+
+.player-page__btn-mute:hover {
+  color: #fff !important;
+}
+
+.player-page__btn-mute--active {
+  color: #e50914 !important;
+}
+
+/* ── Fullscreen ───────────────────────────────────────────────────────────── */
+
+/* The video wrapper fills the screen; controls stay inside it */
+.player-page__video--fullscreen,
+.player-page__video:fullscreen,
+.player-page__video:-webkit-full-screen {
+  max-height: none !important;
+  height: 100vh !important;
+  aspect-ratio: unset !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Video clickzone expands to fill remaining space */
+.player-page__video--fullscreen .player-page__video-clickzone {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-page__video--fullscreen .player-page__video-clickzone .player-page__backdrop {
+  height: 100%;
+}
+
+/* Controls fade in on hover in fullscreen */
+.player-page__video--fullscreen .player-page__controls,
+.player-page__video:fullscreen .player-page__controls,
+.player-page__video:-webkit-full-screen .player-page__controls {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 100%) !important;
+}
+
+.player-page__video--fullscreen:hover .player-page__controls,
+.player-page__video:fullscreen:hover .player-page__controls,
+.player-page__video:-webkit-full-screen:hover .player-page__controls,
+.player-page__video--fullscreen .player-page__controls:focus-within,
+.player-page__video:fullscreen .player-page__controls:focus-within {
+  opacity: 1;
+}
+
+.player-page__video--fullscreen .player-page__video-clickzone {
+  cursor: none;
+}
+
+.player-page__video--fullscreen:hover .player-page__video-clickzone {
+  cursor: default;
 }

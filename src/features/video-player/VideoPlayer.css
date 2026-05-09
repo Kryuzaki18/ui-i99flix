@@ -138,3 +138,86 @@
   line-height: 2;
 
 }
+
+/* ── Volume control ───────────────────────────────────────────────────────── */
+.player__volume-icon {
+  color: #aaa;
+  font-size: 16px;
+}
+
+.player__volume-icon--muted {
+  color: #e50914;
+  font-size: 16px;
+}
+
+.player__btn-mute {
+  color: #aaa !important;
+  transition: color 0.15s ease;
+}
+
+.player__btn-mute:hover {
+  color: #fff !important;
+}
+
+.player__btn-mute--active {
+  color: #e50914 !important;
+}
+
+/* ── Fullscreen ───────────────────────────────────────────────────────────── */
+
+/* The root wrapper fills the screen when fullscreen is active */
+.player__fullscreen-root {
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.player__fullscreen-root--active,
+.player__fullscreen-root:fullscreen,
+.player__fullscreen-root:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+/* In fullscreen the video area expands to fill remaining space */
+.player__fullscreen-root--active .player__video-area,
+.player__fullscreen-root:fullscreen .player__video-area,
+.player__fullscreen-root:-webkit-full-screen .player__video-area {
+  flex: 1;
+  aspect-ratio: unset !important;
+  max-height: none !important;
+}
+
+/* Controls bar fades in on hover in fullscreen */
+.player__fullscreen-root--active .player__controls,
+.player__fullscreen-root:fullscreen .player__controls,
+.player__fullscreen-root:-webkit-full-screen .player__controls {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.player__fullscreen-root--active:hover .player__controls,
+.player__fullscreen-root:fullscreen:hover .player__controls,
+.player__fullscreen-root:-webkit-full-screen:hover .player__controls,
+.player__fullscreen-root--active .player__controls:focus-within,
+.player__fullscreen-root:fullscreen .player__controls:focus-within {
+  opacity: 1;
+}
+
+/* Hide cursor when idle in fullscreen */
+.player__fullscreen-root--active .player__video-area {
+  cursor: none;
+}
+
+.player__fullscreen-root--active:hover .player__video-area {
+  cursor: default;
+}
+
+.player__expand-btn {
+  color: #aaa !important;
+  transition: color 0.15s ease;
+}
+
+.player__expand-btn:hover {
+  color: #fff !important;
+}
