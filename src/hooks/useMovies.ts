@@ -4,7 +4,7 @@ import {
   getFeaturedMovies,
   getTrendingMovies,
   getNewReleases,
-} from '../core/services/movieService';
+} from '../services/movieService';
 
 export const useMovies = () => {
   const featured = useMemo(() => getFeaturedMovies(), []);

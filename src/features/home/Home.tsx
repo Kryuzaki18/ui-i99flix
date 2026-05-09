@@ -5,6 +5,7 @@ import MovieCard from '../../components/ui/movie-card/MovieCard';
 import { useMovies } from '../../hooks/useMovies';
 import { useTheme } from '../../context/ThemeContext';
 import type { Movie } from '../../models/movie';
+import './Home.css';
 
 const { Title } = Typography;
 
@@ -23,12 +24,10 @@ interface SectionProps {
 
 function MovieSection({ title, icon, movies, onPlay, onDetail }: SectionProps) {
   return (
-    <section style={{ marginBottom: 48 }}>
-      <Space align="center" style={{ marginBottom: 20 }}>
-        <span style={{ color: '#e50914', fontSize: 20 }}>{icon}</span>
-        <Title level={3} style={{ margin: 0 }}>
-          {title}
-        </Title>
+    <section className="home-section">
+      <Space align="center" className="home-section__header">
+        <span className="home-section__icon">{icon}</span>
+        <Title level={3} className="home-section__title">{title}</Title>
       </Space>
       <Row gutter={[16, 16]}>
         {movies.map((movie) => (
@@ -43,37 +42,17 @@ function MovieSection({ title, icon, movies, onPlay, onDetail }: SectionProps) {
 
 export default function Home({ onPlay, onDetail }: HomeProps) {
   const { featured, trending, newReleases } = useMovies();
-  useTheme(); // ensure re-render on theme change
+  useTheme();
 
   return (
     <div>
-      <div style={{ marginBottom: 48 }}>
+      <div className="home-hero-wrap">
         <HeroBanner movies={featured} onPlay={onPlay} onDetail={onDetail} />
       </div>
 
-      <MovieSection
-        title="Trending Now"
-        icon={<FireOutlined />}
-        movies={trending}
-        onPlay={onPlay}
-        onDetail={onDetail}
-      />
-
-      <MovieSection
-        title="New Releases"
-        icon={<ThunderboltOutlined />}
-        movies={newReleases}
-        onPlay={onPlay}
-        onDetail={onDetail}
-      />
-
-      <MovieSection
-        title="Top Rated"
-        icon={<StarOutlined />}
-        movies={featured}
-        onPlay={onPlay}
-        onDetail={onDetail}
-      />
+      <MovieSection title="Trending Now"  icon={<FireOutlined />}        movies={trending}    onPlay={onPlay} onDetail={onDetail} />
+      <MovieSection title="New Releases"  icon={<ThunderboltOutlined />} movies={newReleases} onPlay={onPlay} onDetail={onDetail} />
+      <MovieSection title="Top Rated"     icon={<StarOutlined />}        movies={featured}    onPlay={onPlay} onDetail={onDetail} />
     </div>
   );
 }

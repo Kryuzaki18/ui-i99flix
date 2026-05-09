@@ -3,6 +3,7 @@ import { UserOutlined, LockOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
+import './Login.css';
 
 const { Title, Text } = Typography;
 
@@ -32,71 +33,33 @@ export default function Login() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: colors.authBg,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px 16px',
-      }}
-    >
-      {/* Ambient glow */}
-      <div
-        style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundImage:
-            'radial-gradient(circle at 20% 50%, rgba(229,9,20,0.07) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(99,0,255,0.07) 0%, transparent 50%)',
-          pointerEvents: 'none',
-        }}
-      />
+    <div className="login-page" style={{ background: colors.authBg }}>
+      <div className="login-page__glow" />
 
       <div
+        className="login-card"
         style={{
-          width: '100%',
-          maxWidth: 420,
           background: colors.authCard,
-          borderRadius: 16,
-          padding: 'clamp(24px, 5vw, 40px)',
           border: `1px solid ${colors.border}`,
-          backdropFilter: 'blur(20px)',
-          boxShadow: isDark
-            ? '0 24px 64px rgba(0,0,0,0.6)'
-            : '0 8px 40px rgba(0,0,0,0.12)',
-          position: 'relative',
-          zIndex: 1,
+          boxShadow: isDark ? '0 24px 64px rgba(0,0,0,0.6)' : '0 8px 40px rgba(0,0,0,0.12)',
         }}
       >
         {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <div className="login-card__logo">
           <Space align="center">
-            <PlayCircleFilled style={{ fontSize: 36, color: '#e50914' }} />
-            <Title level={2} style={{ margin: 0, letterSpacing: -1 }}>
-              Lorem<span style={{ color: '#e50914' }}>Flix</span>
+            <PlayCircleFilled className="login-card__logo-icon" />
+            <Title level={2} className="login-card__logo-title">
+              Lorem<span className="login-card__logo-accent">Flix</span>
             </Title>
           </Space>
-          <Text style={{ color: colors.textMuted, display: 'block', marginTop: 8 }}>
+          <Text className="login-card__subtitle" style={{ color: colors.textMuted }}>
             Sign in to continue watching
           </Text>
         </div>
 
-        {error && (
-          <Alert
-            message={error}
-            type="error"
-            showIcon
-            style={{ marginBottom: 20 }}
-          />
-        )}
+        {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} />}
 
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          initialValues={{ remember: true }}
-        >
+        <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={{ remember: true }}>
           <Form.Item
             name="email"
             rules={[
@@ -129,9 +92,7 @@ export default function Login() {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
-              <a href="#" style={{ color: '#e50914', fontSize: 13 }}>
-                Forgot password?
-              </a>
+              <a href="#" className="login-card__forgot">Forgot password?</a>
             </div>
           </Form.Item>
 
@@ -142,14 +103,7 @@ export default function Login() {
               size="large"
               block
               loading={loading}
-              style={{
-                background: '#e50914',
-                borderColor: '#e50914',
-                fontWeight: 600,
-                height: 48,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              className="login-card__submit-btn"
             >
               Sign In
             </Button>
@@ -162,28 +116,19 @@ export default function Login() {
 
         <Space style={{ width: '100%', justifyContent: 'center' }} size={12}>
           {['Google', 'GitHub', 'Apple'].map((provider) => (
-            <Button
-              key={provider}
-              style={{ borderRadius: 8, flex: 1 }}
-            >
-              {provider}
-            </Button>
+            <Button key={provider} className="login-card__social-btn">{provider}</Button>
           ))}
         </Space>
 
-        <div style={{ textAlign: 'center', marginTop: 24 }}>
+        <div className="login-card__footer">
           <Text style={{ color: colors.textMuted }}>
             Don't have an account?{' '}
-            <Link to="/signup" style={{ color: '#e50914', fontWeight: 600 }}>
-              Sign up free
-            </Link>
+            <Link to="/signup" className="login-card__signup-link">Sign up free</Link>
           </Text>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: 12 }}>
-          <Text style={{ color: colors.textMuted, fontSize: 11 }}>
-            Demo: demo@lorem.com / password
-          </Text>
+        <div className="login-card__demo-hint">
+          <Text style={{ color: colors.textMuted }}>Demo: demo@lorem.com / password</Text>
         </div>
       </div>
     </div>

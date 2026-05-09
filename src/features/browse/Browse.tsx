@@ -1,13 +1,17 @@
-import { Typography, Row, Col, Input, Select, Space, Empty, Segmented } from 'antd';
+import { useState } from 'react';
+import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination } from 'antd';
 import { SearchOutlined, AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
 import { useBrowse } from '../../hooks/useBrowse';
-import { GENRES } from '../../core/services/movieService';
+import { GENRES } from '../../services/movieService';
 import { useTheme } from '../../context/ThemeContext';
 import type { Movie } from '../../models/movie';
-import { useState } from 'react';
+import './Browse.css';
 
 const { Title, Text } = Typography;
+
+const PAGE_SIZE_OPTIONS = ['8', '12', '16', '24'];
+const DEFAULT_PAGE_SIZE = 12;
 
 interface BrowseProps {
   onPlay: (movie: Movie) => void;
@@ -16,30 +20,40 @@ interface BrowseProps {
 
 export default function Browse({ onPlay, onDetail }: BrowseProps) {
   const { movies, selectedGenre, setSelectedGenre, searchQuery, setSearchQuery } = useBrowse();
-  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
-  const { colors } = useTheme();
+  const [layout, setLayout]     = useState<'grid' | 'list'>('grid');
+  const [page, setPage]         = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const { colors }              = useTheme();
+
+  // Reset to page 1 whenever filters change
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenre(genre);
+    setPage(1);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+    setPage(1);
+  };
+
+  // Slice movies for current page
+  const totalMovies   = movies.length;
+  const pagedMovies   = movies.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <div>
-      {/* Header */}
-      <div style={{ marginBottom: 32 }}>
-        <Title level={2} style={{ margin: '0 0 8px' }}>
-          Browse Movies
-        </Title>
+      {/* ── Header ── */}
+      <div className="browse-header">
+        <Title level={2}>Browse Movies</Title>
         <Text style={{ color: colors.textMuted }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </Text>
       </div>
 
-      {/* Filters bar */}
+      {/* ── Filters bar ── */}
       <div
-        style={{
-          background: colors.bgCard,
-          borderRadius: 12,
-          padding: '16px 20px',
-          marginBottom: 28,
-          border: `1px solid ${colors.border}`,
-        }}
+        className="browse-filters"
+        style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
       >
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} sm={24} md={10} lg={8}>
@@ -47,7 +61,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
               placeholder="Search movies, genres..."
               prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               allowClear
               style={{ borderRadius: 8 }}
             />
@@ -55,7 +69,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
           <Col xs={24} sm={16} md={10} lg={12}>
             <Select
               value={selectedGenre}
-              onChange={setSelectedGenre}
+              onChange={handleGenreChange}
               style={{ width: '100%' }}
               options={GENRES}
               placeholder="Select genre"
@@ -74,22 +88,18 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         </Row>
       </div>
 
-      {/* Genre quick-filter pills */}
-      <Space size={8} wrap style={{ marginBottom: 24 }}>
+      {/* ── Genre quick-filter pills ── */}
+      <Space size={8} className="browse-genre-pills">
         {GENRES.map((g) => (
           <button
             key={g.value}
-            onClick={() => setSelectedGenre(g.value)}
+            className="browse-genre-pill"
+            onClick={() => handleGenreChange(g.value)}
             style={{
-              padding: '6px 16px',
-              borderRadius: 20,
               border: `1px solid ${selectedGenre === g.value ? '#e50914' : colors.border}`,
               background: selectedGenre === g.value ? '#e50914' : 'transparent',
               color: selectedGenre === g.value ? '#fff' : colors.textMuted,
-              cursor: 'pointer',
-              fontSize: 13,
               fontWeight: selectedGenre === g.value ? 600 : 400,
-              transition: 'all 0.2s ease',
             }}
           >
             {g.label}
@@ -97,24 +107,30 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         ))}
       </Space>
 
-      {/* Results count */}
-      <div style={{ marginBottom: 20 }}>
-        <Text style={{ color: colors.textMuted }}>
-          Showing{' '}
-          <Text strong style={{ color: colors.textPrimary }}>
-            {movies.length}
-          </Text>{' '}
-          movies
-          {searchQuery && (
-            <>
-              {' '}for "
-              <Text style={{ color: '#e50914' }}>{searchQuery}</Text>"
-            </>
+      {/* ── Pagination (top) ── */}
+      <div className="browse-pagination">
+        <Pagination
+          current={page}
+          pageSize={pageSize}
+          total={totalMovies}
+          onChange={(p, ps) => { setPage(p); if (ps !== pageSize) { setPageSize(ps); setPage(1); } }}
+          onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
+          showSizeChanger
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
+          showTotal={(total, range) => (
+            <Text style={{ color: colors.textMuted }}>
+              {range[0]}–{range[1]} of{' '}
+              <Text strong style={{ color: colors.textPrimary }}>{total}</Text> movies
+              {searchQuery && (
+                <> for "<Text style={{ color: '#e50914' }}>{searchQuery}</Text>"</>
+              )}
+            </Text>
           )}
-        </Text>
+          disabled={totalMovies === 0}
+        />
       </div>
 
-      {/* Grid / List */}
+      {/* ── Grid / List ── */}
       {movies.length === 0 ? (
         <Empty
           description={
@@ -126,7 +142,7 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         />
       ) : layout === 'grid' ? (
         <Row gutter={[16, 20]}>
-          {movies.map((movie) => (
+          {pagedMovies.map((movie) => (
             <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
               <MovieCard movie={movie} onPlay={onPlay} onDetail={onDetail} />
             </Col>
@@ -134,40 +150,27 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
         </Row>
       ) : (
         <Space direction="vertical" size={12} style={{ width: '100%' }}>
-          {movies.map((movie) => (
+          {pagedMovies.map((movie) => (
             <div
               key={movie.id}
+              className="browse-list-row"
               style={{
                 background: colors.bgCard,
                 border: `1px solid ${colors.border}`,
-                borderRadius: 12,
-                overflow: 'hidden',
-                display: 'flex',
-                cursor: 'pointer',
-                transition: 'border-color 0.2s, box-shadow 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.borderColor = '#e50914';
-                (e.currentTarget as HTMLDivElement).style.boxShadow =
-                  '0 2px 12px rgba(229,9,20,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.borderColor = colors.border;
-                (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
               }}
             >
               <img
                 src={movie.thumbnail}
                 alt={movie.title}
-                style={{ width: 140, height: 90, objectFit: 'cover', flexShrink: 0 }}
+                className="browse-list-row__thumb"
               />
-              <div style={{ padding: '12px 16px', flex: 1, minWidth: 0 }}>
+              <div className="browse-list-row__body">
                 <Row justify="space-between" align="top">
                   <Col flex="auto">
-                    <Text strong style={{ fontSize: 15, display: 'block' }}>
+                    <Text strong className="browse-list-row__title">
                       {movie.title}
                     </Text>
-                    <Space size={6} style={{ marginTop: 4 }} wrap>
+                    <Space size={6} className="browse-list-row__meta" wrap>
                       {movie.genre.map((g) => (
                         <Text key={g} style={{ color: colors.textMuted, fontSize: 12 }}>
                           {g}
@@ -178,50 +181,28 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
                       </Text>
                     </Space>
                     <Text
-                      style={{
-                        color: colors.textMuted,
-                        fontSize: 13,
-                        display: 'block',
-                        marginTop: 6,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
+                      className="browse-list-row__desc"
+                      style={{ color: colors.textMuted }}
                     >
                       {movie.description}
                     </Text>
                   </Col>
-                  <Col style={{ paddingLeft: 12, flexShrink: 0 }}>
+                  <Col className="browse-list-row__actions">
                     <Space direction="vertical" size={6} align="end">
-                      <Text style={{ color: '#fadb14', fontWeight: 700 }}>
-                        ★ {movie.rating}
-                      </Text>
+                      <Text className="browse-list-row__rating">★ {movie.rating}</Text>
                       <Space size={6}>
                         <button
+                          className="browse-list-btn-play"
                           onClick={() => onPlay(movie)}
-                          style={{
-                            background: '#e50914',
-                            border: 'none',
-                            borderRadius: 6,
-                            color: '#fff',
-                            padding: '4px 12px',
-                            cursor: 'pointer',
-                            fontSize: 12,
-                            fontWeight: 600,
-                          }}
                         >
                           Play
                         </button>
                         <button
+                          className="browse-list-btn-info"
                           onClick={() => onDetail(movie)}
                           style={{
-                            background: 'transparent',
                             border: `1px solid ${colors.border}`,
-                            borderRadius: 6,
                             color: colors.textMuted,
-                            padding: '4px 12px',
-                            cursor: 'pointer',
-                            fontSize: 12,
                           }}
                         >
                           Info
@@ -234,6 +215,21 @@ export default function Browse({ onPlay, onDetail }: BrowseProps) {
             </div>
           ))}
         </Space>
+      )}
+
+      {/* ── Pagination (bottom) ── */}
+      {totalMovies > 0 && (
+        <div className="browse-pagination" style={{ marginTop: 32 }}>
+          <Pagination
+            current={page}
+            pageSize={pageSize}
+            total={totalMovies}
+            onChange={(p, ps) => { setPage(p); if (ps !== pageSize) { setPageSize(ps); setPage(1); } }}
+            onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
+            showSizeChanger
+            pageSizeOptions={PAGE_SIZE_OPTIONS}
+          />
+        </div>
       )}
     </div>
   );

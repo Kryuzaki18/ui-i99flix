@@ -1,0 +1,125 @@
+/* ── Signup page ──────────────────────────────────────────────────────────── */
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* Ambient glow */
+.signup-page__glow {
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 50%, rgba(229, 9, 20, 0.07) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(99, 0, 255, 0.07) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Card */
+.signup-card {
+  width: 100%;
+  max-width: 460px;
+  border-radius: 16px;
+  padding: clamp(24px, 5vw, 40px);
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo */
+.signup-card__logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.signup-card__logo-icon {
+  font-size: 32px;
+  color: #e50914;
+}
+
+.signup-card__logo-title {
+  margin: 0 !important;
+  letter-spacing: -1px;
+}
+
+.signup-card__logo-accent {
+  color: #e50914;
+}
+
+.signup-card__subtitle {
+  display: block;
+  margin-top: 6px;
+}
+
+/* Steps */
+.signup-card__steps {
+  margin-bottom: 28px;
+}
+
+/* Plan features list */
+.signup-card__features {
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.signup-card__feature-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.signup-card__feature-icon {
+  color: #e50914;
+  margin-top: 2px;
+}
+
+/* Buttons */
+.signup-card__btn-primary {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+}
+
+.signup-card__btn-back {
+  border-radius: 8px !important;
+  flex: 1;
+}
+
+/* Success state */
+.signup-card__success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.signup-card__success-icon {
+  font-size: 64px !important;
+  color: #52c41a !important;
+  margin-bottom: 16px;
+}
+
+.signup-card__success-title {
+  margin-bottom: 8px !important;
+}
+
+.signup-card__success-btn {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 48px !important;
+  padding-inline: 32px !important;
+}
+
+/* Footer */
+.signup-card__footer {
+  text-align: center;
+}
+
+.signup-card__signin-link {
+  color: #e50914;
+  font-weight: 600;
+}

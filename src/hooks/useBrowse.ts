@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { getMoviesByGenre, searchMovies } from '../core/services/movieService';
+import { getMoviesByGenre, searchMovies } from '../services/movieService';
 import type { Movie } from '../models/movie';
 
 export const useBrowse = () => {

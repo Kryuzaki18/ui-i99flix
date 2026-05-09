@@ -1,0 +1,60 @@
+/* ── Sidebar Drawer ───────────────────────────────────────────────────────── */
+.sidebar__header {
+  padding: 20px 20px 16px;
+}
+
+.sidebar__logo-wrap {
+  margin-bottom: 16px;
+}
+
+.sidebar__logo-icon {
+  font-size: 26px;
+  color: #e50914;
+}
+
+.sidebar__logo-text {
+  font-size: 18px !important;
+  letter-spacing: -0.5px;
+}
+
+.sidebar__logo-accent {
+  color: #e50914;
+}
+
+.sidebar__avatar {
+  background: #e50914 !important;
+  flex-shrink: 0;
+}
+
+.sidebar__user-name {
+  display: block;
+  font-size: 14px;
+}
+
+.sidebar__user-email {
+  font-size: 12px;
+}
+
+/* Menu */
+.sidebar__menu {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px 0;
+}
+
+/* Footer */
+.sidebar__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+}
+
+.sidebar__footer-divider {
+  margin: 0 0 12px !important;
+}
+
+.sidebar__footer-text {
+  font-size: 11px;
+}

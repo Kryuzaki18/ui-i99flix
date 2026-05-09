@@ -1,4 +1,4 @@
-import type { Movie, Genre } from '../../models/movie';
+import type { Movie, Genre } from '../models/movie';
 
 // Placeholder image generator using picsum with consistent seeds
 const thumb = (seed: number) => `https://picsum.photos/seed/movie${seed}/400/220`;

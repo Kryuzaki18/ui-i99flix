@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import { Drawer, Button, Tag, Rate, Typography, Space, Divider, Row, Col, Skeleton } from 'antd';
-import {
-  PlayCircleOutlined,
-  CalendarOutlined,
-  ClockCircleOutlined,
-  StarFilled,
-} from '@ant-design/icons';
+import { PlayCircleOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
 import { useTheme } from '../../../context/ThemeContext';
+import './MovieDetailDrawer.css';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -29,16 +25,10 @@ const genreColors: Record<string, string> = {
   Animation: 'green',
 };
 
-export default function MovieDetailDrawer({
-  movie,
-  open,
-  onClose,
-  onPlay,
-}: MovieDetailDrawerProps) {
+export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: MovieDetailDrawerProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
-  const { colors, isDark } = useTheme();
+  const { colors, isDark }        = useTheme();
 
-  // Reset on movie change
   const handleAfterOpenChange = (visible: boolean) => {
     if (visible) setImgLoaded(false);
   };
@@ -52,87 +42,59 @@ export default function MovieDetailDrawer({
       afterOpenChange={handleAfterOpenChange}
       width="min(520px, 100vw)"
       styles={{
-        body: { background: colors.bgBase, padding: 0 },
-        header: {
-          background: colors.bgBase,
-          borderBottom: `1px solid ${colors.border}`,
-        },
-        mask: { backdropFilter: 'blur(4px)' },
+        body:   { background: colors.bgBase, padding: 0 },
+        header: { background: colors.bgBase, borderBottom: `1px solid ${colors.border}` },
+        mask:   { backdropFilter: 'blur(4px)' },
       }}
-      title={
-        <Text strong style={{ fontSize: 16 }}>
-          Movie Details
-        </Text>
-      }
+      title={<Text strong style={{ fontSize: 16 }}>Movie Details</Text>}
     >
-      {/* ── Backdrop with skeleton ── */}
-      <div style={{ position: 'relative', height: 220, background: colors.skeletonBg }}>
+      {/* Backdrop */}
+      <div
+        className="detail-drawer__backdrop-wrap"
+        style={{ background: colors.skeletonBg }}
+      >
         {!imgLoaded && (
-          <Skeleton.Image
-            active
-            style={{ width: '100%', height: 220, borderRadius: 0 }}
-          />
+          <Skeleton.Image active className="detail-drawer__skeleton-img" />
         )}
         <img
           src={movie.backdrop}
           alt={movie.title}
           onLoad={() => setImgLoaded(true)}
-          style={{
-            width: '100%',
-            height: 220,
-            objectFit: 'cover',
-            display: imgLoaded ? 'block' : 'none',
-          }}
+          className="detail-drawer__backdrop-img"
+          style={{ display: imgLoaded ? 'block' : 'none' }}
         />
         {imgLoaded && (
           <>
             <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: `linear-gradient(to top, ${colors.bgBase} 0%, transparent 60%)`,
-              }}
+              className="detail-drawer__backdrop-gradient"
+              style={{ background: `linear-gradient(to top, ${colors.bgBase} 0%, transparent 60%)` }}
             />
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 16,
-                left: 20,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
+            <div className="detail-drawer__rating-badge">
               <StarFilled style={{ color: '#fadb14', fontSize: 18 }} />
-              <Text style={{ color: '#fadb14', fontSize: 20, fontWeight: 700 }}>
-                {movie.rating}
-              </Text>
+              <Text className="detail-drawer__rating-value">{movie.rating}</Text>
               <Text style={{ color: isDark ? '#aaa' : '#666', fontSize: 14 }}>/10</Text>
             </div>
           </>
         )}
       </div>
 
-      <div style={{ padding: '20px 24px' }}>
+      {/* Body */}
+      <div className="detail-drawer__body">
         {!imgLoaded ? (
           <Skeleton active paragraph={{ rows: 4 }} />
         ) : (
           <>
-            <Title level={3} style={{ margin: '0 0 8px' }}>
-              {movie.title}
-            </Title>
+            <Title level={3} className="detail-drawer__title">{movie.title}</Title>
 
-            <Space size={8} wrap style={{ marginBottom: 16 }}>
+            <Space size={8} wrap className="detail-drawer__tags">
               {movie.genre.map((g) => (
-                <Tag key={g} color={genreColors[g] || 'default'}>
-                  {g}
-                </Tag>
+                <Tag key={g} color={genreColors[g] || 'default'}>{g}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
-              {movie.trending && <Tag color="red">Trending</Tag>}
+              {movie.trending   && <Tag color="red">Trending</Tag>}
             </Space>
 
-            <Row gutter={24} style={{ marginBottom: 16 }}>
+            <Row gutter={24} className="detail-drawer__meta-row">
               <Col span={12}>
                 <Space>
                   <CalendarOutlined style={{ color: colors.textMuted }} />
@@ -151,49 +113,42 @@ export default function MovieDetailDrawer({
               disabled
               allowHalf
               defaultValue={movie.rating / 2}
-              style={{ fontSize: 16, color: '#fadb14', marginBottom: 16 }}
+              className="detail-drawer__rate"
             />
 
-            <Divider style={{ margin: '12px 0' }} />
+            <Divider />
 
             <Text
               strong
-              style={{
-                color: colors.textMuted,
-                fontSize: 12,
-                textTransform: 'uppercase',
-                letterSpacing: 1,
-              }}
+              className="detail-drawer__synopsis-label"
+              style={{ color: colors.textMuted }}
             >
               Synopsis
             </Text>
-            <Paragraph style={{ color: colors.textSecondary, marginTop: 8, lineHeight: 1.7 }}>
+            <Paragraph
+              className="detail-drawer__synopsis-text"
+              style={{ color: colors.textSecondary }}
+            >
               {movie.description}
             </Paragraph>
-            <Paragraph style={{ color: colors.textMuted, lineHeight: 1.7 }}>
+            <Paragraph
+              className="detail-drawer__extra-text"
+              style={{ color: colors.textMuted }}
+            >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
               exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </Paragraph>
 
-            <Divider style={{ margin: '12px 0' }} />
+            <Divider />
 
             <Button
               type="primary"
               size="large"
               block
               icon={<PlayCircleOutlined />}
-              onClick={() => {
-                onPlay(movie);
-                onClose();
-              }}
-              style={{
-                background: '#e50914',
-                borderColor: '#e50914',
-                fontWeight: 600,
-                height: 48,
-                fontSize: 16,
-              }}
+              className="detail-drawer__play-btn"
+              onClick={() => { onPlay(movie); onClose(); }}
             >
               Play Now
             </Button>

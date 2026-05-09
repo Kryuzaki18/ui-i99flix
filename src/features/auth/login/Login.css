@@ -1,0 +1,93 @@
+/* ── Login page ───────────────────────────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* Ambient glow overlay */
+.login-page__glow {
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.07) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(99, 0, 255, 0.07) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Card */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: clamp(24px, 5vw, 40px);
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo */
+.login-card__logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-card__logo-icon {
+  font-size: 36px;
+  color: #e50914;
+}
+
+.login-card__logo-title {
+  margin: 0 !important;
+  letter-spacing: -1px;
+}
+
+.login-card__logo-accent {
+  color: #e50914;
+}
+
+.login-card__subtitle {
+  display: block;
+  margin-top: 8px;
+}
+
+/* Forgot link */
+.login-card__forgot {
+  color: #e50914;
+  font-size: 13px;
+}
+
+/* Submit button */
+.login-card__submit-btn {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+  font-size: 16px !important;
+}
+
+/* Social buttons */
+.login-card__social-btn {
+  border-radius: 8px !important;
+  flex: 1;
+}
+
+/* Footer links */
+.login-card__footer {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.login-card__signup-link {
+  color: #e50914;
+  font-weight: 600;
+}
+
+.login-card__demo-hint {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 11px;
+}

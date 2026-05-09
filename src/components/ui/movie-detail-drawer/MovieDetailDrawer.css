@@ -1,0 +1,84 @@
+/* ── Movie Detail Drawer ──────────────────────────────────────────────────── */
+.detail-drawer__backdrop-wrap {
+  position: relative;
+  height: 220px;
+}
+
+.detail-drawer__skeleton-img {
+  width: 100% !important;
+  height: 220px !important;
+  border-radius: 0 !important;
+}
+
+.detail-drawer__backdrop-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-drawer__backdrop-gradient {
+  position: absolute;
+  inset: 0;
+}
+
+.detail-drawer__rating-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-drawer__rating-value {
+  color: #fadb14 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+}
+
+/* Body */
+.detail-drawer__body {
+  padding: 20px 24px;
+}
+
+.detail-drawer__title {
+  margin: 0 0 8px !important;
+}
+
+.detail-drawer__tags {
+  margin-bottom: 16px;
+}
+
+.detail-drawer__meta-row {
+  margin-bottom: 16px;
+}
+
+.detail-drawer__rate {
+  font-size: 16px !important;
+  color: #fadb14 !important;
+  margin-bottom: 16px !important;
+}
+
+.detail-drawer__synopsis-label {
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.detail-drawer__synopsis-text {
+  margin-top: 8px !important;
+  line-height: 1.7 !important;
+}
+
+.detail-drawer__extra-text {
+  line-height: 1.7 !important;
+}
+
+.detail-drawer__play-btn {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 48px !important;
+  font-size: 16px !important;
+}

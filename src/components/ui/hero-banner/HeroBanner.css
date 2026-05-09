@@ -1,0 +1,147 @@
+/* ── Hero Banner ──────────────────────────────────────────────────────────── */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: clamp(380px, 60vh, 620px);
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Skeleton placeholder */
+.hero-banner__skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 64px);
+  gap: 16px;
+}
+
+/* Backdrop image */
+.hero-banner__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s ease;
+}
+
+/* Gradient overlay */
+.hero-banner__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+}
+
+/* Content panel */
+.hero-banner__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 64px);
+  max-width: 600px;
+}
+
+.hero-banner__tags {
+  margin-bottom: 12px;
+}
+
+.hero-banner__title {
+  color: #fff !important;
+  margin: 0 0 12px !important;
+  font-size: clamp(24px, 4vw, 48px) !important;
+  line-height: 1.2 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-banner__meta {
+  margin-bottom: 12px;
+}
+
+.hero-banner__rating-value {
+  color: #fadb14 !important;
+  font-weight: 700 !important;
+}
+
+.hero-banner__meta-text {
+  color: #ccc !important;
+}
+
+.hero-banner__desc {
+  color: #ddd !important;
+  font-size: clamp(13px, 1.5vw, 16px) !important;
+  margin-bottom: 24px !important;
+  max-width: 480px;
+  line-height: 1.6 !important;
+}
+
+.hero-banner__btn-play {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 44px !important;
+  padding-inline: 28px !important;
+}
+
+.hero-banner__btn-info {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  height: 44px !important;
+  padding-inline: 28px !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Arrow nav buttons */
+.hero-banner__arrow {
+  position: absolute !important;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  z-index: 2;
+}
+
+.hero-banner__arrow--prev { left: 16px; }
+.hero-banner__arrow--next { right: 16px; }
+
+/* Dot indicators */
+.hero-banner__dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.hero-banner__dot {
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.hero-banner__dot--active {
+  width: 24px;
+  background: #e50914;
+}
+
+.hero-banner__dot--inactive {
+  width: 8px;
+  background: rgba(255, 255, 255, 0.4);
+}

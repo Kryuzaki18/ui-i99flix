@@ -1,0 +1,22 @@
+/* ── Home page ────────────────────────────────────────────────────────────── */
+.home-hero-wrap {
+  margin-bottom: 48px;
+}
+
+/* Movie section */
+.home-section {
+  margin-bottom: 48px;
+}
+
+.home-section__header {
+  margin-bottom: 20px;
+}
+
+.home-section__icon {
+  color: #e50914;
+  font-size: 20px;
+}
+
+.home-section__title {
+  margin: 0 !important;
+}
