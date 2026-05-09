@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
@@ -9,12 +9,12 @@ import './MovieCard.css';
 const { Text, Paragraph } = Typography;
 
 interface MovieCardProps {
-  movie: Movie;
-  onPlay: (movie: Movie) => void;
+  movie:    Movie;
+  onPlay:   (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
 
-export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
+function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark } = useTheme();
 
@@ -44,13 +44,14 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
 
           {/* Hover overlay */}
           {imgLoaded && (
-            <div className="movie-card__overlay">
+            <div className="movie-card__overlay" role="group" aria-label={`Actions for ${movie.title}`}>
               <Tooltip title="Play">
                 <Button
                   type="primary"
                   shape="circle"
                   icon={<PlayCircleOutlined />}
                   size="large"
+                  aria-label={`Play ${movie.title}`}
                   onClick={() => onPlay(movie)}
                   style={{ background: '#e50914', borderColor: '#e50914' }}
                 />
@@ -60,6 +61,7 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
                   shape="circle"
                   icon={<InfoCircleOutlined />}
                   size="large"
+                  aria-label={`More info about ${movie.title}`}
                   onClick={() => onDetail(movie)}
                   className="movie-card__overlay-btn-info"
                 />
@@ -69,8 +71,8 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
 
           {/* Rating badge */}
           {imgLoaded && (
-            <div className="movie-card__rating">
-              <StarFilled style={{ color: '#fadb14', fontSize: 12 }} />
+            <div className="movie-card__rating" aria-label={`Rating: ${movie.rating} out of 10`}>
+              <StarFilled style={{ color: '#fadb14', fontSize: 12 }} aria-hidden="true" />
               <Text className="movie-card__rating-value">{movie.rating}</Text>
             </div>
           )}
@@ -119,6 +121,7 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
                 allowHalf
                 defaultValue={movie.rating / 2}
                 className="movie-card__rate"
+                aria-label={`${movie.rating / 2} out of 5 stars`}
               />
             </>
           )}
@@ -127,3 +130,6 @@ export default function MovieCard({ movie, onPlay, onDetail }: MovieCardProps) {
     </Card>
   );
 }
+
+// Memoize — only re-renders when movie data or callbacks change
+export default memo(MovieCardInner);

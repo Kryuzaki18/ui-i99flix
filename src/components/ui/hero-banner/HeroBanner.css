@@ -145,3 +145,14 @@
   width: 8px;
   background: rgba(255, 255, 255, 0.4);
 }
+
+/* ── Focus-visible for keyboard navigation ───────────────────────────────── */
+.hero-banner__dot:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 3px;
+}
+
+.hero-banner__arrow:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
+}

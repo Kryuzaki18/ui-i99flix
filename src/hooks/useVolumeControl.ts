@@ -51,7 +51,7 @@ const SILENT_MP3 =
   'AAABAAADQWXIDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
-const STORAGE_KEY    = 'loremflix-volume';
+const STORAGE_KEY    = '99flix-volume';
 const DEFAULT_VOLUME = 80;
 
 const clamp = (v: number, min = 0, max = 100) => Math.max(min, Math.min(max, v));
@@ -233,7 +233,7 @@ export function useVolumeControl(): VolumeControl {
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title:  meta.title,
-      artist: meta.artist  ?? 'LoremFlix',
+      artist: meta.artist  ?? '99Flix',
       album:  meta.album   ?? 'Now Playing',
       artwork: meta.artwork
         ? [

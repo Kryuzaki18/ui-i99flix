@@ -155,7 +155,7 @@ export default function Player() {
             <Space align="center" size={8}>
               <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
               <Text className="player-page__brand">
-                Lorem<span style={{ color: '#e50914' }}>Flix</span>
+                99<span style={{ color: '#e50914' }}>Flix</span>
               </Text>
             </Space>
           </div>

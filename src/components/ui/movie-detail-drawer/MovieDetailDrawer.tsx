@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Drawer, Button, Tag, Rate, Typography, Space, Divider, Row, Col, Skeleton } from 'antd';
 import { PlayCircleOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
@@ -9,13 +9,13 @@ import './MovieDetailDrawer.css';
 const { Title, Paragraph, Text } = Typography;
 
 interface MovieDetailDrawerProps {
-  movie: Movie | null;
-  open: boolean;
+  movie:   Movie | null;
+  open:    boolean;
   onClose: () => void;
-  onPlay: (movie: Movie) => void;
+  onPlay:  (movie: Movie) => void;
 }
 
-export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: MovieDetailDrawerProps) {
+function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDrawerProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const { colors, isDark }        = useTheme();
 
@@ -48,7 +48,7 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
         )}
         <img
           src={movie.backdrop}
-          alt={movie.title}
+          alt={`${movie.title} backdrop`}
           onLoad={() => setImgLoaded(true)}
           className="detail-drawer__backdrop-img"
           style={{ display: imgLoaded ? 'block' : 'none' }}
@@ -58,9 +58,13 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
             <div
               className="detail-drawer__backdrop-gradient"
               style={{ background: `linear-gradient(to top, ${colors.bgBase} 0%, transparent 60%)` }}
+              aria-hidden="true"
             />
-            <div className="detail-drawer__rating-badge">
-              <StarFilled style={{ color: '#fadb14', fontSize: 18 }} />
+            <div
+              className="detail-drawer__rating-badge"
+              aria-label={`Rating: ${movie.rating} out of 10`}
+            >
+              <StarFilled style={{ color: '#fadb14', fontSize: 18 }} aria-hidden="true" />
               <Text className="detail-drawer__rating-value">{movie.rating}</Text>
               <Text style={{ color: isDark ? '#aaa' : '#666', fontSize: 14 }}>/10</Text>
             </div>
@@ -87,13 +91,13 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
             <Row gutter={24} className="detail-drawer__meta-row">
               <Col span={12}>
                 <Space>
-                  <CalendarOutlined style={{ color: colors.textMuted }} />
+                  <CalendarOutlined style={{ color: colors.textMuted }} aria-hidden="true" />
                   <Text style={{ color: colors.textSecondary }}>{movie.year}</Text>
                 </Space>
               </Col>
               <Col span={12}>
                 <Space>
-                  <ClockCircleOutlined style={{ color: colors.textMuted }} />
+                  <ClockCircleOutlined style={{ color: colors.textMuted }} aria-hidden="true" />
                   <Text style={{ color: colors.textSecondary }}>{movie.duration}</Text>
                 </Space>
               </Col>
@@ -104,6 +108,7 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
               allowHalf
               defaultValue={movie.rating / 2}
               className="detail-drawer__rate"
+              aria-label={`${movie.rating / 2} out of 5 stars`}
             />
 
             <Divider />
@@ -121,14 +126,6 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
             >
               {movie.description}
             </Paragraph>
-            <Paragraph
-              className="detail-drawer__extra-text"
-              style={{ color: colors.textMuted }}
-            >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </Paragraph>
 
             <Divider />
 
@@ -136,8 +133,9 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
               type="primary"
               size="large"
               block
-              icon={<PlayCircleOutlined />}
+              icon={<PlayCircleOutlined aria-hidden="true" />}
               className="detail-drawer__play-btn"
+              aria-label={`Play ${movie.title}`}
               onClick={() => { onPlay(movie); onClose(); }}
             >
               Play Now
@@ -148,3 +146,5 @@ export default function MovieDetailDrawer({ movie, open, onClose, onPlay }: Movi
     </Drawer>
   );
 }
+
+export default memo(MovieDetailDrawerInner);

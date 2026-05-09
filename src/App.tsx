@@ -1,13 +1,17 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout, ConfigProvider, theme, Spin } from 'antd';
+import { PlayCircleFilled } from '@ant-design/icons';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { useUIStore }     from './store/uiStore';
-import { usePlayerStore } from './store/playerStore';
+import { useUIStore }      from './store/uiStore';
+import { usePlayerStore }  from './store/playerStore';
+import { useAuthStore }    from './store/authStore';
+import { useSessionQuery } from './api/useAuthQuery';
 import Nav from './components/navigation/nav/Nav';
 import Sidebar from './components/navigation/sidebar/Sidebar';
 import VideoPlayer from './features/video-player/VideoPlayer';
 import MovieDetailDrawer from './components/ui/movie-detail-drawer/MovieDetailDrawer';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // ─── Lazy-loaded routes ───────────────────────────────────────────────────────
 const Home       = lazy(() => import('./features/home/Home'));
@@ -18,31 +22,125 @@ const PlayerPage = lazy(() => import('./features/player/Player'));
 
 const { Content, Footer } = Layout;
 
-function PageLoader() {
-  const { colors } = useTheme();
+// ─── Full-screen branded splash ───────────────────────────────────────────────
+// Rendered as a persistent overlay that fades out once auth is resolved.
+// Never unmounts instantly — the fade gives the router time to redirect
+// before any protected content becomes visible.
+const FADE_DURATION = 350; // ms — must match the CSS transition below
+
+function AppSplash({ visible }: { visible: boolean }) {
+  // Keep the node in the DOM until the fade finishes, then remove it
+  const [mounted, setMounted] = useState(true);
+
+  useEffect(() => {
+    if (!visible) {
+      const t = setTimeout(() => setMounted(false), FADE_DURATION);
+      return () => clearTimeout(t);
+    }
+  }, [visible]);
+
+  if (!mounted) return null;
+
   return (
     <div
       style={{
-        minHeight: '60vh',
+        position: 'fixed',
+        inset: 0,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: colors.bgBase,
+        gap: 24,
+        background: '#0d0d1a',
+        zIndex: 9999,
+        // Fade out when visible flips to false
+        opacity: visible ? 1 : 0,
+        transition: `opacity ${FADE_DURATION}ms ease`,
+        pointerEvents: visible ? 'all' : 'none',
       }}
     >
+      {/* Logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <PlayCircleFilled style={{ fontSize: 40, color: '#e50914' }} />
+        <span
+          style={{
+            fontSize: 32,
+            fontWeight: 800,
+            color: '#fff',
+            letterSpacing: '-1px',
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          99<span style={{ color: '#e50914' }}>Flix</span>
+        </span>
+      </div>
+
+      {/* Spinner */}
       <Spin size="large" />
+
+      {/* Sliding progress bar */}
+      <div
+        style={{
+          width: 180,
+          height: 3,
+          borderRadius: 2,
+          background: 'rgba(255,255,255,0.08)',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '40%',
+            background: '#e50914',
+            borderRadius: 2,
+            animation: 'splashBar 1.4s ease-in-out infinite',
+          }}
+        />
+      </div>
+
+      <style>{`
+        @keyframes splashBar {
+          0%   { left: -40%; }
+          100% { left: 110%; }
+        }
+      `}</style>
     </div>
   );
 }
+
+// ─── Route guards ─────────────────────────────────────────────────────────────
+
+/** Blocks protected pages until auth is confirmed. Never flashes content. */
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+
+  // Auth check still in-flight — render nothing (AppBootstrap already shows splash)
+  if (isCheckingAuth) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+/** Redirects already-authenticated users away from auth pages. */
+function GuestRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+
+  if (isCheckingAuth) return null;
+  if (isAuthenticated) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
+// ─── App shell ────────────────────────────────────────────────────────────────
 
 function AppLayout() {
   const location = useLocation();
   const { colors } = useTheme();
 
-  // ── UI store ──────────────────────────────────────────────────────────────
   const { sidebarOpen, openSidebar, closeSidebar } = useUIStore();
-
-  // ── Player store ──────────────────────────────────────────────────────────
   const {
     playingMovie, closePlayer,
     detailMovie,  closeDetail,
@@ -54,10 +152,10 @@ function AppLayout() {
 
   if (isAuthPage) {
     return (
-      <Suspense fallback={<PageLoader />}>
+      <Suspense fallback={<AppSplash visible />}>
         <Routes>
-          <Route path="/login"  element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login"  element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
         </Routes>
       </Suspense>
     );
@@ -77,10 +175,10 @@ function AppLayout() {
           boxSizing: 'border-box',
         }}
       >
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<AppSplash visible />}>
           <Routes>
-            <Route path="/"       element={<Home />} />
-            <Route path="/browse" element={<Browse />} />
+            <Route path="/"       element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
           </Routes>
         </Suspense>
       </Content>
@@ -116,11 +214,10 @@ function AppLayout() {
           )}
         </div>
         <div style={{ color: colors.textMuted, fontSize: 12 }}>
-          © 2024 LoremFlix — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          © 2024 99Flix — Stream unlimited movies, anytime.
         </div>
       </Footer>
 
-      {/* Global modals — driven by playerStore, no prop-drilling */}
       <VideoPlayer
         movie={playingMovie}
         open={!!playingMovie}
@@ -135,6 +232,26 @@ function AppLayout() {
     </Layout>
   );
 }
+
+// ─── Bootstrap: fires the session check BEFORE any route renders ──────────────
+// The splash is an overlay — children always render underneath it.
+// This means the router resolves and redirects happen during the fade,
+// so by the time the splash is fully gone the correct page is already mounted.
+function AppBootstrap({ children }: { children: React.ReactNode }) {
+  const { isCheckingAuth } = useAuthStore();
+  useSessionQuery();
+
+  return (
+    <>
+      <ErrorBoundary>
+        {children}
+      </ErrorBoundary>
+      <AppSplash visible={isCheckingAuth} />
+    </>
+  );
+}
+
+// ─── Themed wrapper ───────────────────────────────────────────────────────────
 
 function ThemedApp() {
   const { isDark, colors } = useTheme();
@@ -186,19 +303,21 @@ function ThemedApp() {
       }}
     >
       <BrowserRouter>
-        <Routes>
-          {/* ── Standalone full-page player — no nav/footer shell ── */}
-          <Route
-            path="/player/:id"
-            element={
-              <Suspense fallback={<div style={{ background: '#000', minHeight: '100vh' }} />}>
-                <PlayerPage />
-              </Suspense>
-            }
-          />
-          {/* ── Main app shell ── */}
-          <Route path="*" element={<AppLayout />} />
-        </Routes>
+        <AppBootstrap>
+          <Routes>
+            {/* Standalone full-page player — no nav/footer shell */}
+            <Route
+              path="/player/:id"
+              element={
+                <Suspense fallback={<AppSplash visible />}>
+                  <PlayerPage />
+                </Suspense>
+              }
+            />
+            {/* Main app shell */}
+            <Route path="*" element={<AppLayout />} />
+          </Routes>
+        </AppBootstrap>
       </BrowserRouter>
     </ConfigProvider>
   );

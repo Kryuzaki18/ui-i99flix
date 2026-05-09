@@ -7,6 +7,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import { useTheme } from '../../../context/ThemeContext';
+import { useSignoutMutation } from '../../../api/useAuthQuery';
 import './Sidebar.css';
 
 const { Text } = Typography;
@@ -20,6 +21,13 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   const location              = useLocation();
   const navigate              = useNavigate();
   const { colors, isDark }    = useTheme();
+  const signoutMutation       = useSignoutMutation();
+
+  const handleSignout = () => {
+    signoutMutation.mutate(undefined, {
+      onSuccess: () => { onClose(); navigate('/login'); },
+    });
+  };
 
   const menuItems: MenuProps['items'] = [
     { key: '/',         icon: <HomeOutlined />,      label: 'Home' },
@@ -31,10 +39,11 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { key: 'history',   icon: <HistoryOutlined />,   label: 'Watch History' },
     { type: 'divider' },
     { key: 'settings',  icon: <SettingOutlined />,   label: 'Settings' },
-    { key: '/login',    icon: <LoginOutlined />,     label: 'Sign In', danger: true },
+    { key: 'signout',   icon: <LoginOutlined />,     label: 'Sign Out', danger: true },
   ];
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
+    if (key === 'signout') { handleSignout(); return; }
     if (key.startsWith('/')) { navigate(key); onClose(); }
   };
 
@@ -58,7 +67,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <Space align="center" size={8} className="sidebar__logo-wrap">
           <PlayCircleFilled className="sidebar__logo-icon" />
           <Text strong className="sidebar__logo-text">
-            Lorem<span className="sidebar__logo-accent">Flix</span>
+            99<span className="sidebar__logo-accent">Flix</span>
           </Text>
         </Space>
 
@@ -90,7 +99,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       >
         <Divider className="sidebar__footer-divider" />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
-          © 2024 LoremFlix. All rights reserved.
+          © 2024 99Flix. All rights reserved.
         </Text>
         <br />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
