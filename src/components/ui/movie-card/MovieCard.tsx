@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined, StarFilled } from '@ant-design/icons';
-import type { Movie } from '../../types/movie';
-import { useTheme } from '../../context/ThemeContext';
+import type { Movie } from '../../../models/movie';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { Text, Paragraph } = Typography;
 

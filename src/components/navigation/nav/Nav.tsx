@@ -14,7 +14,7 @@ import {
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import type { MenuProps } from 'antd';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { Header } = Layout;
 const { Text } = Typography;

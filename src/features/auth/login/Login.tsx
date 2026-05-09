@@ -2,7 +2,7 @@ import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert } from
 import { UserOutlined, LockOutlined, PlayCircleFilled } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { Title, Text } = Typography;
 

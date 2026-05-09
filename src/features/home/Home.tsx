@@ -1,10 +1,10 @@
 import { Typography, Row, Col, Space } from 'antd';
 import { FireOutlined, ThunderboltOutlined, StarOutlined } from '@ant-design/icons';
-import HeroBanner from '../../components/ui/HeroBanner';
-import MovieCard from '../../components/ui/MovieCard';
+import HeroBanner from '../../components/ui/hero-banner/HeroBanner';
+import MovieCard from '../../components/ui/movie-card/MovieCard';
 import { useMovies } from '../../hooks/useMovies';
 import { useTheme } from '../../context/ThemeContext';
-import type { Movie } from '../../types/movie';
+import type { Movie } from '../../models/movie';
 
 const { Title } = Typography;
 

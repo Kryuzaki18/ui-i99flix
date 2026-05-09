@@ -1,10 +1,10 @@
 import { Typography, Row, Col, Input, Select, Space, Empty, Segmented } from 'antd';
 import { SearchOutlined, AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
-import MovieCard from '../../components/ui/MovieCard';
-import { useBrowse } from '../../hooks/useMovies';
+import MovieCard from '../../components/ui/movie-card/MovieCard';
+import { useBrowse } from '../../hooks/useBrowse';
 import { GENRES } from '../../core/services/movieService';
 import { useTheme } from '../../context/ThemeContext';
-import type { Movie } from '../../types/movie';
+import type { Movie } from '../../models/movie';
 import { useState } from 'react';
 
 const { Title, Text } = Typography;

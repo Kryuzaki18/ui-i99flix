@@ -6,8 +6,8 @@ import {
   ClockCircleOutlined,
   StarFilled,
 } from '@ant-design/icons';
-import type { Movie } from '../../types/movie';
-import { useTheme } from '../../context/ThemeContext';
+import type { Movie } from '../../../models/movie';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { Title, Paragraph, Text } = Typography;
 

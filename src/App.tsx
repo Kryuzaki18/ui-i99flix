@@ -2,17 +2,17 @@ import { lazy, Suspense, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Layout, ConfigProvider, theme, Spin } from 'antd';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import Nav from './components/navigation/Nav';
-import Sidebar from './components/navigation/Sidebar';
+import Nav from './components/navigation/nav/Nav';
+import Sidebar from './components/navigation/sidebar/Sidebar';
 import VideoPlayer from './features/player/VideoPlayer';
-import MovieDetailDrawer from './components/ui/MovieDetailDrawer';
-import type { Movie } from './types/movie';
+import MovieDetailDrawer from './components/ui/movie-detail-drawer/MovieDetailDrawer';
+import type { Movie } from './models/movie';
 
 // ─── Lazy-loaded routes ───────────────────────────────────────────────────────
 const Home    = lazy(() => import('./features/home/Home'));
 const Browse  = lazy(() => import('./features/browse/Browse'));
-const Login   = lazy(() => import('./features/auth/Login'));
-const Signup  = lazy(() => import('./features/auth/Signup'));
+const Login   = lazy(() => import('./features/auth/login/Login'));
+const Signup  = lazy(() => import('./features/auth/signup/Signup'));
 
 const { Content, Footer } = Layout;
 

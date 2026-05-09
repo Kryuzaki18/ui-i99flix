@@ -8,7 +8,7 @@ import {
   StepBackwardOutlined,
 } from '@ant-design/icons';
 import { useState } from 'react';
-import type { Movie } from '../../types/movie';
+import type { Movie } from '../../models/movie';
 import { useTheme } from '../../context/ThemeContext';
 
 const { Title, Text } = Typography;
