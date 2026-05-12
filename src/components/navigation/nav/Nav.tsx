@@ -13,7 +13,6 @@ import {
   SearchOutlined,
   BellOutlined,
   UserOutlined,
-  PlayCircleFilled,
   MenuOutlined,
   HomeOutlined,
   AppstoreOutlined,
@@ -131,7 +130,6 @@ function NavInner({ onMenuOpen }: NavProps) {
         </nav>
       </Space>
 
-      {/* Right */}
       <Space size={4} align="center">
         {searchOpen ? (
           <Input
