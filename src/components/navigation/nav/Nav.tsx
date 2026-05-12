@@ -69,11 +69,11 @@ function NavInner({ onMenuOpen }: NavProps) {
           aria-haspopup="true"
         />
 
-        <Link to="/" className="nav-logo" aria-label="99Flix home">
+        <Link to="/" className="nav-logo" aria-label="i99flix home">
           <Space align="center" size={6}>
             <PlayCircleFilled className="nav-logo__icon" aria-hidden="true" />
             <span className="nav-logo__text" style={{ color: colors.textPrimary }}>
-              99<span className="nav-logo__accent">Flix</span>
+              i99<span className="nav-logo__accent">flix</span>
             </span>
           </Space>
         </Link>

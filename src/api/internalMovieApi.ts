@@ -1,5 +1,5 @@
 /**
- * Internal Movie API — CRUD operations against the 99Flix backend.
+ * Internal Movie API — CRUD operations against the i99flix backend.
  *
  * These functions call our own Fastify API (api-movie), not TMDB.
  * The shape returned by the API matches the app's Movie model closely,

@@ -71,7 +71,7 @@ export default function ForgotPassword() {
                 className="auth-panel__logo-title"
                 style={{ margin: 0 }}
               >
-                99<span className="auth-panel__logo-accent">Flix</span>
+                i99<span className="auth-panel__logo-accent">flix</span>
               </Title>
             </Space>
           </div>

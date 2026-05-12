@@ -73,7 +73,7 @@ function AppSplash({ visible }: { visible: boolean }) {
             fontFamily: "'Inter', sans-serif",
           }}
         >
-          99<span style={{ color: '#e50914' }}>Flix</span>
+          i99<span style={{ color: '#e50914' }}>flix</span>
         </span>
       </div>
 
@@ -221,7 +221,7 @@ function AppLayout() {
           )}
         </div>
         <div style={{ color: colors.textMuted, fontSize: 12 }}>
-          © 2024 99Flix — Stream unlimited movies, anytime.
+          © 2026 i99flix — Stream unlimited movies, anytime.
         </div>
       </Footer>
 

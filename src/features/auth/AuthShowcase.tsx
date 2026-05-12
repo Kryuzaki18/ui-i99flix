@@ -60,7 +60,7 @@ export default function AuthShowcase() {
       <div className="auth-showcase__brand">
         <PlayCircleFilled className="auth-showcase__brand-icon" />
         <span className="auth-showcase__brand-name">
-          99<span className="auth-showcase__brand-accent">Flix</span>
+          i99<span className="auth-showcase__brand-accent">flix</span>
         </span>
       </div>
 

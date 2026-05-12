@@ -1,5 +1,5 @@
 /**
- * React Query hooks for the internal 99Flix movie API.
+ * React Query hooks for the internal i99flix movie API.
  *
  * These hooks call our own Fastify backend (api-movie), not TMDB.
  * They follow the same patterns as useMoviesQuery.ts for consistency.

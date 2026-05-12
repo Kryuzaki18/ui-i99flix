@@ -78,7 +78,7 @@ export default function Signup() {
             <Space align="center">
               <span style={{ fontSize: 28, color: '#e50914' }}>▶</span>
               <Title level={3} className="auth-panel__logo-title" style={{ margin: 0 }}>
-                99<span className="auth-panel__logo-accent">Flix</span>
+                i99<span className="auth-panel__logo-accent">flix</span>
               </Title>
             </Space>
           </div>
@@ -257,7 +257,7 @@ export default function Signup() {
             <div className="auth-panel__success">
               <CheckCircleOutlined className="auth-panel__success-icon" />
               <Title level={3} className="auth-panel__success-title" style={{ color: colors.textPrimary }}>
-                Welcome to 99Flix!
+                Welcome to i99flix!
               </Title>
               <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
                 Your account is ready. Sign in to start watching.

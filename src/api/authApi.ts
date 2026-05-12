@@ -1,5 +1,5 @@
 /**
- * Auth API — calls the 99Flix backend auth endpoints.
+ * Auth API — calls the i99flix backend auth endpoints.
  *
  * All auth state is managed via httpOnly cookies set by the server.
  * No tokens are stored in JS.

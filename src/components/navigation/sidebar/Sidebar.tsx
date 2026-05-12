@@ -67,7 +67,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <Space align="center" size={8} className="sidebar__logo-wrap">
           <PlayCircleFilled className="sidebar__logo-icon" />
           <Text strong className="sidebar__logo-text">
-            99<span className="sidebar__logo-accent">Flix</span>
+            i99<span className="sidebar__logo-accent">flix</span>
           </Text>
         </Space>
 
@@ -99,7 +99,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       >
         <Divider className="sidebar__footer-divider" />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>
-          © 2024 99Flix. All rights reserved.
+          © 2026 i99flix. All rights reserved.
         </Text>
         <br />
         <Text className="sidebar__footer-text" style={{ color: colors.textMuted }}>

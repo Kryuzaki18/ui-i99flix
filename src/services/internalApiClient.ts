@@ -1,5 +1,5 @@
 /**
- * Internal API client — HTTP wrapper for the 99Flix backend (api-movie).
+ * Internal API client — HTTP wrapper for the i99flix backend (api-movie).
  *
  * Mirrors the pattern of tmdbClient.ts but targets our own Fastify API.
  * Uses httpOnly cookies for auth (credentials: 'include' on every request).

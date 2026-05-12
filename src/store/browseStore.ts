@@ -63,7 +63,7 @@ export const useBrowseStore = create<BrowseState>()(
         resetFilters: ()    => set(INITIAL_STATE,                     false, 'browse/reset'),
       }),
       {
-        name: '99flix-browse',
+        name: 'i99flix-browse',
         storage: createJSONStorage(() => sessionStorage),
         // Only persist UI preferences — exclude searchQuery for privacy
         partialize: (state) => ({

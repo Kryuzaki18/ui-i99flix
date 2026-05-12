@@ -59,7 +59,7 @@ export default function Login() {
             <Space align="center">
               <span style={{ fontSize: 28, color: '#e50914' }}>▶</span>
               <Title level={3} className="auth-panel__logo-title" style={{ margin: 0 }}>
-                99<span className="auth-panel__logo-accent">Flix</span>
+                i99<span className="auth-panel__logo-accent">flix</span>
               </Title>
             </Space>
           </div>
