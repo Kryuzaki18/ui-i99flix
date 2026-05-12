@@ -12,23 +12,23 @@ import { useSignoutMutation } from '../../../api/useAuthQuery';
 import './Nav.css';
 
 const { Header } = Layout;
-const { Text }   = Typography;
+const { Text } = Typography;
 
 interface NavProps {
   onMenuOpen: () => void;
 }
 
 const NAV_LINKS = [
-  { path: '/',       label: 'Home',   icon: <HomeOutlined aria-hidden="true" /> },
+  { path: '/', label: 'Home', icon: <HomeOutlined aria-hidden="true" /> },
   { path: '/browse', label: 'Browse', icon: <AppstoreOutlined aria-hidden="true" /> },
 ] as const;
 
 function NavInner({ onMenuOpen }: NavProps) {
   const [searchOpen, setSearchOpen] = useState(false);
-  const location                    = useLocation();
-  const navigate                    = useNavigate();
-  const { isDark, toggle, colors }  = useTheme();
-  const signoutMutation             = useSignoutMutation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isDark, toggle, colors } = useTheme();
+  const signoutMutation = useSignoutMutation();
 
   const handleSignout = () => {
     signoutMutation.mutate(undefined, {
@@ -37,13 +37,13 @@ function NavInner({ onMenuOpen }: NavProps) {
   };
 
   const userMenuItems: MenuProps['items'] = [
-    { key: 'profile',   label: <Text>My Profile</Text>,                              icon: <UserOutlined /> },
+    { key: 'profile', label: <Text>My Profile</Text>, icon: <UserOutlined /> },
     { key: 'watchlist', label: <Text>My Watchlist</Text> },
     { type: 'divider' },
     {
-      key:     'logout',
-      label:   <Text style={{ color: '#e50914' }}>Sign Out</Text>,
-      icon:    <LoginOutlined style={{ color: '#e50914' }} />,
+      key: 'logout',
+      label: <Text style={{ color: '#e50914' }}>Sign Out</Text>,
+      icon: <LoginOutlined style={{ color: '#e50914' }} />,
       onClick: handleSignout,
     },
   ];
@@ -53,9 +53,9 @@ function NavInner({ onMenuOpen }: NavProps) {
       className="nav-header"
       role="banner"
       style={{
-        background:   colors.bgNav,
+        background: colors.bgNav,
         borderBottom: `1px solid ${colors.borderSubtle}`,
-        boxShadow:    isDark ? 'none' : '0 1px 8px rgba(0,0,0,0.08)',
+        boxShadow: isDark ? 'none' : '0 1px 8px rgba(0,0,0,0.08)',
       }}
     >
       {/* Left */}
@@ -130,7 +130,7 @@ function NavInner({ onMenuOpen }: NavProps) {
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             icon={
               isDark
-                ? <SunOutlined  style={{ fontSize: 18, color: '#fadb14' }} aria-hidden="true" />
+                ? <SunOutlined style={{ fontSize: 18, color: '#fadb14' }} aria-hidden="true" />
                 : <MoonOutlined style={{ fontSize: 18, color: '#6366f1' }} aria-hidden="true" />
             }
           />
@@ -149,10 +149,9 @@ function NavInner({ onMenuOpen }: NavProps) {
             className="nav-avatar"
             icon={<UserOutlined aria-hidden="true" />}
             size={34}
-            role="button"
             aria-label="User menu"
             aria-haspopup="true"
-            tabIndex={0}
+            style={{ cursor: 'pointer' }}
           />
         </Dropdown>
       </Space>
