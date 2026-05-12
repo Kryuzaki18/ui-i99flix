@@ -8,15 +8,18 @@
  * Pure CSS animations — no extra libraries.
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { PlayCircleFilled, StarFilled, FireFilled } from '@ant-design/icons';
-import { MOVIES } from '../../constants/movies';
-import { useTheme } from '../../context/ThemeContext';
+import { useState, useEffect, useRef } from "react";
+import { StarFilled, FireFilled } from "@ant-design/icons";
+import { MOVIES } from "../../constants/movies";
+import { useTheme } from "../../context/ThemeContext";
 
 // Pick a curated subset for the showcase
-const SHOWCASE_MOVIES = MOVIES.filter((m) => m.featured || m.trending).slice(0, 5);
-const CARD_MOVIES     = MOVIES.slice(0, 5);
-const SLIDE_INTERVAL  = 5000; // ms
+const SHOWCASE_MOVIES = MOVIES.filter((m) => m.featured || m.trending).slice(
+  0,
+  5,
+);
+const CARD_MOVIES = MOVIES.slice(0, 5);
+const SLIDE_INTERVAL = 5000; // ms
 
 export default function AuthShowcase() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -28,7 +31,9 @@ export default function AuthShowcase() {
     timerRef.current = setInterval(() => {
       setActiveIdx((i) => (i + 1) % SHOWCASE_MOVIES.length);
     }, SLIDE_INTERVAL);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, []);
 
   const active = SHOWCASE_MOVIES[activeIdx];
@@ -36,13 +41,17 @@ export default function AuthShowcase() {
   return (
     <div
       className="auth-showcase"
-      style={{ '--auth-edge-color': isDark ? '#0d0d1a' : '#f0f2f5' } as React.CSSProperties}
+      style={
+        {
+          "--auth-edge-color": isDark ? "#0d0d1a" : "#f0f2f5",
+        } as React.CSSProperties
+      }
     >
       {/* Backdrop slides */}
       {SHOWCASE_MOVIES.map((movie, i) => (
         <div
           key={movie.id}
-          className={`auth-showcase__slide ${i === activeIdx ? 'is-active' : ''}`}
+          className={`auth-showcase__slide ${i === activeIdx ? "is-active" : ""}`}
           style={{ backgroundImage: `url(${movie.backdrop})` }}
         />
       ))}
@@ -56,12 +65,8 @@ export default function AuthShowcase() {
       <div className="auth-showcase__orb auth-showcase__orb--2" />
       <div className="auth-showcase__orb auth-showcase__orb--3" />
 
-      {/* Brand — top left */}
       <div className="auth-showcase__brand">
-        <PlayCircleFilled className="auth-showcase__brand-icon" />
-        <span className="auth-showcase__brand-name">
-          i99<span className="auth-showcase__brand-accent">flix</span>
-        </span>
+        <img src="/i99flix-logo.png" alt="i99flix logo" width={70} />
       </div>
 
       {/* Floating movie cards */}
@@ -78,7 +83,7 @@ export default function AuthShowcase() {
       <div className="auth-showcase__info" key={activeIdx}>
         <div className="auth-showcase__info-badge">
           <FireFilled />
-          {active.trending ? 'Trending' : 'Featured'}
+          {active.trending ? "Trending" : "Featured"}
         </div>
         <h2 className="auth-showcase__info-title">{active.title}</h2>
         <div className="auth-showcase__info-meta">
@@ -87,9 +92,13 @@ export default function AuthShowcase() {
             {active.rating.toFixed(1)}
           </span>
           <span className="auth-showcase__info-year">{active.year}</span>
-          <span className="auth-showcase__info-duration">{active.duration}</span>
+          <span className="auth-showcase__info-duration">
+            {active.duration}
+          </span>
           {active.genre.slice(0, 2).map((g) => (
-            <span key={g} className="auth-showcase__info-genre">{g}</span>
+            <span key={g} className="auth-showcase__info-genre">
+              {g}
+            </span>
           ))}
         </div>
       </div>
@@ -99,7 +108,7 @@ export default function AuthShowcase() {
         {SHOWCASE_MOVIES.map((_, i) => (
           <button
             key={i}
-            className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
+            className={`auth-showcase__dot ${i === activeIdx ? "is-active" : ""}`}
             onClick={() => {
               setActiveIdx(i);
               if (timerRef.current) clearInterval(timerRef.current);

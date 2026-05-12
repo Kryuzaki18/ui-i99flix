@@ -11,25 +11,10 @@
   height: 64px;
 }
 
-/* Logo */
 .nav-logo {
-  text-decoration: none;
-}
-
-.nav-logo__icon {
-  font-size: 28px;
-  color: #e50914;
-}
-
-.nav-logo__text {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  line-height: 1;
-}
-
-.nav-logo__accent {
-  color: #e50914;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Nav link buttons */

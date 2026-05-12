@@ -60,8 +60,8 @@
 /* Branding in top-left */
 .auth-showcase__brand {
   position: absolute;
-  top: 32px;
-  left: 36px;
+  top: 10px;
+  left: 10px;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -70,17 +70,6 @@
 
 .auth-showcase__brand-icon {
   font-size: 28px;
-  color: #e50914;
-}
-
-.auth-showcase__brand-name {
-  font-size: 22px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.5px;
-}
-
-.auth-showcase__brand-accent {
   color: #e50914;
 }
 

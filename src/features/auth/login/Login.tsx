@@ -54,14 +54,12 @@ export default function Login() {
       >
         <div className="auth-panel__inner">
 
-          {/* Mobile-only logo */}
           <div className="auth-panel__logo">
-            <Space align="center">
-              <span style={{ fontSize: 28, color: '#e50914' }}>▶</span>
-              <Title level={3} className="auth-panel__logo-title" style={{ margin: 0 }}>
-                i99<span className="auth-panel__logo-accent">flix</span>
-              </Title>
-            </Space>
+            <img
+              src="/i99flix-logo.png"
+              alt="i99flix logo"
+              width={100}
+            />
           </div>
 
           <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>

@@ -66,11 +66,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       >
         <Space align="center" size={8} className="sidebar__logo-wrap">
           <PlayCircleFilled className="sidebar__logo-icon" />
-          <Text strong className="sidebar__logo-text">
-            i99<span className="sidebar__logo-accent">flix</span>
-          </Text>
         </Space>
-
+       
         <Space align="center" size={10}>
           <Avatar className="sidebar__avatar" icon={<UserOutlined />} size={40} />
           <div>
