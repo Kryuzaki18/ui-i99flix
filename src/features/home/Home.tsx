@@ -50,7 +50,7 @@ function MovieSection({ title, icon, movies, isLoading }: SectionProps) {
 export default function Home() {
   const { playMovie, openDetail } = usePlayerStore();
 
-  const { data: featured    = [], isLoading: loadingFeatured    } = useFeaturedMoviesQuery();
+  const { data: featured    = [] } = useFeaturedMoviesQuery();
   const { data: trending    = [], isLoading: loadingTrending    } = useTrendingMoviesQuery();
   const { data: newReleases = [], isLoading: loadingNewReleases } = useNewReleasesQuery();
   const { data: topRated    = [], isLoading: loadingTopRated    } = useTopRatedMoviesQuery();
