@@ -25,20 +25,45 @@
   flex-direction: column;
 }
 
-/* Clickzone fills the video area; separated from double-click on the wrapper */
-.player-page__video-clickzone {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-  cursor: pointer;
-}
-
 .player-page__backdrop {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   transition: opacity 0.25s ease;
+}
+
+/* ── YouTube iframe ───────────────────────────────────────────────────────── */
+.player-page__iframe-wrap {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-page__iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  display: block;
+}
+
+.player-page__topbar--over-iframe {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.player-page__topbar--over-iframe .player-page__back-btn,
+.player-page__topbar--over-iframe a {
+  pointer-events: all;
+}
+
+/* ── Dim play icon when no trailer ── */
+.player-page__play-icon--dim {
+  opacity: 0.4 !important;
 }
 
 /* Subtle vignette so overlaid text is always readable */

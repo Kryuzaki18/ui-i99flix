@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Drawer, Button, Tag, Rate, Typography, Space, Divider, Row, Col, Skeleton } from 'antd';
 import { PlayCircleOutlined, CalendarOutlined, ClockCircleOutlined, StarFilled } from '@ant-design/icons';
 import type { Movie } from '../../../models/movie';
@@ -17,11 +17,33 @@ interface MovieDetailDrawerProps {
 
 function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDrawerProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
-  const { colors, isDark }        = useTheme();
+  const { colors, isDark } = useTheme();
 
-  const handleAfterOpenChange = (visible: boolean) => {
-    if (visible) setImgLoaded(false);
-  };
+  const backdropSrc = movie?.backdrop || movie?.thumbnail || '';
+
+  // Pre-load the backdrop image so cached images still trigger the loaded state.
+  // Falls through immediately when there is no image URL.
+  useEffect(() => {
+    if (!open || !movie) return;
+
+    setImgLoaded(false);
+
+    if (!backdropSrc) {
+      setImgLoaded(true);
+      return;
+    }
+
+    const img = new Image();
+    img.onload  = () => setImgLoaded(true);
+    img.onerror = () => setImgLoaded(true); // broken image → still show body
+    img.src = backdropSrc;
+
+    return () => {
+      img.onload  = null;
+      img.onerror = null;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, movie?.id, backdropSrc]);
 
   if (!movie) return null;
 
@@ -29,7 +51,6 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
     <Drawer
       open={open}
       onClose={onClose}
-      afterOpenChange={handleAfterOpenChange}
       styles={{
         section: { width: 'min(520px, 100vw)' },
         body:    { background: colors.bgBase, padding: 0 },
@@ -38,7 +59,7 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
       }}
       title={<Text strong style={{ fontSize: 16 }}>Movie Details</Text>}
     >
-      {/* Backdrop */}
+      {/* ── Backdrop ── */}
       <div
         className="detail-drawer__backdrop-wrap"
         style={{ background: colors.skeletonBg }}
@@ -46,13 +67,16 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
         {!imgLoaded && (
           <Skeleton.Image active className="detail-drawer__skeleton-img" />
         )}
-        <img
-          src={movie.backdrop}
-          alt={`${movie.title} backdrop`}
-          onLoad={() => setImgLoaded(true)}
-          className="detail-drawer__backdrop-img"
-          style={{ display: imgLoaded ? 'block' : 'none' }}
-        />
+
+        {backdropSrc && (
+          <img
+            src={backdropSrc}
+            alt={`${movie.title} backdrop`}
+            className="detail-drawer__backdrop-img"
+            style={{ display: imgLoaded ? 'block' : 'none' }}
+          />
+        )}
+
         {imgLoaded && (
           <>
             <div
@@ -72,7 +96,7 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
         )}
       </div>
 
-      {/* Body */}
+      {/* ── Body ── */}
       <div className="detail-drawer__body">
         {!imgLoaded ? (
           <Skeleton active paragraph={{ rows: 4 }} />
@@ -82,7 +106,7 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
 
             <Space size={8} wrap className="detail-drawer__tags">
               {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || 'default'}>{g}</Tag>
+                <Tag key={g} color={GENRE_COLORS[g] ?? 'default'}>{g}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending   && <Tag color="red">Trending</Tag>}
@@ -106,7 +130,7 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
             <Rate
               disabled
               allowHalf
-              defaultValue={movie.rating / 2}
+              value={movie.rating / 2}
               className="detail-drawer__rate"
               aria-label={`${movie.rating / 2} out of 5 stars`}
             />
@@ -124,7 +148,7 @@ function MovieDetailDrawerInner({ movie, open, onClose, onPlay }: MovieDetailDra
               className="detail-drawer__synopsis-text"
               style={{ color: colors.textSecondary }}
             >
-              {movie.description}
+              {movie.description || 'No synopsis available.'}
             </Paragraph>
 
             <Divider />

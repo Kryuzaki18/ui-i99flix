@@ -12,7 +12,13 @@ export const GENRES: Genre[] = [
   { label: 'Animation', value: 'Animation' },
 ];
 
+/**
+ * Maps genre names → Ant Design tag colors.
+ * Covers both app-specific names (Sci-Fi) and full TMDB names (Science Fiction)
+ * so tags render correctly regardless of the data source.
+ */
 export const GENRE_COLORS: Record<string, string> = {
+  // App genre names
   Action:    'red',
   Drama:     'blue',
   Comedy:    'gold',
@@ -21,4 +27,18 @@ export const GENRE_COLORS: Record<string, string> = {
   Horror:    'volcano',
   Romance:   'pink',
   Animation: 'green',
+
+  // TMDB full genre names
+  'Science Fiction': 'cyan',
+  'TV Movie':        'geekblue',
+  Documentary:       'green',
+  History:           'orange',
+  Music:             'purple',
+  Mystery:           'volcano',
+  War:               'red',
+  Western:           'gold',
+  Family:            'lime',
+  Fantasy:           'magenta',
+  Adventure:         'blue',
+  Crime:             'volcano',
 };

@@ -17,7 +17,59 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000;
+  overflow: hidden;
+}
+
+/* ── Poster gate (shown before play) ── */
+.player__poster-gate {
+  position: absolute;
+  inset: 0;
   cursor: pointer;
+}
+
+/* ── YouTube iframe ── */
+.player__iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+/* ── No trailer fallback ── */
+.player__no-trailer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.player__no-trailer-text {
+  color: rgba(255,255,255,0.55) !important;
+  font-size: 13px !important;
+}
+
+.player__no-trailer-full {
+  position: absolute;
+  inset: 0;
+}
+
+.player__no-trailer-text--lg {
+  font-size: 16px !important;
+  color: #fff !important;
+}
+
+.player__play-icon--dim {
+  opacity: 0.4 !important;
+}
+
+/* Poster overlay gradient */
+.player__poster-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  pointer-events: none;
 }
 
 .player__backdrop {

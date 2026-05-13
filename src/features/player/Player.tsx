@@ -1,60 +1,45 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Typography, Slider, Button, Tag, Space, Rate, Spin, Result, Tooltip } from 'antd';
+import { Typography, Button, Tag, Space, Rate, Spin, Result, Tooltip } from 'antd';
 import {
-  PlayCircleOutlined, PauseCircleOutlined,
+  PlayCircleOutlined,
   ExpandOutlined, CompressOutlined,
-  SoundOutlined, SoundFilled, StepForwardOutlined, StepBackwardOutlined,
-  ArrowLeftOutlined, PlayCircleFilled,
+  ArrowLeftOutlined, PlayCircleFilled, LoadingOutlined,
 } from '@ant-design/icons';
 import { useMovieDetailQuery } from '../../api/useMoviesQuery';
+import { useTrailerKey } from '../../hooks/useTrailerKey';
 import { GENRE_COLORS } from '../../constants/genres';
 import { useTheme } from '../../context/ThemeContext';
-import { useVolumeControl } from '../../hooks/useVolumeControl';
 import { useFullscreen } from '../../hooks/useFullscreen';
 import './Player.css';
 
 const { Title, Text, Paragraph } = Typography;
-
-// Inline muted SVG icon (no Ant Design equivalent)
-function MutedIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="1em"
-      height="1em"
-      fill="currentColor"
-      className={className}
-      aria-label="Muted"
-    >
-      <path d="M16.5 12A4.5 4.5 0 0 0 14 7.97V10.18l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 18l2 2L21 18.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z" />
-    </svg>
-  );
-}
 
 export default function Player() {
   const { id } = useParams<{ id: string }>();
   const { colors, isDark } = useTheme();
 
   const movieId = id ? parseInt(id, 10) : null;
-  const { data: movie, isLoading, isError } = useMovieDetailQuery(
-    Number.isFinite(movieId) ? movieId : null
-  );
+  const safeId  = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
 
-  const [playing,  setPlaying]  = useState(false);
-  const [progress, setProgress] = useState(0);
+  const { data: movie, isLoading, isError } = useMovieDetailQuery(safeId);
+  const { trailerKey, isLoading: trailerLoading } = useTrailerKey(safeId);
 
-  const {
-    volume,
-    muted,
-    volumeIcon,
-    setVolume,
-    toggleMute,
-    resumeContext,
-    setMediaMetadata,
-  } = useVolumeControl();
-
+  const [playing, setPlaying] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
+
+  // Pause when navigating away
+  useEffect(() => {
+    return () => {
+      iframeRef.current?.contentWindow?.postMessage(
+        '{"event":"command","func":"pauseVideo","args":""}',
+        'https://www.youtube.com',
+      );
+    };
+  }, []);
+
+  const handlePlay = useCallback(() => setPlaying(true), []);
 
   // ── Loading ───────────────────────────────────────────────────────────────
   if (isLoading) {
@@ -72,7 +57,7 @@ export default function Player() {
         <Result
           status="404"
           title="Movie not found"
-          subTitle="Lorem ipsum dolor sit amet — this movie doesn't exist."
+          subTitle="This movie doesn't exist or couldn't be loaded."
           extra={
             <Link to="/">
               <Button type="primary" style={{ background: '#e50914', borderColor: '#e50914' }}>
@@ -85,169 +70,155 @@ export default function Player() {
     );
   }
 
-  const elapsedMinutes = Math.floor((progress / 100) * parseInt(movie.duration, 10) || 0);
-  const sliderValue    = muted ? 0 : volume;
-
-  const VolumeIconComponent =
-    volumeIcon === 'muted' ? MutedIcon :
-    volumeIcon === 'low'   ? SoundOutlined : SoundFilled;
-
-  const volumeTooltip =
-    muted
-      ? 'Muted — click to unmute'
-      : `Volume: ${volume}% (relative to system volume)`;
-
-  const handlePlayToggle = async () => {
-    await resumeContext();
-    setMediaMetadata({
-      title:   movie.title,
-      artist:  `${movie.year} · ${movie.duration}`,
-      album:   movie.genre.join(', '),
-      artwork: movie.thumbnail,
-    });
-    setPlaying((p) => !p);
-  };
-
-  const handleVolumeChange = async (v: number) => {
-    await resumeContext();
-    setVolume(v);
-  };
-
-  const handleMuteToggle = async () => {
-    await resumeContext();
-    toggleMute();
-  };
+  const youtubeUrl = trailerKey
+    ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`
+    : null;
 
   return (
     <div className="player-page" style={{ background: '#000' }}>
-      {/*
-        fullscreenRef wraps the video area so the controls stay visible
-        inside the fullscreen element.
-      */}
       <div
         ref={fullscreenRef}
         className={`player-page__video${isFullscreen ? ' player-page__video--fullscreen' : ''}`}
         onDoubleClick={toggleFullscreen}
       >
-        {/* Clickable video zone (separate from double-click to avoid conflict) */}
-        <div className="player-page__video-clickzone" onClick={handlePlayToggle}>
-          <img
-            src={movie.backdrop}
-            alt={movie.title}
-            className="player-page__backdrop"
-            style={{ opacity: playing ? 0.25 : 0.65 }}
-          />
+        {/* ── Poster / play gate ── */}
+        {!playing && (
+          <div className="player-page__video-clickzone" onClick={handlePlay}>
+            <img
+              src={movie.backdrop || movie.thumbnail}
+              alt={movie.title}
+              className="player-page__backdrop"
+            />
+            <div className="player-page__vignette" />
 
-          <div className="player-page__vignette" />
+            {/* Top bar */}
+            <div className="player-page__topbar">
+              <Link to="/" className="player-page__back-link">
+                <Button
+                  type="text"
+                  icon={<ArrowLeftOutlined />}
+                  className="player-page__back-btn"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Back
+                </Button>
+              </Link>
+              <Space align="center" size={8}>
+                <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
+                <Text className="player-page__brand">
+                  i99<span style={{ color: '#e50914' }}>flix</span>
+                </Text>
+              </Space>
+            </div>
 
-          {/* Top bar */}
-          <div className="player-page__topbar">
-            <Link to="/" className="player-page__back-link">
-              <Button
-                type="text"
-                icon={<ArrowLeftOutlined />}
-                className="player-page__back-btn"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Back
-              </Button>
-            </Link>
-            <Space align="center" size={8}>
-              <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
-              <Text className="player-page__brand">
-                i99<span style={{ color: '#e50914' }}>flix</span>
-              </Text>
-            </Space>
+            {/* Centre play icon */}
+            <div className="player-page__overlay">
+              {trailerLoading ? (
+                <LoadingOutlined className="player-page__play-icon" />
+              ) : trailerKey ? (
+                <div className="player-page__play-wrap">
+                  <PlayCircleOutlined className="player-page__play-icon" />
+                  <Text className="player-page__play-hint">Click to watch trailer</Text>
+                </div>
+              ) : (
+                <div className="player-page__play-wrap">
+                  <PlayCircleOutlined className="player-page__play-icon player-page__play-icon--dim" />
+                  <Text className="player-page__play-hint">No trailer available</Text>
+                </div>
+              )}
+            </div>
+
+            {/* Bottom title overlay */}
+            <div className="player-page__title-overlay">
+              <Space size={6} wrap>
+                {movie.genre.map((g) => (
+                  <Tag key={g} color={GENRE_COLORS[g] || 'default'} style={{ fontSize: 11 }}>{g}</Tag>
+                ))}
+              </Space>
+              <Title level={2} className="player-page__title">{movie.title}</Title>
+              <Space size={12}>
+                <Rate disabled allowHalf defaultValue={movie.rating / 2} style={{ fontSize: 13, color: '#fadb14' }} />
+                <Text style={{ color: '#fadb14', fontWeight: 700, fontSize: 13 }}>{movie.rating}/10</Text>
+                <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.year}</Text>
+                <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.duration}</Text>
+              </Space>
+            </div>
           </div>
+        )}
 
-          {/* Centre play/pause */}
-          <div className="player-page__overlay">
-            {!playing ? (
-              <div className="player-page__play-wrap">
-                <PlayCircleOutlined className="player-page__play-icon" />
-                <Text className="player-page__play-hint">Click to play</Text>
-              </div>
-            ) : (
-              <PauseCircleOutlined className="player-page__pause-icon" />
-            )}
+        {/* ── YouTube iframe — shown after play ── */}
+        {playing && youtubeUrl && (
+          <div className="player-page__iframe-wrap">
+            {/* Top bar stays visible over the iframe */}
+            <div className="player-page__topbar player-page__topbar--over-iframe">
+              <Link to="/" className="player-page__back-link">
+                <Button
+                  type="text"
+                  icon={<ArrowLeftOutlined />}
+                  className="player-page__back-btn"
+                >
+                  Back
+                </Button>
+              </Link>
+              <Space align="center" size={8}>
+                <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
+                <Text className="player-page__brand">
+                  i99<span style={{ color: '#e50914' }}>flix</span>
+                </Text>
+              </Space>
+            </div>
+            <iframe
+              ref={iframeRef}
+              src={youtubeUrl}
+              title={`${movie.title} trailer`}
+              className="player-page__iframe"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+            />
           </div>
+        )}
 
-          {/* Bottom title overlay */}
-          <div className="player-page__title-overlay">
-            <Space size={6} wrap>
-              {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || 'default'} style={{ fontSize: 11 }}>{g}</Tag>
-              ))}
-            </Space>
-            <Title level={2} className="player-page__title">{movie.title}</Title>
-            <Space size={12}>
-              <Rate disabled allowHalf defaultValue={movie.rating / 2} style={{ fontSize: 13, color: '#fadb14' }} />
-              <Text style={{ color: '#fadb14', fontWeight: 700, fontSize: 13 }}>{movie.rating}/10</Text>
-              <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.year}</Text>
-              <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.duration}</Text>
-            </Space>
+        {/* ── No trailer fallback ── */}
+        {playing && !youtubeUrl && (
+          <div className="player-page__video-clickzone">
+            <img
+              src={movie.backdrop || movie.thumbnail}
+              alt={movie.title}
+              className="player-page__backdrop"
+              style={{ opacity: 0.3 }}
+            />
+            <div className="player-page__vignette" />
+            <div className="player-page__topbar">
+              <Link to="/" className="player-page__back-link">
+                <Button type="text" icon={<ArrowLeftOutlined />} className="player-page__back-btn">
+                  Back
+                </Button>
+              </Link>
+            </div>
+            <div className="player-page__overlay">
+              <Text style={{ color: '#fff', fontSize: 16 }}>No trailer available for this title</Text>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* ── Controls bar (inside fullscreen root) ── */}
+        {/* ── Controls bar (fullscreen toggle) ── */}
         <div
           className="player-page__controls"
           style={{ background: isDark ? '#0d0d0d' : '#111' }}
         >
-          <Slider
-            value={progress}
-            onChange={setProgress}
-            tooltip={{ formatter: (v) => `${v}%` }}
-            styles={{ track: { background: '#e50914' }, handle: { borderColor: '#e50914' } }}
-            className="player-page__progress"
-          />
-
           <div className="player-page__controls-row">
-            <Space size={4} align="center">
-              <Button type="text" icon={<StepBackwardOutlined />} className="player-page__btn-nav" />
+            <Text style={{ color: '#aaa', fontSize: 13 }}>
+              {playing ? 'Now playing trailer' : 'Click the poster to play'}
+            </Text>
+            <Tooltip title={isFullscreen ? 'Exit fullscreen (F)' : 'Fullscreen (F · double-click)'} placement="top">
               <Button
                 type="text"
-                icon={playing ? <PauseCircleOutlined style={{ fontSize: 32 }} /> : <PlayCircleOutlined style={{ fontSize: 32 }} />}
-                onClick={handlePlayToggle}
-                className="player-page__btn-playpause"
+                icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
+                onClick={toggleFullscreen}
+                className="player-page__btn-nav"
+                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
               />
-              <Button type="text" icon={<StepForwardOutlined />} className="player-page__btn-nav" />
-              <Text className="player-page__time">
-                {elapsedMinutes}m / {movie.duration}
-              </Text>
-            </Space>
-
-            <Space size={4} align="center">
-              <Tooltip title={volumeTooltip} placement="top">
-                <Button
-                  type="text"
-                  icon={<VolumeIconComponent className={muted ? 'player-page__volume-icon--muted' : 'player-page__volume-icon'} />}
-                  onClick={handleMuteToggle}
-                  className={muted ? 'player-page__btn-mute--active' : 'player-page__btn-mute'}
-                  aria-label={muted ? 'Unmute' : 'Mute'}
-                />
-              </Tooltip>
-
-              <Tooltip title={`${sliderValue}% — controls app audio relative to system volume`} placement="top">
-                <Slider
-                  value={sliderValue}
-                  onChange={handleVolumeChange}
-                  className="player-page__volume"
-                  styles={{ track: { background: muted ? '#444' : '#e50914' }, handle: { borderColor: muted ? '#444' : '#e50914' } }}
-                  aria-label="Volume"
-                />
-              </Tooltip>
-
-              <Tooltip title={isFullscreen ? 'Exit fullscreen (F)' : 'Fullscreen (F · double-click)'} placement="top">
-                <Button
-                  type="text"
-                  icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
-                  onClick={toggleFullscreen}
-                  className="player-page__btn-nav"
-                  aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-                />
-              </Tooltip>
-            </Space>
+            </Tooltip>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import {
   useFeaturedMoviesQuery,
   useTrendingMoviesQuery,
   useNewReleasesQuery,
+  useTopRatedMoviesQuery,
 } from '../../api/useMoviesQuery';
 import type { Movie } from '../../models/movie';
 import './Home.css';
@@ -14,9 +15,9 @@ import './Home.css';
 const { Title } = Typography;
 
 interface SectionProps {
-  title:    string;
-  icon:     React.ReactNode;
-  movies:   Movie[];
+  title:     string;
+  icon:      React.ReactNode;
+  movies:    Movie[];
   isLoading: boolean;
 }
 
@@ -52,6 +53,7 @@ export default function Home() {
   const { data: featured    = [], isLoading: loadingFeatured    } = useFeaturedMoviesQuery();
   const { data: trending    = [], isLoading: loadingTrending    } = useTrendingMoviesQuery();
   const { data: newReleases = [], isLoading: loadingNewReleases } = useNewReleasesQuery();
+  const { data: topRated    = [], isLoading: loadingTopRated    } = useTopRatedMoviesQuery();
 
   return (
     <div>
@@ -78,8 +80,8 @@ export default function Home() {
       <MovieSection
         title="Top Rated"
         icon={<StarOutlined />}
-        movies={featured}
-        isLoading={loadingFeatured}
+        movies={topRated}
+        isLoading={loadingTopRated}
       />
     </div>
   );

@@ -1,50 +1,117 @@
 /**
- * React Query hooks for movie data.
+ * React Query hooks for Home page movie sections.
  *
- * Stale-time is set to Infinity for static data — no background refetches
- * needed. When a real API is wired in, lower stale times appropriately.
+ * Data now comes from the TMDB proxy on the i99flix backend.
+ * Each hook maps the TMDB response to the app's Movie model via tmdbAdapter
+ * so no TMDB-specific types leak into pages or components.
+ *
+ * Stale times are set to 5 min — real API data can change.
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { movieKeys } from './queryKeys';
+import { tmdbKeys } from './queryKeys';
 import {
-  fetchFeaturedMovies,
-  fetchTrendingMovies,
-  fetchNewReleases,
-  fetchMovieById,
-} from './movieApi';
+  fetchTmdbMoviesTrending,
+  fetchTmdbMoviesPopular,
+  fetchTmdbMoviesNowPlaying,
+  fetchTmdbMoviesTopRated,
+  fetchTmdbGenresMovie,
+  fetchTmdbMovieDetail,
+} from './tmdbApi';
+import {
+  tmdbMovieListItemToMovie,
+  tmdbMovieDetailToMovie,
+  buildGenreMap,
+} from '../utils/tmdbAdapter';
+import type { Movie } from '../models/movie';
 
-const STATIC_STALE_TIME = Infinity; // data never goes stale (static source)
+const STALE_TIME = 5 * 60 * 1000; // 5 min
+
+// ── Internal: fetch genre map once and reuse ──────────────────────────────────
+
+async function getGenreMap(): Promise<Map<number, string>> {
+  try {
+    const res = await fetchTmdbGenresMovie();
+    return buildGenreMap(res.genres);
+  } catch {
+    return new Map();
+  }
+}
+
+// ── Featured — popular movies (used for hero banner) ─────────────────────────
 
 export function useFeaturedMoviesQuery() {
-  return useQuery({
-    queryKey: movieKeys.featured(),
-    queryFn:  fetchFeaturedMovies,
-    staleTime: STATIC_STALE_TIME,
+  return useQuery<Movie[]>({
+    queryKey: tmdbKeys.movies.popular({}),
+    queryFn:  async ({ signal }) => {
+      const [res, genreMap] = await Promise.all([
+        fetchTmdbMoviesPopular({ page: 1 }, { signal }),
+        getGenreMap(),
+      ]);
+      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+    },
+    staleTime: STALE_TIME,
   });
 }
+
+// ── Trending ──────────────────────────────────────────────────────────────────
 
 export function useTrendingMoviesQuery() {
-  return useQuery({
-    queryKey: movieKeys.trending(),
-    queryFn:  fetchTrendingMovies,
-    staleTime: STATIC_STALE_TIME,
+  return useQuery<Movie[]>({
+    queryKey: tmdbKeys.movies.trending({}),
+    queryFn:  async ({ signal }) => {
+      const [res, genreMap] = await Promise.all([
+        fetchTmdbMoviesTrending({ page: 1 }, { signal }),
+        getGenreMap(),
+      ]);
+      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+    },
+    staleTime: STALE_TIME,
   });
 }
+
+// ── New Releases — now playing ────────────────────────────────────────────────
 
 export function useNewReleasesQuery() {
-  return useQuery({
-    queryKey: movieKeys.newReleases(),
-    queryFn:  fetchNewReleases,
-    staleTime: STATIC_STALE_TIME,
+  return useQuery<Movie[]>({
+    queryKey: tmdbKeys.movies.nowPlaying({}),
+    queryFn:  async ({ signal }) => {
+      const [res, genreMap] = await Promise.all([
+        fetchTmdbMoviesNowPlaying({ page: 1 }, { signal }),
+        getGenreMap(),
+      ]);
+      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+    },
+    staleTime: STALE_TIME,
   });
 }
 
+// ── Top Rated ─────────────────────────────────────────────────────────────────
+
+export function useTopRatedMoviesQuery() {
+  return useQuery<Movie[]>({
+    queryKey: tmdbKeys.movies.topRated({}),
+    queryFn:  async ({ signal }) => {
+      const [res, genreMap] = await Promise.all([
+        fetchTmdbMoviesTopRated({ page: 1 }, { signal }),
+        getGenreMap(),
+      ]);
+      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+    },
+    staleTime: STALE_TIME,
+  });
+}
+
+// ── Single movie detail — used by the /player/:id page ───────────────────────
+
 export function useMovieDetailQuery(id: number | null) {
-  return useQuery({
-    queryKey: movieKeys.detail(id ?? 0),
-    queryFn:  () => fetchMovieById(id!),
-    enabled:  id !== null,
-    staleTime: STATIC_STALE_TIME,
+  return useQuery<Movie>({
+    queryKey: tmdbKeys.movies.detail(id ?? 0),
+    queryFn:  async ({ signal }) => {
+      const detail = await fetchTmdbMovieDetail(id!, { signal });
+      return tmdbMovieDetailToMovie(detail);
+    },
+    enabled:   id !== null && id > 0,
+    staleTime: 10 * 60 * 1000, // 10 min — detail data is stable
   });
 }
