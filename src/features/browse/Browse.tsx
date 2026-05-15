@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination, Skeleton } from 'antd';
+import { Typography, Row, Col, Input, Select, Space, Empty, Segmented, Pagination, Skeleton, Button } from 'antd';
 import { SearchOutlined, AppstoreOutlined, BarsOutlined, CalendarOutlined } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
 import { useBrowseStore }  from '../../store/browseStore';
@@ -204,7 +204,7 @@ export default function Browse() {
           ))}
         </Row>
       ) : (
-        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={12} style={{ width: '100%' }}>
           {displayMovies.map((movie) => (
             <div
               key={movie.id}
@@ -233,19 +233,22 @@ export default function Browse() {
                     </Text>
                   </Col>
                   <Col className="browse-list-row__actions">
-                    <Space direction="vertical" size={6} align="end">
+                    <Space orientation="vertical" size={6} align="end">
                       <Text className="browse-list-row__rating">★ {movie.rating}</Text>
                       <Space size={6}>
-                        <button className="browse-list-btn-play" onClick={() => playMovie(movie)}>
+                        <Button
+                          size="small"
+                          type="primary"
+                          onClick={() => playMovie(movie)}
+                        >
                           Play
-                        </button>
-                        <button
-                          className="browse-list-btn-info"
+                        </Button>
+                        <Button
+                          size="small"
                           onClick={() => openDetail(movie)}
-                          style={{ border: `1px solid ${colors.border}`, color: colors.textMuted }}
                         >
                           Info
-                        </button>
+                        </Button>
                       </Space>
                     </Space>
                   </Col>

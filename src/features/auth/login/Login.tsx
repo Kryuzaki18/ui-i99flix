@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSigninMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
-import AuthShowcase from '../AuthShowcase';
-import './Login.css';
+import AuthLayout from '../AuthLayout';
+
 const { Title, Text } = Typography;
 
 interface LoginForm {
@@ -18,7 +18,7 @@ interface LoginForm {
 export default function Login() {
   const [error, setError]  = useState('');
   const [form]             = Form.useForm<LoginForm>();
-  const { colors, isDark } = useTheme();
+  const { colors }         = useTheme();
   const navigate           = useNavigate();
   const signinMutation     = useSigninMutation();
 
@@ -29,124 +29,97 @@ export default function Login() {
       {
         onSuccess: () => navigate('/'),
         onError: (err) => {
-          if (err instanceof ApiError) {
-            setError(err.message);
-          } else {
-            setError('Something went wrong. Please try again.');
-          }
+          setError(err instanceof ApiError ? err.message : 'Something went wrong. Please try again.');
         },
       },
     );
   };
 
   return (
-    <div
-      className="auth-layout"
-      style={{ background: isDark ? '#0d0d1a' : '#f0f2f5' }}
-    >
-      {/* ── Left: animated showcase ── */}
-      <AuthShowcase />
+    <AuthLayout>
+      <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>
+        Welcome back
+      </Title>
+      <Text className="auth-panel__subheading" style={{ color: colors.textMuted }}>
+        Sign in to continue watching
+      </Text>
 
-      {/* ── Right: form panel ── */}
-      <div
-        className="auth-panel"
-        style={{ background: isDark ? '#0d0d1a' : '#f0f2f5' }}
+      {error && (
+        <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} />
+      )}
+
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        initialValues={{ remember: true }}
       >
-        <div className="auth-panel__inner">
+        <Form.Item
+          name="email"
+          rules={[
+            { required: true, message: 'Please enter your email' },
+            { type: 'email', message: 'Enter a valid email' },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined style={{ color: colors.textMuted }} />}
+            placeholder="Email address"
+            size="large"
+            style={{ borderRadius: 8 }}
+          />
+        </Form.Item>
 
-          <div className="auth-panel__logo">
-            <img
-              src="/i99flix-logo.png"
-              alt="i99flix logo"
-              width={100}
-            />
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Please enter your password' }]}
+        >
+          <Input.Password
+            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+            placeholder="Password"
+            size="large"
+            style={{ borderRadius: 8 }}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <Link to="/forgot-password" className="auth-panel__forgot">Forgot password?</Link>
           </div>
+        </Form.Item>
 
-          <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>
-            Welcome back
-          </Title>
-          <Text className="auth-panel__subheading" style={{ color: colors.textMuted }}>
-            Sign in to continue watching
-          </Text>
-
-          {error && (
-            <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} />
-          )}
-
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-            initialValues={{ remember: true }}
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            block
+            loading={signinMutation.isPending}
+            className="auth-panel__submit-btn"
           >
-            <Form.Item
-              name="email"
-              rules={[
-                { required: true, message: 'Please enter your email' },
-                { type: 'email', message: 'Enter a valid email' },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined style={{ color: colors.textMuted }} />}
-                placeholder="Email address"
-                size="large"
-                style={{ borderRadius: 8 }}
-              />
-            </Form.Item>
+            Sign In
+          </Button>
+        </Form.Item>
+      </Form>
 
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: 'Please enter your password' }]}
-            >
-              <Input.Password
-                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-                placeholder="Password"
-                size="large"
-                style={{ borderRadius: 8 }}
-              />
-            </Form.Item>
+      <Divider>
+        <Text style={{ color: colors.textMuted, fontSize: 12 }}>or continue with</Text>
+      </Divider>
 
-            <Form.Item>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <Link to="/forgot-password" className="auth-panel__forgot">Forgot password?</Link>
-              </div>
-            </Form.Item>
+      <Space style={{ width: '100%', justifyContent: 'center' }} size={12}>
+        {['Google', 'GitHub', 'Apple'].map((provider) => (
+          <Button key={provider} className="auth-panel__social-btn">{provider}</Button>
+        ))}
+      </Space>
 
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="large"
-                block
-                loading={signinMutation.isPending}
-                className="auth-panel__submit-btn"
-              >
-                Sign In
-              </Button>
-            </Form.Item>
-          </Form>
-
-          <Divider>
-            <Text style={{ color: colors.textMuted, fontSize: 12 }}>or continue with</Text>
-          </Divider>
-
-          <Space style={{ width: '100%', justifyContent: 'center' }} size={12}>
-            {['Google', 'GitHub', 'Apple'].map((provider) => (
-              <Button key={provider} className="auth-panel__social-btn">{provider}</Button>
-            ))}
-          </Space>
-
-          <div className="auth-panel__footer">
-            <Text style={{ color: colors.textMuted }}>
-              Don't have an account?{' '}
-              <Link to="/signup" className="auth-panel__link">Sign up free</Link>
-            </Text>
-          </div>
-        </div>
+      <div className="auth-panel__footer">
+        <Text style={{ color: colors.textMuted }}>
+          Don't have an account?{' '}
+          <Link to="/signup" className="auth-panel__link">Sign up free</Link>
+        </Text>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

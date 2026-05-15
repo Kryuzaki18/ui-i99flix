@@ -13,9 +13,9 @@ import { tmdbKeys } from './queryKeys';
 import {
   fetchTmdbMoviesDiscover,
   fetchTmdbMoviesSearch,
-  fetchTmdbGenresMovie,
 } from './tmdbApi';
-import { tmdbMovieListItemToMovie, buildGenreMap } from '../utils/tmdbAdapter';
+import { tmdbMovieListItemToMovie } from '../utils/tmdbAdapter';
+import { getGenreMap } from '../utils/genreMap';
 import { useBrowseStore } from '../store/browseStore';
 import { useDebounce } from '../hooks/useDebounce';
 import { YEAR_RANGES } from '../constants/yearRanges';
@@ -32,15 +32,6 @@ const TMDB_GENRE_IDS: Record<string, number> = {
   Romance:   10749,
   Animation: 16,
 };
-
-async function getGenreMap(): Promise<Map<number, string>> {
-  try {
-    const res = await fetchTmdbGenresMovie();
-    return buildGenreMap(res.genres);
-  } catch {
-    return new Map();
-  }
-}
 
 export interface BrowseResult {
   movies:      Movie[];

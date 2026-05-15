@@ -173,43 +173,8 @@
   flex-shrink: 0;
 }
 
-.browse-list-btn-play {
-  background: #e50914;
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  padding: 4px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  transition: opacity 0.15s ease;
-}
-
-.browse-list-btn-play:hover {
-  opacity: 0.85;
-}
-
-.browse-list-btn-info {
-  background: transparent;
-  border-radius: 6px;
-  padding: 4px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: opacity 0.15s ease;
-}
-
-.browse-list-btn-info:hover {
-  opacity: 0.75;
-}
-
 /* ── Focus-visible styles for keyboard navigation ────────────────────────── */
 .browse-genre-pill:focus-visible {
-  outline: 2px solid #e50914;
-  outline-offset: 2px;
-}
-
-.browse-list-btn-play:focus-visible,
-.browse-list-btn-info:focus-visible {
   outline: 2px solid #e50914;
   outline-offset: 2px;
 }

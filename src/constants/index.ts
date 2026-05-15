@@ -1,5 +1,4 @@
 export { GENRES, GENRE_COLORS } from './genres';
-export { MOVIES } from './movies';
 export { YEAR_RANGES } from './yearRanges';
 export type { YearRange } from './yearRanges';
 export { darkColors, lightColors } from './theme';

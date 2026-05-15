@@ -18,7 +18,6 @@
   aspect-ratio: 16 / 9;
   background: #000;
   flex-shrink: 0;
-  /* Cap height so controls are always visible without scrolling */
   max-height: 72vh;
   overflow: hidden;
   display: flex;
@@ -33,7 +32,7 @@
   transition: opacity 0.25s ease;
 }
 
-/* ── YouTube iframe ───────────────────────────────────────────────────────── */
+/* ── Iframe wrap ──────────────────────────────────────────────────────────── */
 .player-page__iframe-wrap {
   position: relative;
   flex: 1;
@@ -66,12 +65,12 @@
   opacity: 0.4 !important;
 }
 
-/* Subtle vignette so overlaid text is always readable */
+/* Vignette overlay */
 .player-page__vignette {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top,  rgba(0,0,0,0.80) 0%,  transparent 40%),
+    linear-gradient(to top,  rgba(0,0,0,0.80) 0%, transparent 40%),
     linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 30%);
   pointer-events: none;
 }
@@ -148,12 +147,6 @@
   letter-spacing: 0.5px;
 }
 
-.player-page__pause-icon {
-  font-size: clamp(56px, 8vw, 88px) !important;
-  color: rgba(255,255,255,0.35) !important;
-  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.8));
-}
-
 /* ── Bottom title overlay ─────────────────────────────────────────────────── */
 .player-page__title-overlay {
   position: absolute;
@@ -173,11 +166,6 @@
 }
 
 /* ── Controls bar ─────────────────────────────────────────────────────────── */
-
-.player-page__progress {
-  margin-bottom: 6px !important;
-}
-
 .player-page__btn-nav {
   color: #ccc !important;
   transition: color 0.15s ease;
@@ -185,28 +173,6 @@
 
 .player-page__btn-nav:hover {
   color: #fff !important;
-}
-
-.player-page__btn-playpause {
-  color: #e50914 !important;
-}
-
-.player-page__time {
-  color: #aaa !important;
-  font-size: 13px !important;
-  white-space: nowrap;
-}
-
-.player-page__btn-mute {
-  color: #aaa !important;
-}
-
-.player-page__btn-mute--active {
-  color: #e50914 !important;
-}
-
-.player-page__volume {
-  width: 90px;
 }
 
 /* ── Info panel ───────────────────────────────────────────────────────────── */
@@ -260,33 +226,7 @@
   }
 }
 
-/* ── Volume control ───────────────────────────────────────────────────────── */
-.player-page__volume-icon {
-  color: #aaa;
-  font-size: 18px;
-}
-
-.player-page__volume-icon--muted {
-  color: #e50914;
-  font-size: 18px;
-}
-
-.player-page__btn-mute {
-  color: #aaa !important;
-  transition: color 0.15s ease;
-}
-
-.player-page__btn-mute:hover {
-  color: #fff !important;
-}
-
-.player-page__btn-mute--active {
-  color: #e50914 !important;
-}
-
 /* ── Fullscreen ───────────────────────────────────────────────────────────── */
-
-/* The video wrapper fills the screen; controls stay inside it */
 .player-page__video--fullscreen,
 .player-page__video:fullscreen,
 .player-page__video:-webkit-full-screen {
@@ -297,7 +237,6 @@
   flex-direction: column;
 }
 
-/* Video clickzone expands to fill remaining space */
 .player-page__video--fullscreen .player-page__video-clickzone {
   flex: 1;
   position: relative;

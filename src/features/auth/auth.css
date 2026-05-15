@@ -68,11 +68,6 @@
   gap: 8px;
 }
 
-.auth-showcase__brand-icon {
-  font-size: 28px;
-  color: #e50914;
-}
-
 /* Floating movie cards strip */
 .auth-showcase__cards {
   position: absolute;
@@ -132,6 +127,7 @@
   left: 36px;
   right: 36px;
   z-index: 3;
+  animation: fadeSlideUp 0.6s ease both;
 }
 
 .auth-showcase__info-badge {
@@ -217,6 +213,12 @@
   border-radius: 3px;
 }
 
+/* Focus-visible for keyboard navigation */
+.auth-showcase__dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
 /* Particle / floating orbs */
 .auth-showcase__orb {
   position: absolute;
@@ -252,6 +254,12 @@
   left: 20%;
   background: radial-gradient(circle, rgba(229, 9, 20, 0.08) 0%, transparent 70%);
   animation-duration: 14s;
+}
+
+/* Skeleton placeholder */
+.auth-showcase__skeleton {
+  position: absolute;
+  inset: 0;
 }
 
 /* ── Right panel — form ───────────────────────────────────────────────────── */
@@ -292,20 +300,6 @@
   .auth-panel__logo {
     display: block;
   }
-}
-
-.auth-panel__logo-icon {
-  font-size: 32px;
-  color: #e50914;
-}
-
-.auth-panel__logo-title {
-  margin: 0 !important;
-  letter-spacing: -1px;
-}
-
-.auth-panel__logo-accent {
-  color: #e50914;
 }
 
 .auth-panel__heading {
@@ -350,6 +344,68 @@
   font-weight: 600;
 }
 
+/* ── Signup-specific ─────────────────────────────────────────────────────── */
+
+/* Steps */
+.auth-panel__steps {
+  margin-bottom: 24px;
+}
+
+/* Plan features list */
+.auth-panel__features {
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.auth-panel__feature-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.auth-panel__feature-row:last-child {
+  margin-bottom: 0;
+}
+
+.auth-panel__feature-icon {
+  color: #e50914;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Back button */
+.auth-panel__btn-back {
+  border-radius: 8px !important;
+  flex: 1;
+}
+
+/* Success state */
+.auth-panel__success {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.auth-panel__success-icon {
+  font-size: 64px !important;
+  color: #52c41a !important;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.auth-panel__success-title {
+  margin-bottom: 8px !important;
+}
+
+.auth-panel__success-btn {
+  background: #e50914 !important;
+  border-color: #e50914 !important;
+  font-weight: 600 !important;
+  height: 48px !important;
+  padding-inline: 32px !important;
+  border-radius: 8px !important;
+}
+
 /* ── Keyframes ────────────────────────────────────────────────────────────── */
 @keyframes cardFloat {
   0%, 100% { transform: translateY(0px); }
@@ -366,14 +422,4 @@
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-.auth-showcase__info {
-  animation: fadeSlideUp 0.6s ease both;
-}
-
-/* ── Focus-visible for keyboard navigation ───────────────────────────────── */
-.auth-showcase__dot:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
 }

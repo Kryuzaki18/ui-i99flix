@@ -15,31 +15,18 @@ import {
   fetchTmdbMoviesPopular,
   fetchTmdbMoviesNowPlaying,
   fetchTmdbMoviesTopRated,
-  fetchTmdbGenresMovie,
   fetchTmdbMovieDetail,
 } from './tmdbApi';
 import {
   tmdbMovieListItemToMovie,
   tmdbMovieDetailToMovie,
-  buildGenreMap,
 } from '../utils/tmdbAdapter';
+import { getGenreMap } from '../utils/genreMap';
 import type { Movie } from '../models/movie';
 
 const STALE_TIME = 5 * 60 * 1000; // 5 min
 
-// ── Internal: fetch genre map once and reuse ──────────────────────────────────
-
-async function getGenreMap(): Promise<Map<number, string>> {
-  try {
-    const res = await fetchTmdbGenresMovie();
-    return buildGenreMap(res.genres);
-  } catch {
-    return new Map();
-  }
-}
-
 // ── Featured — popular movies (used for hero banner) ─────────────────────────
-
 export function useFeaturedMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
@@ -71,7 +58,6 @@ export function useTrendingMoviesQuery() {
 }
 
 // ── New Releases — now playing ────────────────────────────────────────────────
-
 export function useNewReleasesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
@@ -87,7 +73,6 @@ export function useNewReleasesQuery() {
 }
 
 // ── Top Rated ─────────────────────────────────────────────────────────────────
-
 export function useTopRatedMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),
@@ -103,7 +88,6 @@ export function useTopRatedMoviesQuery() {
 }
 
 // ── Single movie detail — used by the /player/:id page ───────────────────────
-
 export function useMovieDetailQuery(id: number | null) {
   return useQuery<Movie>({
     queryKey: tmdbKeys.movies.detail(id ?? 0),

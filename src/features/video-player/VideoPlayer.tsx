@@ -6,11 +6,13 @@ import {
   LinkOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Movie } from "../../models/movie";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
 import { useTrailerKey } from "../../hooks/useTrailerKey";
+import ServerSelector from "../../components/ui/server-selector/ServerSelector";
+import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import "./VideoPlayer.css";
 
 const { Title, Text } = Typography;
@@ -28,7 +30,6 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [servers, setServers] = useState(1);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
@@ -44,13 +45,17 @@ export default function VideoPlayer({
 
   // Pause iframe when modal closes
   useEffect(() => {
-    if (!open && iframeRef.current) {
-      iframeRef.current.contentWindow?.postMessage(
-        '{"event":"command","func":"pauseVideo","args":""}',
-        "https://www.youtube.com",
-      );
+    if (!open) {
+      // Attempt to pause any active iframe
+      const iframes = fullscreenRef.current?.querySelectorAll('iframe');
+      iframes?.forEach((iframe) => {
+        iframe.contentWindow?.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          '*',
+        );
+      });
     }
-  }, [open]);
+  }, [open, fullscreenRef]);
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
@@ -117,38 +122,7 @@ export default function VideoPlayer({
             </div>
           )}
 
-          {playing && servers === 1 && (
-            <iframe
-              src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
-              className="player__iframe"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          )}
-
-          {playing && servers === 2 && (
-            <iframe
-              src={`https://vidlink.pro/movie/${movie.id}`}
-              className="player__iframe"
-              allowFullScreen
-            ></iframe>
-          )}
-
-          {playing && servers === 3 && (
-            <iframe
-              src={`https://vidsrc.fyi/embed/movie/${movie.id}`}
-              className="player__iframe"
-              allowFullScreen
-            ></iframe>
-          )}
-
-          {playing && servers === 4 && (
-            <iframe
-              src={`https://www.2embed.stream/embed/movie/${movie.id}`}
-              className="player__iframe"
-              allowFullScreen
-            ></iframe>
-          )}
+          {playing && <ServerIframe server={servers} movieId={movie.id} />}
 
           {playing && !youtubeUrl && (
             <div className="player__no-trailer-full">
@@ -173,20 +147,7 @@ export default function VideoPlayer({
           justify="space-between"
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
-          <Flex gap="small" align="center">
-            <Button size="small" onClick={() => setServers(1)} type={servers === 1 ? "primary" : "default"}>
-              Server 1
-            </Button>
-            <Button size="small" onClick={() => setServers(2)} type={servers === 2 ? "primary" : "default"}>
-              Server 2
-            </Button>
-            <Button size="small" onClick={() => setServers(3)} type={servers === 3 ? "primary" : "default"}>
-              Server 3
-            </Button>
-            <Button size="small" onClick={() => setServers(4)} type={servers === 4 ? "primary" : "default"}>
-              Server 4
-            </Button>
-          </Flex>
+          <ServerSelector activeServer={servers} onServerChange={setServers} />
 
           <Space size={8}>
             <Button

@@ -27,7 +27,7 @@
   cursor: pointer;
 }
 
-/* ── YouTube iframe ── */
+/* ── Iframe ── */
 .player__iframe {
   width: 100%;
   height: 100%;
@@ -50,16 +50,6 @@
   font-size: 13px !important;
 }
 
-.player__no-trailer-full {
-  position: absolute;
-  inset: 0;
-}
-
-.player__no-trailer-text--lg {
-  font-size: 16px !important;
-  color: #fff !important;
-}
-
 .player__play-icon--dim {
   opacity: 0.4 !important;
 }
@@ -79,7 +69,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* Play / Pause overlay */
+/* Play overlay */
 .player__overlay {
   position: absolute;
   inset: 0;
@@ -92,25 +82,6 @@
   font-size: 72px !important;
   color: rgba(255, 255, 255, 0.9) !important;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
-}
-
-.player__pause-icon {
-  font-size: 72px !important;
-  color: rgba(255, 255, 255, 0.4) !important;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
-}
-
-.player__pause-label {
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-size: 14px !important;
-}
-
-.player__pause-wrap {
-  text-align: center;
-}
-
-.player__pause-label-wrap {
-  margin-top: 12px;
 }
 
 /* Title overlay */
@@ -126,63 +97,13 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-.player__btn-nav {
-  color: #fff !important;
-}
-
-.player__btn-play-pause {
-  color: #e50914 !important;
-}
-
-.player__time-text {
-  color: #aaa !important;
-  font-size: 13px !important;
-}
-
-.player__volume-icon {
-  color: #aaa;
-}
-
-.player__volume-slider {
-  width: 80px;
-}
-
-.player__expand-btn {
-  color: #aaa !important;
-}
-
 .player__genre-tag {
   height: 22px;
   font-size: 11px;
 }
 
-/* ── Volume control ───────────────────────────────────────────────────────── */
-.player__volume-icon {
-  color: #aaa;
-  font-size: 16px;
-}
-
-.player__volume-icon--muted {
-  color: #e50914;
-  font-size: 16px;
-}
-
-.player__btn-mute {
-  color: #aaa !important;
-  transition: color 0.15s ease;
-}
-
-.player__btn-mute:hover {
-  color: #fff !important;
-}
-
-.player__btn-mute--active {
-  color: #e50914 !important;
-}
-
 /* ── Fullscreen ───────────────────────────────────────────────────────────── */
 
-/* The root wrapper fills the screen when fullscreen is active */
 .player__fullscreen-root {
   display: flex;
   flex-direction: column;
@@ -196,7 +117,6 @@
   height: 100vh !important;
 }
 
-/* In fullscreen the video area expands to fill remaining space */
 .player__fullscreen-root--active .player__video-area,
 .player__fullscreen-root:fullscreen .player__video-area,
 .player__fullscreen-root:-webkit-full-screen .player__video-area {
@@ -221,20 +141,10 @@
   opacity: 1;
 }
 
-/* Hide cursor when idle in fullscreen */
 .player__fullscreen-root--active .player__video-area {
   cursor: none;
 }
 
 .player__fullscreen-root--active:hover .player__video-area {
   cursor: default;
-}
-
-.player__expand-btn {
-  color: #aaa !important;
-  transition: color 0.15s ease;
-}
-
-.player__expand-btn:hover {
-  color: #fff !important;
 }

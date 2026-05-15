@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Typography,
@@ -24,13 +24,15 @@ import { useTrailerKey } from "../../hooks/useTrailerKey";
 import { GENRE_COLORS } from "../../constants/genres";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
+import ServerSelector from "../../components/ui/server-selector/ServerSelector";
+import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import "./Player.css";
 
 const { Title, Text, Paragraph } = Typography;
 
 export default function Player() {
   const { id } = useParams<{ id: string }>();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const [servers, setServers] = useState(1);
 
   const movieId = id ? parseInt(id, 10) : null;
@@ -40,28 +42,26 @@ export default function Player() {
   const { trailerKey, isLoading: trailerLoading } = useTrailerKey(safeId);
 
   const [playing, setPlaying] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
-  // Pause when navigating away
+  // Pause iframes when navigating away
   useEffect(() => {
     return () => {
-      iframeRef.current?.contentWindow?.postMessage(
-        '{"event":"command","func":"pauseVideo","args":""}',
-        "https://www.youtube.com",
-      );
+      fullscreenRef.current?.querySelectorAll("iframe").forEach((iframe) => {
+        iframe.contentWindow?.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          "*",
+        );
+      });
     };
-  }, []);
+  }, [fullscreenRef]);
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
   // ── Loading ───────────────────────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div
-        className="player-page player-page--loading"
-        style={{ background: "#000" }}
-      >
+      <div className="player-page player-page--loading" style={{ background: "#000" }}>
         <Spin size="large" />
       </div>
     );
@@ -70,32 +70,20 @@ export default function Player() {
   // ── Error / not found ─────────────────────────────────────────────────────
   if (isError || !movie) {
     return (
-      <div
-        className="player-page player-page--error"
-        style={{ background: colors.bgBase }}
-      >
+      <div className="player-page player-page--error" style={{ background: colors.bgBase }}>
         <Result
           status="404"
           title="Movie not found"
           subTitle="This movie doesn't exist or couldn't be loaded."
           extra={
             <Link to="/">
-              <Button
-                type="primary"
-                style={{ background: "#e50914", borderColor: "#e50914" }}
-              >
-                Back to Home
-              </Button>
+              <Button type="primary">Back to Home</Button>
             </Link>
           }
         />
       </div>
     );
   }
-
-  const youtubeUrl = trailerKey
-    ? `https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`
-    : null;
 
   return (
     <div className="player-page" style={{ background: "#000" }}>
@@ -141,16 +129,12 @@ export default function Player() {
               ) : trailerKey ? (
                 <div className="player-page__play-wrap">
                   <PlayCircleOutlined className="player-page__play-icon" />
-                  <Text className="player-page__play-hint">
-                    Click to watch trailer
-                  </Text>
+                  <Text className="player-page__play-hint">Click to watch</Text>
                 </div>
               ) : (
                 <div className="player-page__play-wrap">
                   <PlayCircleOutlined className="player-page__play-icon player-page__play-icon--dim" />
-                  <Text className="player-page__play-hint">
-                    No trailer available
-                  </Text>
+                  <Text className="player-page__play-hint">No trailer available</Text>
                 </div>
               )}
             </div>
@@ -159,18 +143,12 @@ export default function Player() {
             <div className="player-page__title-overlay">
               <Space size={6} wrap>
                 {movie.genre.map((g) => (
-                  <Tag
-                    key={g}
-                    color={GENRE_COLORS[g] || "default"}
-                    style={{ fontSize: 11 }}
-                  >
+                  <Tag key={g} color={GENRE_COLORS[g] || "default"} style={{ fontSize: 11 }}>
                     {g}
                   </Tag>
                 ))}
               </Space>
-              <Title level={2} className="player-page__title">
-                {movie.title}
-              </Title>
+              <Title level={2} className="player-page__title">{movie.title}</Title>
               <Space size={12}>
                 <Rate
                   disabled
@@ -178,24 +156,18 @@ export default function Player() {
                   defaultValue={movie.rating / 2}
                   style={{ fontSize: 13, color: "#fadb14" }}
                 />
-                <Text
-                  style={{ color: "#fadb14", fontWeight: 700, fontSize: 13 }}
-                >
+                <Text style={{ color: "#fadb14", fontWeight: 700, fontSize: 13 }}>
                   {movie.rating}/10
                 </Text>
-                <Text style={{ color: "#ccc", fontSize: 13 }}>
-                  {movie.year}
-                </Text>
-                <Text style={{ color: "#ccc", fontSize: 13 }}>
-                  {movie.duration}
-                </Text>
+                <Text style={{ color: "#ccc", fontSize: 13 }}>{movie.year}</Text>
+                <Text style={{ color: "#ccc", fontSize: 13 }}>{movie.duration}</Text>
               </Space>
             </div>
           </div>
         )}
 
-        {/* ── YouTube iframe — shown after play ── */}
-        {playing && youtubeUrl && (
+        {/* ── Active player — shown after play ── */}
+        {playing && (
           <div className="player-page__iframe-wrap">
             {/* Top bar stays visible over the iframe */}
             <div className="player-page__topbar player-page__topbar--over-iframe">
@@ -216,117 +188,28 @@ export default function Player() {
               </Space>
             </div>
 
-            {servers === 1 && (
-              <iframe
-                src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
-                className="player__iframe"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            )}
-
-            {servers === 2 && (
-              <iframe
-                src={`https://vidlink.pro/movie/${movie.id}`}
-                className="player__iframe"
-                allowFullScreen
-              ></iframe>
-            )}
-
-            {servers === 3 && (
-              <iframe
-                src={`https://vidsrc.fyi/embed/movie/${movie.id}`}
-                className="player__iframe"
-                allowFullScreen
-              ></iframe>
-            )}
-
-            {servers === 4 && (
-              <iframe
-                src={`https://www.2embed.stream/embed/movie/${movie.id}`}
-                className="player__iframe"
-                allowFullScreen
-              ></iframe>
-            )}
-          </div>
-        )}
-
-        {playing && !youtubeUrl && (
-          <div className="player-page__video-clickzone">
-            <img
-              src={movie.backdrop || movie.thumbnail}
-              alt={movie.title}
-              className="player-page__backdrop"
-              style={{ opacity: 0.3 }}
+            <ServerIframe
+              server={servers}
+              movieId={movie.id}
+              className="player-page__iframe"
             />
-            <div className="player-page__vignette" />
-            <div className="player-page__topbar">
-              <Link to="/" className="player-page__back-link">
-                <Button
-                  type="text"
-                  icon={<ArrowLeftOutlined />}
-                  className="player-page__back-btn"
-                >
-                  Back
-                </Button>
-              </Link>
-            </div>
-            <div className="player-page__overlay">
-              <Text style={{ color: "#fff", fontSize: 16 }}>
-                No trailer available for this title
-              </Text>
-            </div>
           </div>
         )}
       </div>
 
+      {/* ── Controls bar ── */}
       <Flex
         gap="small"
         align="center"
         justify="space-between"
         style={{ background: colors.playerControls, padding: "0.5rem" }}
       >
-        <Text >
-          {movie.title} ({movie.year}) • {movie.duration}
-        </Text>
+        <Text>{movie.title} ({movie.year}) • {movie.duration}</Text>
 
-        <Flex gap="small" align="center" justify="center">
-          <Button
-            size="small"
-            onClick={() => setServers(1)}
-            type={servers === 1 ? "primary" : "default"}
-          >
-            Server 1
-          </Button>
-          <Button
-            size="small"
-            onClick={() => setServers(2)}
-            type={servers === 2 ? "primary" : "default"}
-          >
-            Server 2
-          </Button>
-          <Button
-            size="small"
-            onClick={() => setServers(3)}
-            type={servers === 3 ? "primary" : "default"}
-          >
-            Server 3
-          </Button>
-          <Button
-            size="small"
-            onClick={() => setServers(4)}
-            type={servers === 4 ? "primary" : "default"}
-          >
-            Server 4
-          </Button>
-        </Flex>
+        <ServerSelector activeServer={servers} onServerChange={setServers} />
 
         <Tooltip
-          title={
-            isFullscreen
-              ? "Exit fullscreen (F)"
-              : "Fullscreen (F · double-click)"
-          }
+          title={isFullscreen ? "Exit fullscreen (F)" : "Fullscreen (F · double-click)"}
           placement="top"
         >
           <Button
@@ -339,74 +222,49 @@ export default function Player() {
         </Tooltip>
       </Flex>
 
+      {/* ── Info panel ── */}
       <div
         className="player-page__info"
         style={{
           background: colors.bgBase,
-          borderTop: `1px solid ${isDark ? "#1a1a2e" : "#e0e0e8"}`,
+          borderTop: `1px solid ${colors.border}`,
         }}
       >
         <div className="player-page__info-inner">
           <div className="player-page__info-main">
-            <Title
-              level={4}
-              style={{ margin: "0 0 8px", color: colors.textPrimary }}
-            >
+            <Title level={4} style={{ margin: "0 0 8px", color: colors.textPrimary }}>
               {movie.title}
             </Title>
             <Space size={8} wrap style={{ marginBottom: 12 }}>
               {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || "default"}>
-                  {g}
-                </Tag>
+                <Tag key={g} color={GENRE_COLORS[g] || "default"}>{g}</Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
-            <Paragraph
-              style={{
-                color: colors.textSecondary,
-                lineHeight: 1.7,
-                margin: 0,
-              }}
-            >
+            <Paragraph style={{ color: colors.textSecondary, lineHeight: 1.7, margin: 0 }}>
               {movie.description}
             </Paragraph>
           </div>
 
           <div className="player-page__info-meta">
             <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
+              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>
                 Year
               </Text>
-              <Text strong style={{ color: colors.textPrimary }}>
-                {movie.year}
-              </Text>
+              <Text strong style={{ color: colors.textPrimary }}>{movie.year}</Text>
             </div>
             <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
+              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>
                 Duration
               </Text>
-              <Text strong style={{ color: colors.textPrimary }}>
-                {movie.duration}
-              </Text>
+              <Text strong style={{ color: colors.textPrimary }}>{movie.duration}</Text>
             </div>
             <div className="player-page__meta-item">
-              <Text
-                className="player-page__meta-label"
-                style={{ color: colors.textMuted }}
-              >
+              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>
                 Rating
               </Text>
-              <Text strong style={{ color: "#fadb14" }}>
-                ★ {movie.rating}
-              </Text>
+              <Text strong style={{ color: "#fadb14" }}>★ {movie.rating}</Text>
             </div>
           </div>
         </div>
