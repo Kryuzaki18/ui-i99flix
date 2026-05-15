@@ -1,33 +1,41 @@
-import { Modal, Typography, Space, Tag, Button, Tooltip } from 'antd';
+import { Modal, Typography, Space, Tag, Button, Tooltip } from "antd";
 import {
   PlayCircleOutlined,
-  ExpandOutlined, CompressOutlined,
-  LinkOutlined, LoadingOutlined,
-} from '@ant-design/icons';
-import { useState, useRef, useEffect, useCallback } from 'react';
-import type { Movie } from '../../models/movie';
-import { useTheme } from '../../context/ThemeContext';
-import { useFullscreen } from '../../hooks/useFullscreen';
-import { useTrailerKey } from '../../hooks/useTrailerKey';
-import './VideoPlayer.css';
+  ExpandOutlined,
+  CompressOutlined,
+  LinkOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { useState, useRef, useEffect, useCallback } from "react";
+import type { Movie } from "../../models/movie";
+import { useTheme } from "../../context/ThemeContext";
+import { useFullscreen } from "../../hooks/useFullscreen";
+import { useTrailerKey } from "../../hooks/useTrailerKey";
+import "./VideoPlayer.css";
 
 const { Title, Text } = Typography;
 
 interface VideoPlayerProps {
   movie: Movie | null;
-  open:  boolean;
+  open: boolean;
   onClose: () => void;
 }
 
-export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
+export default function VideoPlayer({
+  movie,
+  open,
+  onClose,
+}: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [servers, setServers] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
-  const movieId = typeof movie?.id === 'number' ? movie.id : null;
-  const { trailerKey, isLoading: trailerLoading } = useTrailerKey(open ? movieId : null);
+  const movieId = typeof movie?.id === "number" ? movie.id : null;
+  const { trailerKey, isLoading: trailerLoading } = useTrailerKey(
+    open ? movieId : null,
+  );
 
   // Reset play state when modal closes or movie changes
   useEffect(() => {
@@ -39,7 +47,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
     if (!open && iframeRef.current) {
       iframeRef.current.contentWindow?.postMessage(
         '{"event":"command","func":"pauseVideo","args":""}',
-        'https://www.youtube.com',
+        "https://www.youtube.com",
       );
     }
   }, [open]);
@@ -61,19 +69,23 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       centered
       style={{ padding: 0 }}
       styles={{
-        body: { background: '#000', padding: 0, borderRadius: 12, overflow: 'hidden' },
-        mask: { backdropFilter: 'blur(6px)', background: 'rgba(0,0,0,0.85)' },
+        body: {
+          background: "#000",
+          padding: 0,
+          borderRadius: 12,
+          overflow: "hidden",
+        },
+        mask: { backdropFilter: "blur(6px)", background: "rgba(0,0,0,0.85)" },
       }}
       closeIcon={<span className="player__close-icon">✕</span>}
       destroyOnHidden
     >
       <div
         ref={fullscreenRef}
-        className={`player__fullscreen-root${isFullscreen ? ' player__fullscreen-root--active' : ''}`}
+        className={`player__fullscreen-root${isFullscreen ? " player__fullscreen-root--active" : ""}`}
       >
         {/* ── Video area ── */}
         <div className="player__video-area">
-
           {/* Poster / play gate — shown before user clicks play */}
           {!playing && (
             <div className="player__poster-gate" onClick={handlePlay}>
@@ -91,12 +103,16 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                 ) : (
                   <div className="player__no-trailer">
                     <PlayCircleOutlined className="player__play-icon player__play-icon--dim" />
-                    <Text className="player__no-trailer-text">No trailer available</Text>
+                    <Text className="player__no-trailer-text">
+                      No trailer available
+                    </Text>
                   </div>
                 )}
               </div>
               <div className="player__title-overlay">
-                <Title level={5} className="player__title">{movie.title}</Title>
+                <Title level={5} className="player__title">
+                  {movie.title}
+                </Title>
               </div>
             </div>
           )}
@@ -111,11 +127,19 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           )}
 
           {playing && servers === 2 && (
-          <iframe
-            src={`https://vidlink.pro/movie/${movie.id}`}
-            className="player__iframe"
-            allowFullScreen
-          ></iframe>
+            <iframe
+              src={`https://vidlink.pro/movie/${movie.id}`}
+              className="player__iframe"
+              allowFullScreen
+            ></iframe>
+          )}
+
+          {playing && servers === 3 && (
+            <iframe
+              src={`https://www.2embed.cc/embed/${movie.id}`}
+              className="player__iframe"
+              allowFullScreen
+            ></iframe>
           )}
 
           {playing && !youtubeUrl && (
@@ -135,7 +159,10 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           )}
         </div>
 
-        <div className="player__servers" style={{ background: colors.playerControls }}>
+        <div
+          className="player__servers"
+          style={{ background: colors.playerControls }}
+        >
           <Button
             size="small"
             color="default"
@@ -152,26 +179,46 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           >
             Server 2
           </Button>
+          <Button
+            size="small"
+            color="default"
+            variant="solid"
+            onClick={() => setServers(3)}
+          >
+            Server 3
+          </Button>
         </div>
 
         {/* ── Controls bar ── */}
-        <div className="player__controls" style={{ background: colors.playerControls }}>
+        <div
+          className="player__controls"
+          style={{ background: colors.playerControls }}
+        >
           <div className="player__controls-row">
             <div className="player__info">
               <Text className="player__meta-text">{movie.year}</Text>
               {movie.genre.map((g) => (
-                <Tag key={g} className="player__genre-tag">{g}</Tag>
+                <Tag key={g} className="player__genre-tag">
+                  {g}
+                </Tag>
               ))}
             </div>
 
             <Space size={8}>
-              <Tooltip title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'} placement="top">
+              <Tooltip
+                title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                placement="top"
+              >
                 <Button
                   type="text"
-                  icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
+                  icon={
+                    isFullscreen ? <CompressOutlined /> : <ExpandOutlined />
+                  }
                   onClick={toggleFullscreen}
                   className="player__expand-btn"
-                  aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                  aria-label={
+                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                  }
                 />
               </Tooltip>
               <Button
@@ -179,7 +226,13 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                 color="default"
                 variant="solid"
                 icon={<LinkOutlined />}
-                onClick={() => window.open(`/player/${movie.id}`, '_blank', 'noopener,noreferrer')}
+                onClick={() =>
+                  window.open(
+                    `/player/${movie.id}`,
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                }
               >
                 Open in new tab
               </Button>

@@ -1,17 +1,29 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Typography, Button, Tag, Space, Rate, Spin, Result, Tooltip } from 'antd';
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useParams, Link } from "react-router-dom";
+import {
+  Typography,
+  Button,
+  Tag,
+  Space,
+  Rate,
+  Spin,
+  Result,
+  Tooltip,
+} from "antd";
 import {
   PlayCircleOutlined,
-  ExpandOutlined, CompressOutlined,
-  ArrowLeftOutlined, PlayCircleFilled, LoadingOutlined,
-} from '@ant-design/icons';
-import { useMovieDetailQuery } from '../../api/useMoviesQuery';
-import { useTrailerKey } from '../../hooks/useTrailerKey';
-import { GENRE_COLORS } from '../../constants/genres';
-import { useTheme } from '../../context/ThemeContext';
-import { useFullscreen } from '../../hooks/useFullscreen';
-import './Player.css';
+  ExpandOutlined,
+  CompressOutlined,
+  ArrowLeftOutlined,
+  PlayCircleFilled,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { useMovieDetailQuery } from "../../api/useMoviesQuery";
+import { useTrailerKey } from "../../hooks/useTrailerKey";
+import { GENRE_COLORS } from "../../constants/genres";
+import { useTheme } from "../../context/ThemeContext";
+import { useFullscreen } from "../../hooks/useFullscreen";
+import "./Player.css";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -21,7 +33,7 @@ export default function Player() {
   const [servers, setServers] = useState(1);
 
   const movieId = id ? parseInt(id, 10) : null;
-  const safeId  = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
+  const safeId = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
 
   const { data: movie, isLoading, isError } = useMovieDetailQuery(safeId);
   const { trailerKey, isLoading: trailerLoading } = useTrailerKey(safeId);
@@ -35,7 +47,7 @@ export default function Player() {
     return () => {
       iframeRef.current?.contentWindow?.postMessage(
         '{"event":"command","func":"pauseVideo","args":""}',
-        'https://www.youtube.com',
+        "https://www.youtube.com",
       );
     };
   }, []);
@@ -45,7 +57,10 @@ export default function Player() {
   // ── Loading ───────────────────────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div className="player-page player-page--loading" style={{ background: '#000' }}>
+      <div
+        className="player-page player-page--loading"
+        style={{ background: "#000" }}
+      >
         <Spin size="large" />
       </div>
     );
@@ -54,14 +69,20 @@ export default function Player() {
   // ── Error / not found ─────────────────────────────────────────────────────
   if (isError || !movie) {
     return (
-      <div className="player-page player-page--error" style={{ background: colors.bgBase }}>
+      <div
+        className="player-page player-page--error"
+        style={{ background: colors.bgBase }}
+      >
         <Result
           status="404"
           title="Movie not found"
           subTitle="This movie doesn't exist or couldn't be loaded."
           extra={
             <Link to="/">
-              <Button type="primary" style={{ background: '#e50914', borderColor: '#e50914' }}>
+              <Button
+                type="primary"
+                style={{ background: "#e50914", borderColor: "#e50914" }}
+              >
                 Back to Home
               </Button>
             </Link>
@@ -76,10 +97,10 @@ export default function Player() {
     : null;
 
   return (
-    <div className="player-page" style={{ background: '#000' }}>
+    <div className="player-page" style={{ background: "#000" }}>
       <div
         ref={fullscreenRef}
-        className={`player-page__video${isFullscreen ? ' player-page__video--fullscreen' : ''}`}
+        className={`player-page__video${isFullscreen ? " player-page__video--fullscreen" : ""}`}
         onDoubleClick={toggleFullscreen}
       >
         {/* ── Poster / play gate ── */}
@@ -105,9 +126,9 @@ export default function Player() {
                 </Button>
               </Link>
               <Space align="center" size={8}>
-                <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
+                <PlayCircleFilled style={{ color: "#e50914", fontSize: 20 }} />
                 <Text className="player-page__brand">
-                  i99<span style={{ color: '#e50914' }}>flix</span>
+                  i99<span style={{ color: "#e50914" }}>flix</span>
                 </Text>
               </Space>
             </div>
@@ -119,12 +140,16 @@ export default function Player() {
               ) : trailerKey ? (
                 <div className="player-page__play-wrap">
                   <PlayCircleOutlined className="player-page__play-icon" />
-                  <Text className="player-page__play-hint">Click to watch trailer</Text>
+                  <Text className="player-page__play-hint">
+                    Click to watch trailer
+                  </Text>
                 </div>
               ) : (
                 <div className="player-page__play-wrap">
                   <PlayCircleOutlined className="player-page__play-icon player-page__play-icon--dim" />
-                  <Text className="player-page__play-hint">No trailer available</Text>
+                  <Text className="player-page__play-hint">
+                    No trailer available
+                  </Text>
                 </div>
               )}
             </div>
@@ -133,15 +158,36 @@ export default function Player() {
             <div className="player-page__title-overlay">
               <Space size={6} wrap>
                 {movie.genre.map((g) => (
-                  <Tag key={g} color={GENRE_COLORS[g] || 'default'} style={{ fontSize: 11 }}>{g}</Tag>
+                  <Tag
+                    key={g}
+                    color={GENRE_COLORS[g] || "default"}
+                    style={{ fontSize: 11 }}
+                  >
+                    {g}
+                  </Tag>
                 ))}
               </Space>
-              <Title level={2} className="player-page__title">{movie.title}</Title>
+              <Title level={2} className="player-page__title">
+                {movie.title}
+              </Title>
               <Space size={12}>
-                <Rate disabled allowHalf defaultValue={movie.rating / 2} style={{ fontSize: 13, color: '#fadb14' }} />
-                <Text style={{ color: '#fadb14', fontWeight: 700, fontSize: 13 }}>{movie.rating}/10</Text>
-                <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.year}</Text>
-                <Text style={{ color: '#ccc', fontSize: 13 }}>{movie.duration}</Text>
+                <Rate
+                  disabled
+                  allowHalf
+                  defaultValue={movie.rating / 2}
+                  style={{ fontSize: 13, color: "#fadb14" }}
+                />
+                <Text
+                  style={{ color: "#fadb14", fontWeight: 700, fontSize: 13 }}
+                >
+                  {movie.rating}/10
+                </Text>
+                <Text style={{ color: "#ccc", fontSize: 13 }}>
+                  {movie.year}
+                </Text>
+                <Text style={{ color: "#ccc", fontSize: 13 }}>
+                  {movie.duration}
+                </Text>
               </Space>
             </div>
           </div>
@@ -162,30 +208,37 @@ export default function Player() {
                 </Button>
               </Link>
               <Space align="center" size={8}>
-                <PlayCircleFilled style={{ color: '#e50914', fontSize: 20 }} />
+                <PlayCircleFilled style={{ color: "#e50914", fontSize: 20 }} />
                 <Text className="player-page__brand">
-                  i99<span style={{ color: '#e50914' }}>flix</span>
+                  i99<span style={{ color: "#e50914" }}>flix</span>
                 </Text>
               </Space>
             </div>
 
-            
-          {playing && servers === 1 && (
-            <iframe
-              src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
-              className="player__iframe"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          )}
+            {servers === 1 && (
+              <iframe
+                src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
+                className="player__iframe"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            )}
 
-          {playing && servers === 2 && (
-          <iframe
-            src={`https://vidlink.pro/movie/${movie.id}`}
-            className="player__iframe"
-            allowFullScreen
-          ></iframe>
-          )}
+            {servers === 2 && (
+              <iframe
+                src={`https://vidlink.pro/movie/${movie.id}`}
+                className="player__iframe"
+                allowFullScreen
+              ></iframe>
+            )}
+
+            {servers === 3 && (
+              <iframe
+                src={`https://www.2embed.cc/embed/${movie.id}`}
+                className="player__iframe"
+                allowFullScreen
+              ></iframe>
+            )}
           </div>
         )}
 
@@ -200,91 +253,151 @@ export default function Player() {
             <div className="player-page__vignette" />
             <div className="player-page__topbar">
               <Link to="/" className="player-page__back-link">
-                <Button type="text" icon={<ArrowLeftOutlined />} className="player-page__back-btn">
+                <Button
+                  type="text"
+                  icon={<ArrowLeftOutlined />}
+                  className="player-page__back-btn"
+                >
                   Back
                 </Button>
               </Link>
             </div>
             <div className="player-page__overlay">
-              <Text style={{ color: '#fff', fontSize: 16 }}>No trailer available for this title</Text>
+              <Text style={{ color: "#fff", fontSize: 16 }}>
+                No trailer available for this title
+              </Text>
             </div>
           </div>
         )}
 
         <div
           className="player-page__controls"
-          style={{ background: isDark ? '#0d0d0d' : '#111' }}
+          style={{ background: isDark ? "#0d0d0d" : "#111" }}
         >
           <div className="player-page__controls-row">
-            <Text style={{ color: '#aaa', fontSize: 13 }}>
-              {playing ? 'Now playing trailer' : 'Click the poster to play'}
+            <Text style={{ color: "#aaa", fontSize: 13 }}>
+              {playing ? "Now playing trailer" : "Click the poster to play"}
             </Text>
-            <Tooltip title={isFullscreen ? 'Exit fullscreen (F)' : 'Fullscreen (F · double-click)'} placement="top">
+            <Tooltip
+              title={
+                isFullscreen
+                  ? "Exit fullscreen (F)"
+                  : "Fullscreen (F · double-click)"
+              }
+              placement="top"
+            >
               <Button
                 type="text"
                 icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
                 onClick={toggleFullscreen}
                 className="player-page__btn-nav"
-                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                aria-label={
+                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                }
               />
             </Tooltip>
           </div>
         </div>
       </div>
 
-
-      <div className="player-page__servers" style={{ background: colors.playerControls }}>
-      <Button
-        size="small"
-        color="default"
-        variant="solid"
-        onClick={() => setServers(1)}
+      <div
+        className="player-page__servers"
+        style={{ background: colors.playerControls }}
       >
-        Server 1
-      </Button>
-      <Button
-        size="small"
-        color="default"
-        variant="solid"
-        onClick={() => setServers(2)}
-      >
-        Server 2
-      </Button>
-    </div>
+        <Button
+          size="small"
+          color="default"
+          variant="solid"
+          onClick={() => setServers(1)}
+        >
+          Server 1
+        </Button>
+        <Button
+          size="small"
+          color="default"
+          variant="solid"
+          onClick={() => setServers(2)}
+        >
+          Server 2
+        </Button>
+        <Button
+          size="small"
+          color="default"
+          variant="solid"
+          onClick={() => setServers(3)}
+        >
+          Server 3
+        </Button>
+      </div>
 
       <div
         className="player-page__info"
-        style={{ background: colors.bgBase, borderTop: `1px solid ${isDark ? '#1a1a2e' : '#e0e0e8'}` }}
+        style={{
+          background: colors.bgBase,
+          borderTop: `1px solid ${isDark ? "#1a1a2e" : "#e0e0e8"}`,
+        }}
       >
         <div className="player-page__info-inner">
           <div className="player-page__info-main">
-            <Title level={4} style={{ margin: '0 0 8px', color: colors.textPrimary }}>
+            <Title
+              level={4}
+              style={{ margin: "0 0 8px", color: colors.textPrimary }}
+            >
               {movie.title}
             </Title>
             <Space size={8} wrap style={{ marginBottom: 12 }}>
               {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || 'default'}>{g}</Tag>
+                <Tag key={g} color={GENRE_COLORS[g] || "default"}>
+                  {g}
+                </Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
-              {movie.trending   && <Tag color="red">Trending</Tag>}
+              {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
-            <Paragraph style={{ color: colors.textSecondary, lineHeight: 1.7, margin: 0 }}>
+            <Paragraph
+              style={{
+                color: colors.textSecondary,
+                lineHeight: 1.7,
+                margin: 0,
+              }}
+            >
               {movie.description}
             </Paragraph>
           </div>
 
           <div className="player-page__info-meta">
             <div className="player-page__meta-item">
-              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Year</Text>
-              <Text strong style={{ color: colors.textPrimary }}>{movie.year}</Text>
+              <Text
+                className="player-page__meta-label"
+                style={{ color: colors.textMuted }}
+              >
+                Year
+              </Text>
+              <Text strong style={{ color: colors.textPrimary }}>
+                {movie.year}
+              </Text>
             </div>
             <div className="player-page__meta-item">
-              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Duration</Text>
-              <Text strong style={{ color: colors.textPrimary }}>{movie.duration}</Text>
+              <Text
+                className="player-page__meta-label"
+                style={{ color: colors.textMuted }}
+              >
+                Duration
+              </Text>
+              <Text strong style={{ color: colors.textPrimary }}>
+                {movie.duration}
+              </Text>
             </div>
             <div className="player-page__meta-item">
-              <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
-              <Text strong style={{ color: '#fadb14' }}>★ {movie.rating}</Text>
+              <Text
+                className="player-page__meta-label"
+                style={{ color: colors.textMuted }}
+              >
+                Rating
+              </Text>
+              <Text strong style={{ color: "#fadb14" }}>
+                ★ {movie.rating}
+              </Text>
             </div>
           </div>
         </div>
