@@ -173,21 +173,9 @@
 }
 
 /* ── Controls bar ─────────────────────────────────────────────────────────── */
-.player-page__controls {
-  padding: 10px 20px 14px;
-  flex-shrink: 0;
-}
 
 .player-page__progress {
   margin-bottom: 6px !important;
-}
-
-.player-page__controls-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .player-page__btn-nav {
@@ -219,14 +207,6 @@
 
 .player-page__volume {
   width: 90px;
-}
-
-.player-page__servers {
-  padding: 1rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
 }
 
 /* ── Info panel ───────────────────────────────────────────────────────────── */
@@ -326,23 +306,6 @@
 
 .player-page__video--fullscreen .player-page__video-clickzone .player-page__backdrop {
   height: 100%;
-}
-
-/* Controls fade in on hover in fullscreen */
-.player-page__video--fullscreen .player-page__controls,
-.player-page__video:fullscreen .player-page__controls,
-.player-page__video:-webkit-full-screen .player-page__controls {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 100%) !important;
-}
-
-.player-page__video--fullscreen:hover .player-page__controls,
-.player-page__video:fullscreen:hover .player-page__controls,
-.player-page__video:-webkit-full-screen:hover .player-page__controls,
-.player-page__video--fullscreen .player-page__controls:focus-within,
-.player-page__video:fullscreen .player-page__controls:focus-within {
-  opacity: 1;
 }
 
 .player-page__video--fullscreen .player-page__video-clickzone {

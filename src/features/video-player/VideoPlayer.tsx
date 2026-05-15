@@ -1,4 +1,4 @@
-import { Modal, Typography, Space, Tag, Button, Tooltip } from "antd";
+import { Modal, Typography, Space, Tag, Button, Tooltip, Flex } from "antd";
 import {
   PlayCircleOutlined,
   ExpandOutlined,
@@ -136,7 +136,15 @@ export default function VideoPlayer({
 
           {playing && servers === 3 && (
             <iframe
-              src={`https://www.2embed.cc/embed/${movie.id}`}
+              src={`https://vidsrc.fyi/embed/movie/${movie.id}`}
+              className="player__iframe"
+              allowFullScreen
+            ></iframe>
+          )}
+
+          {playing && servers === 4 && (
+            <iframe
+              src={`https://www.2embed.stream/embed/movie/${movie.id}`}
               className="player__iframe"
               allowFullScreen
             ></iframe>
@@ -159,86 +167,72 @@ export default function VideoPlayer({
           )}
         </div>
 
-        <div
-          className="player__servers"
-          style={{ background: colors.playerControls }}
+        <Flex
+          gap="medium"
+          align="center"
+          justify="space-between"
+          style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
-          <Button
-            size="small"
-            color="default"
-            variant="solid"
-            onClick={() => setServers(1)}
-          >
-            Server 1
-          </Button>
-          <Button
-            size="small"
-            color="default"
-            variant="solid"
-            onClick={() => setServers(2)}
-          >
-            Server 2
-          </Button>
-          <Button
-            size="small"
-            color="default"
-            variant="solid"
-            onClick={() => setServers(3)}
-          >
-            Server 3
-          </Button>
-        </div>
+          <Flex gap="small" align="center">
+            <Button size="small" onClick={() => setServers(1)} type={servers === 1 ? "primary" : "default"}>
+              Server 1
+            </Button>
+            <Button size="small" onClick={() => setServers(2)} type={servers === 2 ? "primary" : "default"}>
+              Server 2
+            </Button>
+            <Button size="small" onClick={() => setServers(3)} type={servers === 3 ? "primary" : "default"}>
+              Server 3
+            </Button>
+            <Button size="small" onClick={() => setServers(4)} type={servers === 4 ? "primary" : "default"}>
+              Server 4
+            </Button>
+          </Flex>
 
-        {/* ── Controls bar ── */}
-        <div
-          className="player__controls"
-          style={{ background: colors.playerControls }}
-        >
-          <div className="player__controls-row">
-            <div className="player__info">
-              <Text className="player__meta-text">{movie.year}</Text>
-              {movie.genre.map((g) => (
-                <Tag key={g} className="player__genre-tag">
-                  {g}
-                </Tag>
-              ))}
-            </div>
+          <Space size={8}>
+            <Button
+              size="small"
+              icon={<LinkOutlined />}
+              onClick={() =>
+                window.open(
+                  `/player/${movie.id}`,
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
+            >
+              Open in new tab
+            </Button>
 
-            <Space size={8}>
-              <Tooltip
-                title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                placement="top"
-              >
-                <Button
-                  type="text"
-                  icon={
-                    isFullscreen ? <CompressOutlined /> : <ExpandOutlined />
-                  }
-                  onClick={toggleFullscreen}
-                  className="player__expand-btn"
-                  aria-label={
-                    isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                  }
-                />
-              </Tooltip>
+            <Tooltip
+              title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+              placement="top"
+            >
               <Button
                 size="small"
-                color="default"
-                variant="solid"
-                icon={<LinkOutlined />}
-                onClick={() =>
-                  window.open(
-                    `/player/${movie.id}`,
-                    "_blank",
-                    "noopener,noreferrer",
-                  )
+                icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
+                onClick={toggleFullscreen}
+                aria-label={
+                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
                 }
-              >
-                Open in new tab
-              </Button>
-            </Space>
-          </div>
-        </div>
+              />
+            </Tooltip>
+          </Space>
+        </Flex>
+
+        {/* ── Controls bar ── */}
+
+        <Flex
+          gap="small"
+          align="center"
+          style={{ background: colors.playerControls, padding: "0.5rem" }}
+        >
+          <Text>{movie.title} ({movie.year}) • {movie.duration}</Text>
+          {movie.genre.map((g) => (
+            <Tag key={g} className="player__genre-tag">
+              {g}
+            </Tag>
+          ))}
+        </Flex>
       </div>
     </Modal>
   );

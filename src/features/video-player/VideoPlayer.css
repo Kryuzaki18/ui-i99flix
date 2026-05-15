@@ -126,25 +126,6 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-.player__servers {
-  padding: 1rem 0;
-  display: flex;
-  gap: 12px;
-}
-
-/* Controls bar */
-.player__controls {
-  padding: 12px 20px 16px;
-}
-
-.player__controls-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .player__btn-nav {
   color: #fff !important;
 }
@@ -170,31 +151,9 @@
   color: #aaa !important;
 }
 
-.player__info-row {
-  margin-top: 8px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.player__info {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
 .player__genre-tag {
   height: 22px;
   font-size: 11px;
-}
-
-.player__meta-text {
-  height: 22px;
-  color: #757575;
-  font-size: 12px;
-  line-height: 2;
-
 }
 
 /* ── Volume control ───────────────────────────────────────────────────────── */

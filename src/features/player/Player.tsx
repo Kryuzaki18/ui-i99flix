@@ -9,6 +9,7 @@ import {
   Spin,
   Result,
   Tooltip,
+  Flex,
 } from "antd";
 import {
   PlayCircleOutlined,
@@ -234,7 +235,15 @@ export default function Player() {
 
             {servers === 3 && (
               <iframe
-                src={`https://www.2embed.cc/embed/${movie.id}`}
+                src={`https://vidsrc.fyi/embed/movie/${movie.id}`}
+                className="player__iframe"
+                allowFullScreen
+              ></iframe>
+            )}
+
+            {servers === 4 && (
+              <iframe
+                src={`https://www.2embed.stream/embed/movie/${movie.id}`}
                 className="player__iframe"
                 allowFullScreen
               ></iframe>
@@ -269,66 +278,66 @@ export default function Player() {
             </div>
           </div>
         )}
-
-        <div
-          className="player-page__controls"
-          style={{ background: isDark ? "#0d0d0d" : "#111" }}
-        >
-          <div className="player-page__controls-row">
-            <Text style={{ color: "#aaa", fontSize: 13 }}>
-              {playing ? "Now playing trailer" : "Click the poster to play"}
-            </Text>
-            <Tooltip
-              title={
-                isFullscreen
-                  ? "Exit fullscreen (F)"
-                  : "Fullscreen (F · double-click)"
-              }
-              placement="top"
-            >
-              <Button
-                type="text"
-                icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
-                onClick={toggleFullscreen}
-                className="player-page__btn-nav"
-                aria-label={
-                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                }
-              />
-            </Tooltip>
-          </div>
-        </div>
       </div>
 
-      <div
-        className="player-page__servers"
-        style={{ background: colors.playerControls }}
+      <Flex
+        gap="small"
+        align="center"
+        justify="space-between"
+        style={{ background: colors.playerControls, padding: "0.5rem" }}
       >
-        <Button
-          size="small"
-          color="default"
-          variant="solid"
-          onClick={() => setServers(1)}
+        <Text >
+          {movie.title} ({movie.year}) • {movie.duration}
+        </Text>
+
+        <Flex gap="small" align="center" justify="center">
+          <Button
+            size="small"
+            onClick={() => setServers(1)}
+            type={servers === 1 ? "primary" : "default"}
+          >
+            Server 1
+          </Button>
+          <Button
+            size="small"
+            onClick={() => setServers(2)}
+            type={servers === 2 ? "primary" : "default"}
+          >
+            Server 2
+          </Button>
+          <Button
+            size="small"
+            onClick={() => setServers(3)}
+            type={servers === 3 ? "primary" : "default"}
+          >
+            Server 3
+          </Button>
+          <Button
+            size="small"
+            onClick={() => setServers(4)}
+            type={servers === 4 ? "primary" : "default"}
+          >
+            Server 4
+          </Button>
+        </Flex>
+
+        <Tooltip
+          title={
+            isFullscreen
+              ? "Exit fullscreen (F)"
+              : "Fullscreen (F · double-click)"
+          }
+          placement="top"
         >
-          Server 1
-        </Button>
-        <Button
-          size="small"
-          color="default"
-          variant="solid"
-          onClick={() => setServers(2)}
-        >
-          Server 2
-        </Button>
-        <Button
-          size="small"
-          color="default"
-          variant="solid"
-          onClick={() => setServers(3)}
-        >
-          Server 3
-        </Button>
-      </div>
+          <Button
+            type="text"
+            icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
+            onClick={toggleFullscreen}
+            className="player-page__btn-nav"
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          />
+        </Tooltip>
+      </Flex>
 
       <div
         className="player-page__info"
