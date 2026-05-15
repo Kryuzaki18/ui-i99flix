@@ -21,6 +21,7 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
+  const [servers, setServers] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
@@ -100,13 +101,21 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             </div>
           )}
 
-          {playing && youtubeUrl && (
+          {playing && servers === 1 && (
             <iframe
               src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
               className="player__iframe"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
             ></iframe>
+          )}
+
+          {playing && servers === 2 && (
+          <iframe
+            src={`https://vidlink.pro/movie/${movie.id}`}
+            className="player__iframe"
+            allowFullScreen
+          ></iframe>
           )}
 
           {playing && !youtubeUrl && (
@@ -124,6 +133,25 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
               </div>
             </div>
           )}
+        </div>
+
+        <div className="player__servers" style={{ background: colors.playerControls }}>
+          <Button
+            size="small"
+            color="default"
+            variant="solid"
+            onClick={() => setServers(1)}
+          >
+            Server 1
+          </Button>
+          <Button
+            size="small"
+            color="default"
+            variant="solid"
+            onClick={() => setServers(2)}
+          >
+            Server 2
+          </Button>
         </div>
 
         {/* ── Controls bar ── */}

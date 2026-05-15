@@ -18,6 +18,7 @@ const { Title, Text, Paragraph } = Typography;
 export default function Player() {
   const { id } = useParams<{ id: string }>();
   const { colors, isDark } = useTheme();
+  const [servers, setServers] = useState(1);
 
   const movieId = id ? parseInt(id, 10) : null;
   const safeId  = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
@@ -168,12 +169,23 @@ export default function Player() {
               </Space>
             </div>
 
+            
+          {playing && servers === 1 && (
             <iframe
               src={`https://ezvidapi.com/embed/movie/${movie.id}?provider=vidsrc`}
-              className="player-page__iframe"
+              className="player__iframe"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
             ></iframe>
+          )}
+
+          {playing && servers === 2 && (
+          <iframe
+            src={`https://vidlink.pro/movie/${movie.id}`}
+            className="player__iframe"
+            allowFullScreen
+          ></iframe>
+          )}
           </div>
         )}
 
@@ -219,6 +231,26 @@ export default function Player() {
           </div>
         </div>
       </div>
+
+
+      <div className="player-page__servers" style={{ background: colors.playerControls }}>
+      <Button
+        size="small"
+        color="default"
+        variant="solid"
+        onClick={() => setServers(1)}
+      >
+        Server 1
+      </Button>
+      <Button
+        size="small"
+        color="default"
+        variant="solid"
+        onClick={() => setServers(2)}
+      >
+        Server 2
+      </Button>
+    </div>
 
       <div
         className="player-page__info"

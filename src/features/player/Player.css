@@ -221,6 +221,14 @@
   width: 90px;
 }
 
+.player-page__servers {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
 /* ── Info panel ───────────────────────────────────────────────────────────── */
 .player-page__info {
   flex: 1;
