@@ -1,7 +1,7 @@
 import { Drawer, Menu, Space, Typography, Avatar, Divider } from 'antd';
 import {
   HomeOutlined, AppstoreOutlined, HeartOutlined, HistoryOutlined,
-  SettingOutlined, LoginOutlined, PlayCircleFilled, UserOutlined,
+  SettingOutlined, LoginOutlined, UserOutlined,
   StarOutlined, FireOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
