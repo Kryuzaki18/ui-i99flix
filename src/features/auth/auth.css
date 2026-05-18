@@ -71,7 +71,7 @@
 /* Floating movie cards strip */
 .auth-showcase__cards {
   position: absolute;
-  bottom: 160px;
+  bottom: 250px;
   left: 0;
   right: 0;
   z-index: 3;
@@ -127,7 +127,71 @@
   left: 36px;
   right: 36px;
   z-index: 3;
-  animation: fadeSlideUp 0.6s ease both;
+  /* dots sit at the bottom in normal flow;
+     content blocks are absolute and grow upward from above the dots */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each movie's content cross-fades — same technique as the backdrop slides.
+   All blocks are stacked; only the active one is visible. */
+.auth-showcase__info-content {
+  position: absolute;
+  /* anchor to the bottom of the content area, just above the dots (42px = dot height + margin) */
+  bottom: 42px;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
+}
+
+.auth-showcase__info-content.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Dots are the only normal-flow child — they define the container's height
+   and always sit at the very bottom, never overlapping the text above */
+.auth-showcase__dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 4px;
+  /* push content blocks far enough up to fit badge+title+meta+3-line desc */
+  margin-top: 170px;
+}
+
+.auth-showcase__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Large invisible hit area — easy to click/tap */
+.auth-showcase__dot::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+}
+
+.auth-showcase__dot.is-active {
+  background: #e50914;
+  width: 28px;
+  border-radius: 5px;
+}
+
+/* Focus-visible for keyboard navigation */
+.auth-showcase__dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
 .auth-showcase__info-badge {
@@ -176,32 +240,16 @@
   font-size: 13px;
 }
 
-/* Slide indicator dots */
-.auth-showcase__dots {
-  position: absolute;
-  bottom: 36px;
-  right: 36px;
-  z-index: 3;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.auth-showcase__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-  padding: 0;
-}
-
-.auth-showcase__dot.is-active {
-  background: #e50914;
-  width: 20px;
-  border-radius: 3px;
+.auth-showcase__info-description {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Focus-visible for keyboard navigation */
@@ -319,10 +367,7 @@
 }
 
 /* Social buttons */
-.auth-panel__social-btn {
-  border-radius: 8px !important;
-  flex: 1;
-}
+
 
 /* Footer */
 .auth-panel__footer {

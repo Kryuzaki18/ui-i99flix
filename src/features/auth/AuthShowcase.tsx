@@ -97,7 +97,6 @@ export default function AuthShowcase() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [movies.length]);
 
-  const active = movies[activeIdx];
 
   return (
     <div
@@ -145,53 +144,63 @@ export default function AuthShowcase() {
         </div>
       )}
 
-      {/* ── Active movie info ── */}
-      {active && (
-        <div className="auth-showcase__info" key={activeIdx}>
-          <div className="auth-showcase__info-badge">
-            <FireFilled />
-            Trending
-          </div>
-          <h2 className="auth-showcase__info-title">{active.title}</h2>
-          <div className="auth-showcase__info-meta">
-            <span className="auth-showcase__info-rating">
-              <StarFilled />
-              {active.rating.toFixed(1)}
-            </span>
-            <span className="auth-showcase__info-year">{active.year}</span>
-            {active.duration && active.duration !== 'N/A' && (
-              <span className="auth-showcase__info-duration">{active.duration}</span>
-            )}
-            {active.genre.slice(0, 2).map((g) => (
-              <Tag
-                key={g}
-                color={GENRE_COLORS[g] ?? 'default'}
-                style={{ margin: 0, fontSize: 11, fontWeight: 600 }}
-              >
-                {g}
-              </Tag>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Slide dots ── */}
-      {movies.length > 1 && (
-        <div className="auth-showcase__dots">
-          {movies.map((_, i) => (
-            <button
-              key={i}
-              className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
-              onClick={() => {
-                setActiveIdx(i);
-                if (timerRef.current) clearInterval(timerRef.current);
-                timerRef.current = setInterval(() => {
-                  setActiveIdx((idx) => (idx + 1) % movies.length);
-                }, SLIDE_INTERVAL);
-              }}
-              aria-label={`Go to slide ${i + 1}`}
-            />
+      {/* ── Active movie info + slide dots ── */}
+      {movies.length > 0 && (
+        <div className="auth-showcase__info">
+          {movies.map((movie, i) => (
+            <div
+              key={movie.id}
+              className={`auth-showcase__info-content ${i === activeIdx ? 'is-active' : ''}`}
+            >
+              <div className="auth-showcase__info-badge">
+                <FireFilled />
+                Trending
+              </div>
+              <h2 className="auth-showcase__info-title">{movie.title}</h2>
+              <div className="auth-showcase__info-meta">
+                <span className="auth-showcase__info-rating">
+                  <StarFilled />
+                  {movie.rating.toFixed(1)}
+                </span>
+                <span className="auth-showcase__info-year">{movie.year}</span>
+                {movie.duration && movie.duration !== 'N/A' && (
+                  <span className="auth-showcase__info-duration">{movie.duration}</span>
+                )}
+                {movie.genre.slice(0, 2).map((g) => (
+                  <Tag
+                    key={g}
+                    color={GENRE_COLORS[g] ?? 'default'}
+                    style={{ margin: 0, fontSize: 11, fontWeight: 600 }}
+                  >
+                    {g}
+                  </Tag>
+                ))}
+              </div>
+              {movie.description && (
+                <p className="auth-showcase__info-description">{movie.description}</p>
+              )}
+            </div>
           ))}
+
+          {/* Dots always visible, no flicker */}
+          {movies.length > 1 && (
+            <div className="auth-showcase__dots">
+              {movies.map((_, i) => (
+                <button
+                  key={i}
+                  className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setActiveIdx(i);
+                    if (timerRef.current) clearInterval(timerRef.current);
+                    timerRef.current = setInterval(() => {
+                      setActiveIdx((idx) => (idx + 1) % movies.length);
+                    }, SLIDE_INTERVAL);
+                  }}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

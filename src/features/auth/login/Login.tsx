@@ -1,5 +1,5 @@
-import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
-import { UserOutlined, LockOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip, Image } from 'antd';
+import { UserOutlined, LockOutlined, InfoCircleOutlined, GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../context/ThemeContext';
@@ -113,10 +113,9 @@ export default function Login() {
         <Text style={{ color: colors.textMuted, fontSize: 12 }}>or continue with</Text>
       </Divider>
 
-      <Space style={{ width: '100%', justifyContent: 'center' }} size={12}>
-        {['Google', 'GitHub', 'Apple'].map((provider) => (
-          <Button key={provider} className="auth-panel__social-btn">{provider}</Button>
-        ))}
+      <Space style={{ width: '100%', justifyContent: 'center' }} size={15}>
+        <Button shape="circle" icon={<GoogleOutlined />} />
+        <Button shape="circle" icon={<FacebookOutlined />} />
       </Space>
 
       <div className="auth-panel__footer">
