@@ -10,20 +10,27 @@ import {
   Row,
   Col,
   Skeleton,
+  Avatar,
+  Tooltip,
 } from "antd";
 import {
   PlayCircleOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
   StarFilled,
+  UserOutlined,
 } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
 import { GENRE_COLORS } from "../../../constants/genres";
+import { useTmdbMovieCreditsQuery, useTmdbTvCreditsQuery } from "../../../api/useTmdbQuery";
 import "./MovieDetailDrawer.css";
 
 const { Title, Paragraph, Text } = Typography;
+
+const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
+const MAX_CAST        = 10;
 
 interface MovieDetailDrawerProps {
   movie: Movie | null;
@@ -42,6 +49,16 @@ function MovieDetailDrawerInner({
   const { colors, isDark } = useTheme();
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
+
+  // Only fetch credits for numeric TMDB ids
+  const tmdbId = typeof movie?.id === "number" ? movie.id : null;
+  const isTV   = movie?.mediaType === "tv";
+
+  const movieCredits = useTmdbMovieCreditsQuery(!isTV ? tmdbId : null);
+  const tvCredits    = useTmdbTvCreditsQuery(isTV ? tmdbId : null);
+
+  const credits      = isTV ? tvCredits : movieCredits;
+  const cast         = (credits.data?.cast ?? []).slice(0, MAX_CAST);
 
   useEffect(() => {
     if (!open || !movie) return;
@@ -197,6 +214,71 @@ function MovieDetailDrawerInner({
             </Paragraph>
 
             <Divider />
+
+            {/* ── Cast ──────────────────────────────────────────────── */}
+            {tmdbId && (
+              <>
+                <Text
+                  strong
+                  className="detail-drawer__synopsis-label"
+                  style={{ color: colors.textMuted }}
+                >
+                  Cast
+                </Text>
+
+                {credits.isLoading ? (
+                  <div className="detail-drawer__cast-row">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <div key={i} className="detail-drawer__cast-card">
+                        <Skeleton.Avatar active size={64} shape="circle" />
+                        <Skeleton active title={{ width: 56 }} paragraph={false} style={{ marginTop: 6 }} />
+                      </div>
+                    ))}
+                  </div>
+                ) : cast.length > 0 ? (
+                  <div className="detail-drawer__cast-row">
+                    {cast.map((member) => (
+                      <Tooltip
+                        key={member.id}
+                        title={member.character ? `as ${member.character}` : undefined}
+                        placement="top"
+                      >
+                        <div className="detail-drawer__cast-card">
+                          <Avatar
+                            size={64}
+                            src={member.profile_path ? `${TMDB_IMAGE_BASE}${member.profile_path}` : undefined}
+                            icon={!member.profile_path ? <UserOutlined /> : undefined}
+                            style={{ flexShrink: 0, background: colors.skeletonBg }}
+                          />
+                          <Text
+                            className="detail-drawer__cast-name"
+                            style={{ color: colors.textSecondary }}
+                            ellipsis
+                          >
+                            {member.name}
+                          </Text>
+                          {member.character && (
+                            <Text
+                              className="detail-drawer__cast-character"
+                              style={{ color: colors.textMuted }}
+                              ellipsis
+                            >
+                              {member.character}
+                            </Text>
+                          )}
+                        </div>
+                      </Tooltip>
+                    ))}
+                  </div>
+                ) : (
+                  <Text style={{ color: colors.textMuted, fontSize: 13 }}>
+                    No cast information available.
+                  </Text>
+                )}
+
+                <Divider />
+              </>
+            )}
 
             <Button
               type="primary"
