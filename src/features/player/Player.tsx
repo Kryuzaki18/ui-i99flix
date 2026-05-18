@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import {
   Typography,
   Button,
@@ -18,6 +18,9 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/useMoviesQuery";
+import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
+import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
+import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import { GENRE_COLORS } from "../../constants/genres";
 import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
@@ -29,13 +32,30 @@ const { Title, Text, Paragraph } = Typography;
 
 export default function Player() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
+  const isTv = type === "tv";
+
+  const [season, setSeason] = useState(() => parseInt(searchParams.get("season") || "1", 10));
+  const [episode, setEpisode] = useState(() => parseInt(searchParams.get("episode") || "1", 10));
+
   const { colors } = useTheme();
   const [servers, setServers] = useState(1);
 
   const movieId = id ? parseInt(id, 10) : null;
   const safeId = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
 
-  const { data: movie, isLoading, isError } = useMovieDetailQuery(safeId);
+  const { data: movieData, isLoading: isMovieLoading, isError: isMovieError } = useMovieDetailQuery(isTv ? null : safeId);
+  const { data: tvDetail, isLoading: isTvLoading, isError: isTvError } = useTmdbTvDetailQuery(isTv ? safeId : null);
+
+  const movie = isTv ? (tvDetail ? tmdbTvDetailToMovie(tvDetail) : null) : movieData;
+  const isLoading = isTv ? isTvLoading : isMovieLoading;
+  const isError = isTv ? isTvError : isMovieError;
+
+  const selectedSeasonData = tvDetail?.seasons?.find(
+    (s) => s.season_number === season
+  );
+  const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
 
   const [playing, setPlaying] = useState(false);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
@@ -177,7 +197,10 @@ export default function Player() {
 
             <ServerIframe
               server={servers}
-              movieId={movie.id}
+              mediaId={movie.id}
+              mediaType={movie.mediaType}
+              season={season}
+              episode={episode}
               className="player-page__iframe"
             />
           </div>
@@ -213,6 +236,21 @@ export default function Player() {
           />
         </Tooltip>
       </Flex>
+
+      {isTv && (
+        <Flex
+          style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
+        >
+          <TvEpisodeSelector
+            season={season}
+            episode={episode}
+            onSeasonChange={setSeason}
+            onEpisodeChange={setEpisode}
+            totalSeasons={tvDetail?.number_of_seasons || 20}
+            totalEpisodes={totalEpisodesForSeason}
+          />
+        </Flex>
+      )}
 
       <div
         className="player-page__info"

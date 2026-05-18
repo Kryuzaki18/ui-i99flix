@@ -11,6 +11,8 @@ import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
+import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
+import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import "./VideoPlayer.css";
 
 const { Title, Text } = Typography;
@@ -28,12 +30,27 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [servers, setServers] = useState(1);
+  const [season, setSeason] = useState(1);
+  const [episode, setEpisode] = useState(1);
   const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
+  const { data: tvDetail } = useTmdbTvDetailQuery(
+    movie?.mediaType === "tv" ? Number(movie.id) : null
+  );
+
+  const selectedSeasonData = tvDetail?.seasons?.find(
+    (s) => s.season_number === season
+  );
+  const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
+
   // Reset play state when modal closes or movie changes
   useEffect(() => {
-    if (!open) setPlaying(false);
+    if (!open) {
+      setPlaying(false);
+      setSeason(1);
+      setEpisode(1);
+    }
   }, [open, movie?.id]);
 
   // Pause iframe when modal closes
@@ -100,7 +117,7 @@ export default function VideoPlayer({
             </div>
           )}
 
-          {playing && <ServerIframe server={servers} movieId={movie.id} />}
+          {playing && <ServerIframe server={servers} mediaId={movie.id} mediaType={movie.mediaType} season={season} episode={episode} />}
         </div>
 
         <Flex
@@ -116,13 +133,16 @@ export default function VideoPlayer({
             <Button
               size="small"
               icon={<LinkOutlined />}
-              onClick={() =>
+              onClick={() => {
+                const url = movie.mediaType === "tv"
+                  ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
+                  : `/player/${movie.id}`;
                 window.open(
-                  `/player/${movie.id}`,
+                  url,
                   "_blank",
-                  "noopener,noreferrer",
-                )
-              }
+                  "noopener,noreferrer"
+                );
+              }}
             >
               Open in new tab
             </Button>
@@ -142,6 +162,21 @@ export default function VideoPlayer({
             </Tooltip>
           </Space>
         </Flex>
+
+        {movie.mediaType === "tv" && (
+          <Flex
+            style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
+          >
+            <TvEpisodeSelector
+              season={season}
+              episode={episode}
+              onSeasonChange={setSeason}
+              onEpisodeChange={setEpisode}
+              totalSeasons={tvDetail?.number_of_seasons || 20}
+              totalEpisodes={totalEpisodesForSeason}
+            />
+          </Flex>
+        )}
 
         <Flex
           gap="small"

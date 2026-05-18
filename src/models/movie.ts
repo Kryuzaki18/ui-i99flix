@@ -9,6 +9,7 @@ export interface Movie {
   duration:    string;
   thumbnail:   string;
   backdrop:    string;
+  mediaType?:  'movie' | 'tv';
   featured?:   boolean;
   trending?:   boolean;
   newRelease?:  boolean;

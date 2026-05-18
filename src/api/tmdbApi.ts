@@ -39,11 +39,22 @@ export interface TmdbTvListItem {
   original_language: string;
 }
 
+export interface TmdbTvSeason {
+  air_date:      string | null;
+  episode_count: number;
+  id:            number;
+  name:          string;
+  overview:      string;
+  poster_path:   string | null;
+  season_number: number;
+}
+
 export interface TmdbTvDetail extends Omit<TmdbTvListItem, 'genre_ids'> {
   genres:           TmdbGenre[];
   episode_run_time: number[];
   number_of_seasons:  number;
   number_of_episodes: number;
+  seasons:          TmdbTvSeason[];
   status:           string;
   tagline:          string;
   homepage:         string;

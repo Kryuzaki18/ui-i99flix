@@ -58,6 +58,7 @@ export function tmdbMovieListItemToMovie(
     duration:    'N/A',
     thumbnail:   tmdbPoster(item.poster_path),
     backdrop:    tmdbBackdrop(item.backdrop_path),
+    mediaType:   'movie',
   };
 }
 
@@ -74,6 +75,7 @@ export function tmdbMovieDetailToMovie(item: TmdbMovieDetail): Movie {
     duration:    formatRuntime(item.runtime),
     thumbnail:   tmdbPoster(item.poster_path),
     backdrop:    tmdbBackdrop(item.backdrop_path),
+    mediaType:   'movie',
   };
 }
 
@@ -93,6 +95,7 @@ export function tmdbTvListItemToMovie(
     duration:    'N/A',
     thumbnail:   tmdbPoster(item.poster_path),
     backdrop:    tmdbBackdrop(item.backdrop_path),
+    mediaType:   'tv',
   };
 }
 
@@ -110,5 +113,6 @@ export function tmdbTvDetailToMovie(item: TmdbTvDetail): Movie {
     duration:    formatRuntime(avgRuntime),
     thumbnail:   tmdbPoster(item.poster_path),
     backdrop:    tmdbBackdrop(item.backdrop_path),
+    mediaType:   'tv',
   };
 }
