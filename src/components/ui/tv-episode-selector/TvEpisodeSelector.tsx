@@ -1,17 +1,4 @@
-/**
- * TvEpisodeSelector
- *
- * Season dropdown + episode button grid for TV series playback.
- * Generates up to MAX_SEASONS seasons and MAX_EPISODES_PER_SEASON episode
- * buttons. The user picks a season from the Select, then clicks an episode.
- *
- * Used by both VideoPlayer (modal) and Player (full-page).
- */
-
-import { Select, Button, Flex, Typography } from 'antd';
-import { UnorderedListOutlined } from '@ant-design/icons';
-
-const { Text } = Typography;
+import { Select, Button, Flex } from 'antd';
 
 const MAX_SEASONS           = 20;
 const MAX_EPISODES_PER_SEASON = 30;
@@ -21,7 +8,6 @@ interface TvEpisodeSelectorProps {
   episode:         number;
   onSeasonChange:  (s: number) => void;
   onEpisodeChange: (e: number) => void;
-  /** Optional: constrain to known season/episode counts */
   totalSeasons?:   number;
   totalEpisodes?:  number;
 }
@@ -42,22 +28,16 @@ export default function TvEpisodeSelector({
   const episodeCount = Math.min(totalEpisodes, MAX_EPISODES_PER_SEASON);
 
   return (
-    <Flex vertical gap={12} style={{ width: '100%' }}>
-      {/* Season selector */}
-      <Flex align="center" gap={10} wrap>
-        <UnorderedListOutlined style={{ color: '#e50914', fontSize: 16, flexShrink: 0 }} />
-        <Text strong style={{ flexShrink: 0 }}>Season</Text>
-        <Select
-          value={season}
-          onChange={(v) => { onSeasonChange(v); onEpisodeChange(1); }}
-          options={seasonOptions}
-          size="small"
-          style={{ minWidth: 120 }}
-          popupMatchSelectWidth={false}
-        />
-      </Flex>
+    <Flex gap={12} style={{ width: '100%', padding: "1rem 0" }}>
+      <Select
+        value={season}
+        onChange={(v) => { onSeasonChange(v); onEpisodeChange(1); }}
+        options={seasonOptions}
+        size="small"
+        style={{ minWidth: 120, height: "27px" }}
+        popupMatchSelectWidth={false}
+      />
 
-      {/* Episode buttons */}
       <Flex wrap gap={6}>
         {Array.from({ length: episodeCount }, (_, i) => {
           const ep = i + 1;
@@ -71,11 +51,12 @@ export default function TvEpisodeSelector({
               style={{
                 minWidth: 40,
                 fontWeight: isActive ? 700 : 400,
+                height: "27px",
               }}
               aria-label={`Episode ${ep}`}
               aria-pressed={isActive}
             >
-              {ep}
+              E{ep}
             </Button>
           );
         })}
