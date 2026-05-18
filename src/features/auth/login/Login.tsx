@@ -1,4 +1,4 @@
-import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip, Image } from 'antd';
+import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
 import { UserOutlined, LockOutlined, InfoCircleOutlined, GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
