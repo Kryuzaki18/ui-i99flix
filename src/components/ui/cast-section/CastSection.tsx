@@ -14,7 +14,7 @@ import "./CastSection.css";
 const { Text } = Typography;
 
 const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
-const MAX_CAST        = 10;
+const MAX_CAST = 20;
 
 interface CastSectionProps {
   /** Numeric TMDB id. Pass null/undefined to skip fetching. */

@@ -211,7 +211,12 @@ export default function VideoPlayer({
         {typeof movie.id === "number" && (
           <Flex
             vertical
-            style={{ background: colors.playerControls, padding: "0.5rem 0.75rem 0.75rem" }}
+            style={{
+              background: colors.playerControls,
+              padding: "0.5rem 0.75rem 0.75rem",
+              minWidth: 0,
+              overflow: "hidden",
+            }}
           >
             <CastSection tmdbId={movie.id} mediaType={movie.mediaType} />
           </Flex>

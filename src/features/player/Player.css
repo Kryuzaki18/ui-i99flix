@@ -197,7 +197,7 @@
 
 .player-page__info-main {
   flex: 1;
-  min-width: 260px;
+  min-width: 0;
 }
 
 .player-page__info-meta {

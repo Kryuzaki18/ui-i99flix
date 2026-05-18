@@ -3,6 +3,11 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Needed so overflow-x: auto on the row actually kicks in when this
+     component is placed inside a flex container (flex children default
+     to min-width: auto which lets them grow past their parent). */
+  min-width: 0;
+  width: 100%;
 }
 
 .cast-section__label {
@@ -15,7 +20,10 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 10px 0 4px;
+  overflow-y: visible;
+  padding: 10px 0 8px;
+  /* Prevent the row itself from wrapping — all cards must stay on one line */
+  flex-wrap: nowrap;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   -webkit-overflow-scrolling: touch;
@@ -39,8 +47,9 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  min-width: 72px;
-  max-width: 72px;
+  /* Fixed width + no shrink = cards always overflow the row, triggering scroll */
+  flex: 0 0 72px;
+  width: 72px;
   cursor: default;
 }
 
