@@ -1,10 +1,25 @@
 /* ── Browse page ─────────────────────────────────────────────────────────── */
 .browse-header {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
-.browse-header .ant-typography.ant-typography-h2 {
-  margin: 0 0 8px;
+/* ── Media type tabs ─────────────────────────────────────────────────────── */
+.browse-tabs .ant-tabs-nav {
+  margin-bottom: 24px;
+}
+
+.browse-tabs .ant-tabs-tab {
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 4px;
+}
+
+.browse-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #e50914 !important;
+}
+
+.browse-tabs .ant-tabs-ink-bar {
+  background: #e50914;
 }
 
 /* Filters bar */
