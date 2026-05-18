@@ -18,9 +18,6 @@ import { tmdbMovieListItemToMovie } from '../../utils/tmdbAdapter';
 const SLIDE_INTERVAL  = 5000; // ms
 const SHOWCASE_COUNT  = 5;
 
-const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)
-  ?? 'http://localhost:4321/api/v1';
-
 /**
  * Static TMDB genre ID → name map.
  * Covers all common genres so the showcase works without an authenticated
@@ -50,7 +47,7 @@ const STATIC_GENRE_MAP = new Map<number, string>([
 ]);
 
 async function fetchShowcaseMovies(): Promise<Movie[]> {
-  const res = await fetch(`${BASE_URL}/tmdb/showcase`, {
+  const res = await fetch(`tmdb/showcase`, {
     headers: { Accept: 'application/json' },
   });
   if (!res.ok) throw new Error(`Showcase fetch failed: ${res.status}`);

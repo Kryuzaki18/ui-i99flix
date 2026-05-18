@@ -13,9 +13,6 @@
  * • AbortSignal is threaded through every call for React Query cancellation.
  */
 
-const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined)
-  ?? 'http://localhost:4321/api/v1';
-
 // ── Custom error types ────────────────────────────────────────────────────────
 
 export class ApiError extends Error {
@@ -57,7 +54,7 @@ async function request<T>(
   path:   string,
   options: RequestOptions = {},
 ): Promise<T> {
-  const url = new URL(`${BASE_URL}${path}`);
+  const url = new URL(path);
 
   if (options.params) {
     for (const [key, value] of Object.entries(options.params)) {

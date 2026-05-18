@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/:path*", "destination": "https://api-movie-cqa9.onrender.com/api/v1/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

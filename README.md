@@ -113,19 +113,6 @@ npm install
 yarn install
 ```
 
-### Environment Variables
-
-This project requires API credentials to fetch movie data. Create a `.env` file in the root directory:
-
-```env
-VITE_API_KEY=your_movie_api_key_here
-VITE_API_BASE_URL=https://api.themoviedb.org/3
-```
-
-> **Note:** Vite exposes only variables prefixed with `VITE_` to the client. Never commit your `.env` file — it is already listed in `.gitignore`.
-
-You can obtain a free API key from [The Movie Database (TMDB)](https://www.themoviedb.org/settings/api).
-
 ### Running the App
 
 **Development server** (with HMR):
@@ -134,7 +121,7 @@ You can obtain a free API key from [The Movie Database (TMDB)](https://www.themo
 npm run dev
 ```
 
-Open your browser and navigate to [http://localhost:5173](http://localhost:5173).
+Open your browser and navigate to [http://localhost:1234](http://localhost:1234).
 
 ---
 
