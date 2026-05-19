@@ -1,16 +1,3 @@
-/**
- * React Query hooks for TMDB data — proxied through the i99flix backend.
- *
- * All hooks follow the same patterns as useInternalMoviesQuery.ts:
- * - staleTime: 5 min for list/search data, 10 min for detail/static data
- * - placeholderData keeps previous data visible during refetch
- * - AbortSignal is threaded through for cancellation on unmount
- * - Hooks are disabled when required params are missing
- *
- * ── Usage ──────────────────────────────────────────────────────────────────
- * import { useTmdbMoviesPopularQuery, useTmdbSearchMultiQuery } from '../api/useTmdbQuery';
- */
-
 import { useQuery } from '@tanstack/react-query';
 import { tmdbKeys } from './queryKeys';
 import {
@@ -47,14 +34,9 @@ import {
   type DiscoverTvParams,
 } from './tmdbApi';
 
-// Stale times
-const LIST_STALE_TIME   = 5  * 60 * 1000; // 5 min — list data changes occasionally
-const DETAIL_STALE_TIME = 10 * 60 * 1000; // 10 min — detail data is more stable
-const GENRE_STALE_TIME  = 60 * 60 * 1000; // 1 hr  — genres rarely change
-
-// ════════════════════════════════════════════════════════════════════════════
-// MOVIES
-// ════════════════════════════════════════════════════════════════════════════
+const LIST_STALE_TIME   = 5  * 60 * 1000;
+const DETAIL_STALE_TIME = 10 * 60 * 1000;
+const GENRE_STALE_TIME  = 60 * 60 * 1000;
 
 export function useTmdbMoviesPopularQuery(params: PageParams = {}) {
   return useQuery({
@@ -110,7 +92,6 @@ export function useTmdbMoviesDiscoverQuery(params: DiscoverMovieParams = {}) {
   });
 }
 
-/** Disabled when query is empty */
 export function useTmdbMoviesSearchQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
@@ -122,7 +103,6 @@ export function useTmdbMoviesSearchQuery(params: SearchParams) {
   });
 }
 
-/** Disabled when id is null/0 */
 export function useTmdbMovieDetailQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.movies.detail(id ?? 0),
@@ -169,10 +149,6 @@ export function useTmdbMovieRecommendationsQuery(id: number | null, params: Page
     placeholderData: (prev) => prev,
   });
 }
-
-// ════════════════════════════════════════════════════════════════════════════
-// TV SERIES
-// ════════════════════════════════════════════════════════════════════════════
 
 export function useTmdbTvPopularQuery(params: PageParams = {}) {
   return useQuery({
@@ -228,7 +204,6 @@ export function useTmdbTvDiscoverQuery(params: DiscoverTvParams = {}) {
   });
 }
 
-/** Disabled when query is empty */
 export function useTmdbTvSearchQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
@@ -240,7 +215,6 @@ export function useTmdbTvSearchQuery(params: SearchParams) {
   });
 }
 
-/** Disabled when id is null/0 */
 export function useTmdbTvDetailQuery(id: number | null) {
   return useQuery({
     queryKey: tmdbKeys.tv.detail(id ?? 0),
@@ -288,11 +262,6 @@ export function useTmdbTvRecommendationsQuery(id: number | null, params: PagePar
   });
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// SHARED
-// ════════════════════════════════════════════════════════════════════════════
-
-/** Multi-search across movies, TV, and people. Disabled when query is empty. */
 export function useTmdbSearchMultiQuery(params: SearchParams) {
   const enabled = params.query.trim().length > 0;
   return useQuery({
@@ -304,7 +273,6 @@ export function useTmdbSearchMultiQuery(params: SearchParams) {
   });
 }
 
-/** Movie genre list — cached for 1 hour */
 export function useTmdbGenresMovieQuery() {
   return useQuery({
     queryKey: tmdbKeys.genresMovie(),
@@ -313,7 +281,6 @@ export function useTmdbGenresMovieQuery() {
   });
 }
 
-/** TV genre list — cached for 1 hour */
 export function useTmdbGenresTvQuery() {
   return useQuery({
     queryKey: tmdbKeys.genresTv(),

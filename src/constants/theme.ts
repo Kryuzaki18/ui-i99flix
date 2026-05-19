@@ -1,4 +1,3 @@
-/** Semantic color token shape shared by both themes */
 export interface ThemeColors {
   bgBase:         string;
   bgCard:         string;

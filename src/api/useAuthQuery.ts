@@ -1,14 +1,3 @@
-/**
- * React Query hooks for authentication.
- *
- * useSessionQuery          — verifies the session on app load via GET /me.
- * useSigninMutation        — calls POST /signin.
- * useSignupMutation        — calls POST /signup.
- * useSignoutMutation       — calls POST /signout.
- * useForgotPasswordMutation — calls POST /forgot-password.
- * useResetPasswordMutation  — calls POST /reset-password.
- */
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { signin, signup, signout, getMe, forgotPassword, resetPassword } from './authApi';
 import { useAuthStore } from '../store/authStore';
@@ -18,13 +7,6 @@ export const authKeys = {
   session: ['auth', 'session'] as const,
 };
 
-/**
- * Verifies the current session on mount.
- * Syncs result into authStore so the rest of the app can read it.
- *
- * retry: 2 — retries twice on failure to handle Render cold-start latency
- * (free tier can take 30–60s to wake up on first request).
- */
 export function useSessionQuery() {
   const { setAuthenticated } = useAuthStore();
 
@@ -43,11 +25,10 @@ export function useSessionQuery() {
     staleTime:            5 * 60 * 1000,
     refetchOnWindowFocus: true,
     retry:                2,
-    retryDelay:           (attempt) => Math.min(1000 * 2 ** attempt, 10000), // 2s, 4s
+    retryDelay:           (attempt) => Math.min(1000 * 2 ** attempt, 10000),
   });
 }
 
-/** Sign in and mark the session as authenticated on success. */
 export function useSigninMutation() {
   const { setAuthenticated } = useAuthStore();
   const queryClient          = useQueryClient();
@@ -61,14 +42,12 @@ export function useSigninMutation() {
   });
 }
 
-/** Sign up — does not auto-login; user must sign in after. */
 export function useSignupMutation() {
   return useMutation({
     mutationFn: (payload: SignupPayload) => signup(payload),
   });
 }
 
-/** Sign out, clear session state, and invalidate all queries. */
 export function useSignoutMutation() {
   const { logout }  = useAuthStore();
   const queryClient = useQueryClient();
@@ -80,21 +59,18 @@ export function useSignoutMutation() {
       queryClient.clear();
     },
     onError: () => {
-      // Even if the server call fails, clear local state
       logout();
       queryClient.clear();
     },
   });
 }
 
-/** Request a password reset email for the given address. */
 export function useForgotPasswordMutation() {
   return useMutation({
     mutationFn: (payload: ForgotPasswordPayload) => forgotPassword(payload),
   });
 }
 
-/** Complete a password reset using the token from the reset link. */
 export function useResetPasswordMutation() {
   return useMutation({
     mutationFn: (payload: ResetPasswordPayload) => resetPassword(payload),

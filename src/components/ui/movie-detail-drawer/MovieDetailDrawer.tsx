@@ -44,7 +44,6 @@ function MovieDetailDrawerInner({
 
   const backdropSrc = movie?.backdrop || movie?.thumbnail || "";
 
-  // Numeric TMDB id for credits lookup
   const tmdbId = typeof movie?.id === "number" ? movie.id : null;
 
   useEffect(() => {
@@ -202,7 +201,6 @@ function MovieDetailDrawerInner({
 
             <Divider />
 
-            {/* ── Cast ──────────────────────────────────────────────── */}
             {tmdbId && (
               <>
                 <CastSection tmdbId={tmdbId} mediaType={movie.mediaType} />

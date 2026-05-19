@@ -1,5 +1,4 @@
 export interface Movie {
-  /** Numeric id for static/TMDB movies; MongoDB ObjectId string for API movies */
   id:          number | string;
   title:       string;
   description: string;

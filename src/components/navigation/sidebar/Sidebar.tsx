@@ -59,7 +59,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         mask:    { backdropFilter: 'blur(4px)' },
       }}
     >
-      {/* Header */}
       <div
         className="sidebar__header"
         style={{ borderBottom: `1px solid ${colors.border}` }}
@@ -75,7 +74,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </Space>
       </div>
 
-      {/* Menu */}
       <Menu
         mode="inline"
         selectedKeys={[location.pathname]}
@@ -85,7 +83,6 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         theme={isDark ? 'dark' : 'light'}
       />
 
-      {/* Footer */}
       <div
         className="sidebar__footer"
         style={{ borderTop: `1px solid ${colors.border}` }}

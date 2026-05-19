@@ -1,10 +1,3 @@
-/**
- * UI store — lightweight global UI state that doesn't belong to any single
- * feature (sidebar open/close, future notification state, etc.).
- *
- * NOT persisted — UI state resets on reload by design.
- */
-
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 

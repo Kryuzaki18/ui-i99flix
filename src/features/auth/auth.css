@@ -1,15 +1,13 @@
-/* ── Auth split layout ────────────────────────────────────────────────────── */
 .auth-layout {
   min-height: 100vh;
   display: flex;
 }
 
-/* ── Left panel — cinematic showcase ─────────────────────────────────────── */
 .auth-showcase {
   flex: 1;
   position: relative;
   overflow: hidden;
-  display: none; /* hidden on mobile */
+  display: none;
 }
 
 @media (min-width: 900px) {
@@ -18,7 +16,6 @@
   }
 }
 
-/* Cycling backdrop images */
 .auth-showcase__slide {
   position: absolute;
   inset: 0;
@@ -32,7 +29,6 @@
   opacity: 1;
 }
 
-/* Dark gradient overlay so text is readable */
 .auth-showcase__overlay {
   position: absolute;
   inset: 0;
@@ -45,7 +41,6 @@
   z-index: 1;
 }
 
-/* Right-edge fade so the card panel blends in */
 .auth-showcase__edge-fade {
   position: absolute;
   top: 0;
@@ -57,7 +52,6 @@
   pointer-events: none;
 }
 
-/* Branding in top-left */
 .auth-showcase__brand {
   position: absolute;
   top: 10px;
@@ -68,10 +62,9 @@
   gap: 8px;
 }
 
-/* Floating movie cards strip */
 .auth-showcase__cards {
   position: absolute;
-  bottom: 250px;
+  bottom: 220px;
   left: 0;
   right: 0;
   z-index: 3;
@@ -120,24 +113,18 @@
   font-weight: 500;
 }
 
-/* Active movie info at the bottom */
 .auth-showcase__info {
   position: absolute;
   bottom: 36px;
   left: 36px;
   right: 36px;
   z-index: 3;
-  /* dots sit at the bottom in normal flow;
-     content blocks are absolute and grow upward from above the dots */
   display: flex;
   flex-direction: column;
 }
 
-/* Each movie's content cross-fades — same technique as the backdrop slides.
-   All blocks are stacked; only the active one is visible. */
 .auth-showcase__info-content {
   position: absolute;
-  /* anchor to the bottom of the content area, just above the dots (42px = dot height + margin) */
   bottom: 42px;
   left: 0;
   right: 0;
@@ -149,49 +136,6 @@
 .auth-showcase__info-content.is-active {
   opacity: 1;
   pointer-events: auto;
-}
-
-/* Dots are the only normal-flow child — they define the container's height
-   and always sit at the very bottom, never overlapping the text above */
-.auth-showcase__dots {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding-top: 4px;
-  /* push content blocks far enough up to fit badge+title+meta+3-line desc */
-  margin-top: 170px;
-}
-
-.auth-showcase__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-  padding: 0;
-  position: relative;
-  flex-shrink: 0;
-}
-
-/* Large invisible hit area — easy to click/tap */
-.auth-showcase__dot::before {
-  content: '';
-  position: absolute;
-  inset: -10px;
-}
-
-.auth-showcase__dot.is-active {
-  background: #e50914;
-  width: 28px;
-  border-radius: 5px;
-}
-
-/* Focus-visible for keyboard navigation */
-.auth-showcase__dot:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
 }
 
 .auth-showcase__info-badge {
@@ -252,13 +196,44 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Focus-visible for keyboard navigation */
+.auth-showcase__dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 4px;
+  margin-top: 170px;
+}
+
+.auth-showcase__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.auth-showcase__dot::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+}
+
+.auth-showcase__dot.is-active {
+  background: #e50914;
+  width: 28px;
+  border-radius: 5px;
+}
+
 .auth-showcase__dot:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;
 }
 
-/* Particle / floating orbs */
 .auth-showcase__orb {
   position: absolute;
   border-radius: 50%;
@@ -295,13 +270,11 @@
   animation-duration: 14s;
 }
 
-/* Skeleton placeholder */
 .auth-showcase__skeleton {
   position: absolute;
   inset: 0;
 }
 
-/* ── Right panel — form ───────────────────────────────────────────────────── */
 .auth-panel {
   width: 100%;
   max-width: 480px;
@@ -316,7 +289,6 @@
   flex-shrink: 0;
 }
 
-/* On mobile the panel takes full width */
 @media (max-width: 899px) {
   .auth-panel {
     max-width: 100%;
@@ -328,7 +300,6 @@
   max-width: 380px;
 }
 
-/* Logo (shown only on mobile — desktop shows it in the showcase) */
 .auth-panel__logo {
   text-align: center;
   margin-bottom: 32px;
@@ -341,108 +312,24 @@
   }
 }
 
-.auth-panel__heading {
-  margin-bottom: 6px !important;
+.auth-autofill-override input:-webkit-autofill,
+.auth-autofill-override input:-webkit-autofill:hover,
+.auth-autofill-override input:-webkit-autofill:focus,
+.auth-autofill-override input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--autofill-text, #ffffff) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--autofill-bg, #1a1a2e) inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+  caret-color: var(--autofill-text, #ffffff);
 }
 
-.auth-panel__subheading {
-  display: block;
-  margin-bottom: 28px;
+[data-theme='light'] .auth-autofill-override input:-webkit-autofill,
+[data-theme='light'] .auth-autofill-override input:-webkit-autofill:hover,
+[data-theme='light'] .auth-autofill-override input:-webkit-autofill:focus,
+[data-theme='light'] .auth-autofill-override input:-webkit-autofill:active {
+  --autofill-text: #111111;
+  --autofill-bg: #ffffff;
 }
 
-/* Forgot link */
-.auth-panel__forgot {
-  color: #e50914;
-  font-size: 13px;
-}
-
-/* Submit button */
-.auth-panel__submit-btn {
-  background: #e50914 !important;
-  border-color: #e50914 !important;
-  font-weight: 600 !important;
-  height: 48px !important;
-  border-radius: 8px !important;
-  font-size: 15px !important;
-}
-
-/* Social buttons */
-
-
-/* Footer */
-.auth-panel__footer {
-  text-align: center;
-  margin-top: 24px;
-}
-
-.auth-panel__link {
-  color: #e50914;
-  font-weight: 600;
-}
-
-/* ── Signup-specific ─────────────────────────────────────────────────────── */
-
-/* Steps */
-.auth-panel__steps {
-  margin-bottom: 24px;
-}
-
-/* Plan features list */
-.auth-panel__features {
-  border-radius: 8px;
-  padding: 14px 16px;
-  margin-bottom: 20px;
-}
-
-.auth-panel__feature-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.auth-panel__feature-row:last-child {
-  margin-bottom: 0;
-}
-
-.auth-panel__feature-icon {
-  color: #e50914;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-
-/* Back button */
-.auth-panel__btn-back {
-  border-radius: 8px !important;
-  flex: 1;
-}
-
-/* Success state */
-.auth-panel__success {
-  text-align: center;
-  padding: 24px 0;
-}
-
-.auth-panel__success-icon {
-  font-size: 64px !important;
-  color: #52c41a !important;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.auth-panel__success-title {
-  margin-bottom: 8px !important;
-}
-
-.auth-panel__success-btn {
-  background: #e50914 !important;
-  border-color: #e50914 !important;
-  font-weight: 600 !important;
-  height: 48px !important;
-  padding-inline: 32px !important;
-  border-radius: 8px !important;
-}
-
-/* ── Keyframes ────────────────────────────────────────────────────────────── */
 @keyframes cardFloat {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
@@ -453,9 +340,4 @@
   33%  { transform: translate(30px, -20px) scale(1.05); }
   66%  { transform: translate(-20px, 30px) scale(0.95); }
   100% { transform: translate(0, 0) scale(1); }
-}
-
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
 }

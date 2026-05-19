@@ -1,10 +1,3 @@
-/**
- * ErrorBoundary — catches unhandled render errors and shows a fallback UI
- * instead of crashing the entire app.
- *
- * React error boundaries must be class components (no hooks equivalent).
- */
-
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { Button, Typography } from 'antd';
@@ -14,7 +7,6 @@ const { Title, Text } = Typography;
 
 interface Props {
   children: ReactNode;
-  /** Optional custom fallback. Receives the error and a reset callback. */
   fallback?: (error: Error, reset: () => void) => ReactNode;
 }
 
@@ -30,7 +22,6 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    // In production you'd send this to an error tracking service (Sentry, etc.)
     console.error('[ErrorBoundary]', error, info.componentStack);
   }
 

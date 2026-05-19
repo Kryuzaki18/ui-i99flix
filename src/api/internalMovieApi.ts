@@ -1,17 +1,6 @@
-/**
- * Internal Movie API — CRUD operations against the i99flix backend.
- *
- * These functions call our own Fastify API (api-movie), not TMDB.
- * The shape returned by the API matches the app's Movie model closely,
- * with `_id` (MongoDB ObjectId string) instead of numeric `id`.
- */
-
 import { apiGet, apiPost, apiPut, apiDelete } from '../services/internalApiClient';
 import type { Movie } from '../models/movie';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-/** Shape returned by the API (MongoDB uses _id) */
 export interface ApiMovie {
   _id:         string;
   title:       string;
@@ -52,12 +41,9 @@ export interface MovieFiltersApi {
 
 export type MoviePayload = Omit<ApiMovie, '_id' | 'createdAt' | 'updatedAt'>;
 
-// ── Adapter ───────────────────────────────────────────────────────────────────
-
-/** Map an ApiMovie (MongoDB shape) to the app's Movie model */
 export function apiMovieToMovie(m: ApiMovie): Movie {
   return {
-    id:          m._id,   // kept as string — Movie.id is now number | string
+    id:          m._id,
     title:       m.title,
     description: m.description,
     genre:       m.genre,
@@ -72,9 +58,6 @@ export function apiMovieToMovie(m: ApiMovie): Movie {
   };
 }
 
-// ── CRUD functions ────────────────────────────────────────────────────────────
-
-/** GET /api/v1/movies — list with filters + pagination */
 export async function fetchApiMovies(
   filters: MovieFiltersApi = {},
   options?: { signal?: AbortSignal },
@@ -95,7 +78,6 @@ export async function fetchApiMovies(
   return apiGet<PaginatedMovies>('/movies', { params, signal: options?.signal });
 }
 
-/** GET /api/v1/movies/:id — single movie */
 export async function fetchApiMovieById(
   id: string,
   options?: { signal?: AbortSignal },
@@ -104,7 +86,6 @@ export async function fetchApiMovieById(
   return apiGet<ApiMovie>(`/movies/${encodeURIComponent(id)}`, { signal: options?.signal });
 }
 
-/** POST /api/v1/movies — create (auth required) */
 export async function createApiMovie(
   payload: MoviePayload,
   options?: { signal?: AbortSignal },
@@ -112,7 +93,6 @@ export async function createApiMovie(
   return apiPost<ApiMovie>('/movies', payload, { signal: options?.signal });
 }
 
-/** PUT /api/v1/movies/:id — update (auth required) */
 export async function updateApiMovie(
   id:      string,
   payload: MoviePayload,
@@ -122,7 +102,6 @@ export async function updateApiMovie(
   return apiPut<ApiMovie>(`/movies/${encodeURIComponent(id)}`, payload, { signal: options?.signal });
 }
 
-/** DELETE /api/v1/movies/:id — delete (auth required) */
 export async function deleteApiMovie(
   id: string,
   options?: { signal?: AbortSignal },

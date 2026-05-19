@@ -268,7 +268,6 @@ export default function Browse() {
 
   return (
     <div>
-      {/* ── Header ── */}
       <div className="browse-header">
         <Title level={2} style={{ marginBottom: 4 }}>Browse</Title>
         <Text style={{ color: colors.textMuted }}>
@@ -276,7 +275,6 @@ export default function Browse() {
         </Text>
       </div>
 
-      {/* ── Media type tabs ── */}
       <Tabs
         activeKey={mediaType}
         onChange={handleTabChange}

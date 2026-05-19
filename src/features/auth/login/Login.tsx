@@ -1,7 +1,13 @@
-import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
-import { UserOutlined, LockOutlined, InfoCircleOutlined, GoogleOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  InfoCircleOutlined,
+  GoogleOutlined,
+  FacebookOutlined,
+} from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSigninMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
@@ -15,12 +21,23 @@ interface LoginForm {
   remember: boolean;
 }
 
+const ACCENT = '#e50914';
+
+const submitBtnStyle: React.CSSProperties = {
+  background: ACCENT,
+  borderColor: ACCENT,
+  fontWeight: 600,
+  height: 48,
+  borderRadius: 8,
+  fontSize: 15,
+};
+
 export default function Login() {
-  const [error, setError]  = useState('');
-  const [form]             = Form.useForm<LoginForm>();
-  const { colors }         = useTheme();
-  const navigate           = useNavigate();
-  const signinMutation     = useSigninMutation();
+  const [error, setError] = useState('');
+  const [form]            = Form.useForm<LoginForm>();
+  const { colors }        = useTheme();
+  const navigate          = useNavigate();
+  const signinMutation    = useSigninMutation();
 
   const handleSubmit = (values: LoginForm) => {
     setError('');
@@ -37,22 +54,21 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>
+      <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
         Welcome back
       </Title>
-      <Text className="auth-panel__subheading" style={{ color: colors.textMuted }}>
+      <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
         Sign in to continue watching
       </Text>
 
-      {error && (
-        <Alert title={error} type="error" showIcon style={{ marginBottom: 20 }} />
-      )}
+      {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
 
       <Form
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
         initialValues={{ remember: true }}
+        autoComplete="off"
       >
         <Form.Item
           name="email"
@@ -66,6 +82,7 @@ export default function Login() {
             placeholder="Email address"
             size="large"
             style={{ borderRadius: 8 }}
+            autoComplete="new-password"
           />
         </Form.Item>
 
@@ -78,6 +95,7 @@ export default function Login() {
             placeholder="Password"
             size="large"
             style={{ borderRadius: 8 }}
+            autoComplete="new-password"
           />
         </Form.Item>
 
@@ -91,7 +109,9 @@ export default function Login() {
                 </Tooltip>
               </Checkbox>
             </Form.Item>
-            <Link to="/forgot-password" className="auth-panel__forgot">Forgot password?</Link>
+            <Link to="/forgot-password" style={{ color: ACCENT, fontSize: 13 }}>
+              Forgot password?
+            </Link>
           </div>
         </Form.Item>
 
@@ -102,7 +122,7 @@ export default function Login() {
             size="large"
             block
             loading={signinMutation.isPending}
-            className="auth-panel__submit-btn"
+            style={submitBtnStyle}
           >
             Sign In
           </Button>
@@ -118,10 +138,12 @@ export default function Login() {
         <Button shape="circle" icon={<FacebookOutlined />} />
       </Space>
 
-      <div className="auth-panel__footer">
+      <div style={{ textAlign: 'center', marginTop: 24 }}>
         <Text style={{ color: colors.textMuted }}>
           Don't have an account?{' '}
-          <Link to="/signup" className="auth-panel__link">Sign up free</Link>
+          <Link to="/signup" style={{ color: ACCENT, fontWeight: 600 }}>
+            Sign up free
+          </Link>
         </Text>
       </div>
     </AuthLayout>

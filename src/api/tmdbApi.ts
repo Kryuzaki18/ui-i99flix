@@ -1,17 +1,3 @@
-/**
- * TMDB API layer — proxied through the i99flix backend.
- *
- * All requests go to our own Fastify API (/api/v1/tmdb/*) which holds the
- * TMDB key server-side. The TMDB key is never exposed to the browser.
- *
- * ── Security ──────────────────────────────────────────────────────────────────
- * • No TMDB token in the client — all calls are proxied via our backend.
- * • credentials: 'include' is handled by internalApiClient (session cookie).
- * • All IDs are validated as positive integers before use in URL paths.
- * • Query params are built via URLSearchParams in internalApiClient.
- * • AbortSignal is threaded through every call for React Query cancellation.
- */
-
 import { apiGet } from '../services/internalApiClient';
 import type {
   TmdbPaginatedResponse,
@@ -21,8 +7,6 @@ import type {
   TmdbCreditsResponse,
   TmdbGenre,
 } from '../models/tmdb';
-
-// ── TV-specific types (not in the existing model file) ────────────────────────
 
 export interface TmdbTvListItem {
   id:                number;
@@ -64,8 +48,8 @@ export interface TmdbTvDetail extends Omit<TmdbTvListItem, 'genre_ids'> {
 export interface TmdbMultiResult {
   id:           number;
   media_type:   'movie' | 'tv' | 'person';
-  title?:       string;   // movies
-  name?:        string;   // tv / person
+  title?:       string;
+  name?:        string;
   overview?:    string;
   poster_path:  string | null;
   backdrop_path: string | null;
@@ -74,8 +58,6 @@ export interface TmdbMultiResult {
   first_air_date?: string;
   genre_ids?:   number[];
 }
-
-// ── Shared params ─────────────────────────────────────────────────────────────
 
 export interface PageParams {
   page?:     number;
@@ -108,8 +90,6 @@ export interface DiscoverTvParams extends PageParams {
   with_original_language?: string;
 }
 
-// ── Input validation ──────────────────────────────────────────────────────────
-
 function validateId(id: unknown, label = 'id'): number {
   const n = Number(id);
   if (!Number.isInteger(n) || n < 1) {
@@ -131,10 +111,6 @@ function buildPageParams(params: PageParams): Record<string, string | number> {
   if (params.language !== undefined) out['language'] = params.language;
   return out;
 }
-
-// ════════════════════════════════════════════════════════════════════════════
-// MOVIES
-// ════════════════════════════════════════════════════════════════════════════
 
 export async function fetchTmdbMoviesPopular(
   params: PageParams = {},
@@ -241,10 +217,6 @@ export async function fetchTmdbMovieRecommendations(
   return apiGet(`/tmdb/movies/${safeId}/recommendations`, { params: buildPageParams(params), signal: options?.signal });
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// TV SERIES
-// ════════════════════════════════════════════════════════════════════════════
-
 export async function fetchTmdbTvPopular(
   params: PageParams = {},
   options?: { signal?: AbortSignal },
@@ -347,10 +319,6 @@ export async function fetchTmdbTvRecommendations(
   const safeId = validateId(id, 'tvId');
   return apiGet(`/tmdb/tv/${safeId}/recommendations`, { params: buildPageParams(params), signal: options?.signal });
 }
-
-// ════════════════════════════════════════════════════════════════════════════
-// SHARED
-// ════════════════════════════════════════════════════════════════════════════
 
 export async function fetchTmdbSearchMulti(
   params: SearchParams,

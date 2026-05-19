@@ -1,13 +1,3 @@
-/**
- * TMDB → App Movie adapter
- *
- * Converts TMDB API shapes into the app's internal Movie model so no
- * TMDB-specific types leak into pages or components.
- *
- * TMDB genre IDs are mapped to human-readable names via a genre map.
- * If the map is unavailable, the raw ID is used as a fallback.
- */
-
 import type { Movie } from '../models/movie';
 import type { TmdbMovieListItem, TmdbMovieDetail, TmdbGenre } from '../models/tmdb';
 import type { TmdbTvListItem, TmdbTvDetail } from '../api/tmdbApi';
@@ -37,12 +27,9 @@ function releaseYear(dateStr: string | undefined): number {
   return Number.isFinite(y) ? y : 0;
 }
 
-/** Build a genre-id → name lookup from a TMDB genres response */
 export function buildGenreMap(genres: TmdbGenre[]): Map<number, string> {
   return new Map(genres.map((g) => [g.id, g.name]));
 }
-
-// ── Movie list item (search / discover / trending) ────────────────────────────
 
 export function tmdbMovieListItemToMovie(
   item: TmdbMovieListItem,
@@ -62,8 +49,6 @@ export function tmdbMovieListItemToMovie(
   };
 }
 
-// ── Movie detail ──────────────────────────────────────────────────────────────
-
 export function tmdbMovieDetailToMovie(item: TmdbMovieDetail): Movie {
   return {
     id:          item.id,
@@ -78,8 +63,6 @@ export function tmdbMovieDetailToMovie(item: TmdbMovieDetail): Movie {
     mediaType:   'movie',
   };
 }
-
-// ── TV list item ──────────────────────────────────────────────────────────────
 
 export function tmdbTvListItemToMovie(
   item: TmdbTvListItem,
@@ -98,8 +81,6 @@ export function tmdbTvListItemToMovie(
     mediaType:   'tv',
   };
 }
-
-// ── TV detail ─────────────────────────────────────────────────────────────────
 
 export function tmdbTvDetailToMovie(item: TmdbTvDetail): Movie {
   const avgRuntime = item.episode_run_time?.[0] ?? null;

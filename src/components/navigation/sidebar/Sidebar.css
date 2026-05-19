@@ -1,4 +1,3 @@
-/* ── Sidebar Drawer ───────────────────────────────────────────────────────── */
 .sidebar__header {
   padding: 20px 20px 16px;
 }
@@ -35,14 +34,12 @@
   font-size: 12px;
 }
 
-/* Menu */
 .sidebar__menu {
   background: transparent !important;
   border: none !important;
   padding: 8px 0;
 }
 
-/* Footer */
 .sidebar__footer {
   position: absolute;
   bottom: 0;

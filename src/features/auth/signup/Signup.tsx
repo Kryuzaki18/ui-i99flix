@@ -1,10 +1,12 @@
-import { Form, Input, Button, Typography, Divider, Space, Steps, Alert } from 'antd';
-import {
-  UserOutlined, LockOutlined, MailOutlined,
-  CheckCircleOutlined,
-} from '@ant-design/icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Typography, Divider, Space, Steps, Alert } from 'antd';
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  CheckCircleOutlined,
+} from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSignupMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
@@ -17,17 +19,27 @@ interface SignupForm {
   email:    string;
   password: string;
   confirm:  string;
-  plan:     string;
 }
 
+const ACCENT = '#e50914';
+
+const submitBtnStyle: React.CSSProperties = {
+  background: ACCENT,
+  borderColor: ACCENT,
+  fontWeight: 600,
+  height: 48,
+  borderRadius: 8,
+  fontSize: 15,
+};
+
 export default function Signup() {
-  const [step, setStep]    = useState(0);
-  const [done, setDone]    = useState(false);
-  const [error, setError]  = useState('');
-  const [form]             = Form.useForm<SignupForm>();
-  const { colors } = useTheme();
-  const navigate           = useNavigate();
-  const signupMutation     = useSignupMutation();
+  const [step, setStep]   = useState(0);
+  const [done, setDone]   = useState(false);
+  const [error, setError] = useState('');
+  const [form]            = Form.useForm<SignupForm>();
+  const { colors }        = useTheme();
+  const navigate          = useNavigate();
+  const signupMutation    = useSignupMutation();
 
   const handleNext = async () => {
     try {
@@ -60,28 +72,26 @@ export default function Signup() {
     <AuthLayout>
       {!done ? (
         <>
-          <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>
+          <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
             Create account
           </Title>
-          <Text className="auth-panel__subheading" style={{ color: colors.textMuted }}>
+          <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
             Start watching in minutes
           </Text>
 
-          {error && (
-            <Alert title={error} type="error" showIcon style={{ marginBottom: 16 }} />
-          )}
+          {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 16 }} />}
 
           <Steps
             current={step}
             size="small"
-            className="auth-panel__steps"
+            style={{ marginBottom: 24 }}
             items={[
               { title: <Text style={{ fontSize: 12 }}>Account</Text> },
               { title: <Text style={{ fontSize: 12 }}>Security</Text> },
             ]}
           />
 
-          <Form form={form} layout="vertical">
+          <Form form={form} layout="vertical" autoComplete="off">
             {step === 0 && (
               <>
                 <Form.Item
@@ -93,6 +103,7 @@ export default function Signup() {
                     placeholder="Full name"
                     size="large"
                     style={{ borderRadius: 8 }}
+                    autoComplete="new-password"
                   />
                 </Form.Item>
                 <Form.Item
@@ -107,6 +118,7 @@ export default function Signup() {
                     placeholder="Email address"
                     size="large"
                     style={{ borderRadius: 8 }}
+                    autoComplete="new-password"
                   />
                 </Form.Item>
                 <Button
@@ -114,7 +126,7 @@ export default function Signup() {
                   size="large"
                   block
                   onClick={handleNext}
-                  className="auth-panel__submit-btn"
+                  style={submitBtnStyle}
                 >
                   Continue
                 </Button>
@@ -135,6 +147,7 @@ export default function Signup() {
                     placeholder="Password"
                     size="large"
                     style={{ borderRadius: 8 }}
+                    autoComplete="new-password"
                   />
                 </Form.Item>
                 <Form.Item
@@ -157,18 +170,23 @@ export default function Signup() {
                     placeholder="Confirm password"
                     size="large"
                     style={{ borderRadius: 8 }}
+                    autoComplete="new-password"
                   />
                 </Form.Item>
                 <Space style={{ width: '100%' }} size={12}>
-                  <Button size="large" onClick={() => setStep(0)} className="auth-panel__btn-back">
+                  <Button
+                    size="large"
+                    onClick={() => setStep(0)}
+                    style={{ borderRadius: 8, flex: 1 }}
+                  >
                     Back
                   </Button>
                   <Button
                     type="primary"
                     size="large"
                     onClick={handleSubmit}
-                    className="auth-panel__submit-btn"
-                    style={{ flex: 2 }}
+                    loading={signupMutation.isPending}
+                    style={{ ...submitBtnStyle, flex: 2 }}
                   >
                     Continue
                   </Button>
@@ -178,9 +196,9 @@ export default function Signup() {
           </Form>
         </>
       ) : (
-        <div className="auth-panel__success">
-          <CheckCircleOutlined className="auth-panel__success-icon" />
-          <Title level={3} className="auth-panel__success-title" style={{ color: colors.textPrimary }}>
+        <div style={{ textAlign: 'center', padding: '24px 0' }}>
+          <CheckCircleOutlined style={{ fontSize: 64, color: '#52c41a', marginBottom: 16, display: 'block' }} />
+          <Title level={3} style={{ color: colors.textPrimary, marginBottom: 8 }}>
             Welcome to i99flix!
           </Title>
           <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
@@ -189,7 +207,7 @@ export default function Signup() {
           <Button
             type="primary"
             size="large"
-            className="auth-panel__success-btn"
+            style={{ ...submitBtnStyle, paddingInline: 32 }}
             onClick={() => navigate('/login')}
           >
             Sign In
@@ -200,10 +218,12 @@ export default function Signup() {
       {!done && (
         <>
           <Divider />
-          <div className="auth-panel__footer">
+          <div style={{ textAlign: 'center', marginTop: 24 }}>
             <Text style={{ color: colors.textMuted }}>
               Already have an account?{' '}
-              <Link to="/login" className="auth-panel__link">Sign in</Link>
+              <Link to="/login" style={{ color: ACCENT, fontWeight: 600 }}>
+                Sign in
+              </Link>
             </Text>
           </div>
         </>

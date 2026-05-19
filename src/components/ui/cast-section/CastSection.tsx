@@ -1,10 +1,3 @@
-/**
- * CastSection — reusable cast row for movie/TV detail views.
- *
- * Fetches credits via the appropriate TMDB query (movie or TV) and renders
- * a horizontally scrollable list of avatar cards.
- */
-
 import { Avatar, Skeleton, Tooltip, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useTmdbMovieCreditsQuery, useTmdbTvCreditsQuery } from "../../../api/useTmdbQuery";
@@ -17,10 +10,8 @@ const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w185";
 const MAX_CAST = 20;
 
 interface CastSectionProps {
-  /** Numeric TMDB id. Pass null/undefined to skip fetching. */
   tmdbId:    number | null | undefined;
   mediaType: "movie" | "tv" | undefined;
-  /** Optional label override. Defaults to "Cast". */
   label?:    string;
 }
 
@@ -34,7 +25,6 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast" }: CastS
   const credits = isTV ? tvCredits : movieCredits;
   const cast    = (credits.data?.cast ?? []).slice(0, MAX_CAST);
 
-  // Nothing to show for non-TMDB ids
   if (!tmdbId) return null;
 
   return (

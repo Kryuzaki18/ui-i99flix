@@ -1,20 +1,3 @@
-/**
- * Internal API client — HTTP wrapper for the i99flix backend (api-movie).
- *
- * Uses httpOnly cookies for auth (credentials: 'include' on every request).
- * SameSite=None; Secure works on all browsers when both frontend (Vercel)
- * and backend (Render) are served over HTTPS.
- *
- * ── Security ──────────────────────────────────────────────────────────────────
- * • credentials: 'include' sends the session cookie automatically.
- * • No tokens are stored in JS — the cookie is httpOnly.
- * • All URL path segments are encoded before use.
- * • Query params are built with URLSearchParams (no string interpolation).
- * • AbortSignal is threaded through every call for React Query cancellation.
- */
-
-// ── Custom error types ────────────────────────────────────────────────────────
-
 export class ApiError extends Error {
   readonly statusCode: number;
   readonly details?:   unknown;
@@ -40,8 +23,6 @@ export class ApiNotFoundError extends ApiError {
     this.name = 'ApiNotFoundError';
   }
 }
-
-// ── Core request ──────────────────────────────────────────────────────────────
 
 interface RequestOptions {
   params?: Record<string, string | number | boolean | undefined>;
@@ -75,7 +56,7 @@ async function request<T>(
   const response = await fetch(url.toString(), {
     method,
     headers,
-    credentials: 'include', // send session cookie on every request
+    credentials: 'include',
     body: method !== 'GET' && options.body !== undefined
       ? JSON.stringify(options.body)
       : undefined,
@@ -100,8 +81,6 @@ async function request<T>(
   if (response.status === 204) return undefined as unknown as T;
   return response.json() as Promise<T>;
 }
-
-// ── Public helpers ────────────────────────────────────────────────────────────
 
 export const apiGet = <T>(path: string, options?: Omit<RequestOptions, 'body'>) =>
   request<T>('GET', '/api' + path, options);

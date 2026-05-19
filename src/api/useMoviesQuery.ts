@@ -1,13 +1,3 @@
-/**
- * React Query hooks for Home page movie sections.
- *
- * Data now comes from the TMDB proxy on the i99flix backend.
- * Each hook maps the TMDB response to the app's Movie model via tmdbAdapter
- * so no TMDB-specific types leak into pages or components.
- *
- * Stale times are set to 5 min — real API data can change.
- */
-
 import { useQuery } from '@tanstack/react-query';
 import { tmdbKeys } from './queryKeys';
 import {
@@ -24,9 +14,8 @@ import {
 import { getGenreMap } from '../utils/genreMap';
 import type { Movie } from '../models/movie';
 
-const STALE_TIME = 5 * 60 * 1000; // 5 min
+const STALE_TIME = 5 * 60 * 1000;
 
-// ── Featured — popular movies (used for hero banner) ─────────────────────────
 export function useFeaturedMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
@@ -40,8 +29,6 @@ export function useFeaturedMoviesQuery() {
     staleTime: STALE_TIME,
   });
 }
-
-// ── Trending ──────────────────────────────────────────────────────────────────
 
 export function useTrendingMoviesQuery() {
   return useQuery<Movie[]>({
@@ -57,7 +44,6 @@ export function useTrendingMoviesQuery() {
   });
 }
 
-// ── New Releases — now playing ────────────────────────────────────────────────
 export function useNewReleasesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
@@ -72,7 +58,6 @@ export function useNewReleasesQuery() {
   });
 }
 
-// ── Top Rated ─────────────────────────────────────────────────────────────────
 export function useTopRatedMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),
@@ -87,7 +72,6 @@ export function useTopRatedMoviesQuery() {
   });
 }
 
-// ── Single movie detail — used by the /player/:id page ───────────────────────
 export function useMovieDetailQuery(id: number | null) {
   return useQuery<Movie>({
     queryKey: tmdbKeys.movies.detail(id ?? 0),
@@ -96,6 +80,6 @@ export function useMovieDetailQuery(id: number | null) {
       return tmdbMovieDetailToMovie(detail);
     },
     enabled:   id !== null && id > 0,
-    staleTime: 10 * 60 * 1000, // 10 min — detail data is stable
+    staleTime: 10 * 60 * 1000,
   });
 }

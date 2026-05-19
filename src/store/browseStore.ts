@@ -1,14 +1,3 @@
-/**
- * Browse store — filter + pagination state for the Browse page.
- *
- * Persisted to sessionStorage so filters survive in-tab navigation
- * but reset on a new tab / browser close.
- *
- * Security notes:
- * - Only UI preferences are persisted (genre, year, layout, page size, mediaType).
- * - searchQuery is intentionally NOT persisted.
- */
-
 import { create } from 'zustand';
 import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 import { DEFAULT_PAGE_SIZE } from '../constants/pagination';
@@ -16,22 +5,14 @@ import { DEFAULT_PAGE_SIZE } from '../constants/pagination';
 export type MediaType = 'movie' | 'tv';
 
 interface BrowseState {
-  // Media type tab
   mediaType:     MediaType;
-
-  // Filter state
   selectedGenre: string;
   selectedYear:  string;
-  searchQuery:   string; // NOT persisted
-
-  // Pagination
+  searchQuery:   string;
   page:     number;
   pageSize: number;
-
-  // Layout toggle
   layout: 'grid' | 'list';
 
-  // Actions
   setMediaType:  (type: MediaType) => void;
   setGenre:      (genre: string)   => void;
   setYear:       (year: string)    => void;

@@ -1,17 +1,7 @@
-/**
- * ForgotPassword — lets users request a password reset link.
- *
- * Step 1: User enters their email address.
- * Step 2: On success, a confirmation screen is shown.
- *
- * The API always returns 200 regardless of whether the email exists
- * (to prevent user enumeration), so we always show the success state.
- */
-
-import { Form, Input, Button, Typography, Alert, Result } from 'antd';
-import { MailOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Form, Input, Button, Typography, Alert, Result } from 'antd';
+import { MailOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useForgotPasswordMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
@@ -22,6 +12,17 @@ const { Title, Text } = Typography;
 interface ForgotPasswordForm {
   email: string;
 }
+
+const ACCENT = '#e50914';
+
+const submitBtnStyle: React.CSSProperties = {
+  background: ACCENT,
+  borderColor: ACCENT,
+  fontWeight: 600,
+  height: 48,
+  borderRadius: 8,
+  fontSize: 15,
+};
 
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
@@ -43,11 +44,17 @@ export default function ForgotPassword() {
     );
   };
 
+  const backToSignIn = (
+    <Link to="/login" style={{ color: ACCENT, fontSize: 14 }}>
+      <ArrowLeftOutlined style={{ marginRight: 6 }} />
+      Back to sign in
+    </Link>
+  );
+
   return (
     <AuthLayout>
       {submitted ? (
         <Result
-          status="success"
           icon={
             <div
               style={{
@@ -61,7 +68,7 @@ export default function ForgotPassword() {
                 margin: '0 auto 16px',
               }}
             >
-              <MailOutlined style={{ fontSize: 32, color: '#e50914' }} />
+              <MailOutlined style={{ fontSize: 32, color: ACCENT }} />
             </div>
           }
           title={
@@ -83,35 +90,27 @@ export default function ForgotPassword() {
               <Button
                 type="primary"
                 size="large"
-                className="auth-panel__submit-btn"
-                style={{ width: '100%' }}
+                style={{ ...submitBtnStyle, width: '100%' }}
                 onClick={() => { setSubmitted(false); form.resetFields(); }}
               >
                 Try a different email
               </Button>
-              <div className="auth-panel__footer">
-                <Link to="/login" style={{ color: '#e50914', fontSize: 14 }}>
-                  <ArrowLeftOutlined style={{ marginRight: 6 }} />
-                  Back to sign in
-                </Link>
-              </div>
+              <div style={{ textAlign: 'center', marginTop: 8 }}>{backToSignIn}</div>
             </div>
           }
         />
       ) : (
         <>
-          <Title level={2} className="auth-panel__heading" style={{ color: colors.textPrimary }}>
+          <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
             Forgot password?
           </Title>
-          <Text className="auth-panel__subheading" style={{ color: colors.textMuted }}>
+          <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
             Enter your email and we'll send you a reset link.
           </Text>
 
-          {error && (
-            <Alert title={error} type="error" showIcon style={{ marginBottom: 20 }} />
-          )}
+          {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
 
-          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
             <Form.Item
               name="email"
               rules={[
@@ -124,7 +123,7 @@ export default function ForgotPassword() {
                 placeholder="Email address"
                 size="large"
                 style={{ borderRadius: 8 }}
-                autoComplete="email"
+                autoComplete="new-password"
               />
             </Form.Item>
 
@@ -135,19 +134,14 @@ export default function ForgotPassword() {
                 size="large"
                 block
                 loading={forgotMutation.isPending}
-                className="auth-panel__submit-btn"
+                style={submitBtnStyle}
               >
                 Send reset link
               </Button>
             </Form.Item>
           </Form>
 
-          <div className="auth-panel__footer">
-            <Link to="/login" style={{ color: '#e50914', fontSize: 14 }}>
-              <ArrowLeftOutlined style={{ marginRight: 6 }} />
-              Back to sign in
-            </Link>
-          </div>
+          <div style={{ textAlign: 'center', marginTop: 8 }}>{backToSignIn}</div>
         </>
       )}
     </AuthLayout>

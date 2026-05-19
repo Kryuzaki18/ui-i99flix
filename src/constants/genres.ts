@@ -25,9 +25,6 @@ export const TV_GENRES: Genre[] = [
   { label: 'Family',      value: 'Family'       },
 ];
 
-/**
- * TMDB genre name → genre ID for Movies.
- */
 export const MOVIE_GENRE_IDS: Record<string, number> = {
   Action:    28,
   Drama:     18,
@@ -39,14 +36,11 @@ export const MOVIE_GENRE_IDS: Record<string, number> = {
   Animation: 16,
 };
 
-/**
- * TMDB genre name → genre ID for TV Series.
- */
 export const TV_GENRE_IDS: Record<string, number> = {
-  Action:      10759, // Action & Adventure
+  Action:      10759,
   Drama:       18,
   Comedy:      35,
-  'Sci-Fi':    10765, // Sci-Fi & Fantasy
+  'Sci-Fi':    10765,
   Animation:   16,
   Crime:       80,
   Mystery:     9648,
@@ -54,13 +48,7 @@ export const TV_GENRE_IDS: Record<string, number> = {
   Family:      10751,
 };
 
-/**
- * Maps genre names → Ant Design tag colors.
- * Covers both app-specific names (Sci-Fi) and full TMDB names (Science Fiction)
- * so tags render correctly regardless of the data source.
- */
 export const GENRE_COLORS: Record<string, string> = {
-  // Movie genre names
   Action:    'red',
   Drama:     'blue',
   Comedy:    'gold',
@@ -69,14 +57,10 @@ export const GENRE_COLORS: Record<string, string> = {
   Horror:    'volcano',
   Romance:   'pink',
   Animation: 'green',
-
-  // TV genre names
   Crime:       'volcano',
   Mystery:     'purple',
   Documentary: 'green',
   Family:      'lime',
-
-  // TMDB full genre names
   'Science Fiction':    'cyan',
   'Sci-Fi & Fantasy':   'cyan',
   'Action & Adventure': 'red',

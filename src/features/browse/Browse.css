@@ -1,9 +1,7 @@
-/* ── Browse page ─────────────────────────────────────────────────────────── */
 .browse-header {
   margin-bottom: 24px;
 }
 
-/* ── Media type tabs ─────────────────────────────────────────────────────── */
 .browse-tabs .ant-tabs-nav {
   margin-bottom: 24px;
 }
@@ -22,14 +20,12 @@
   background: #e50914;
 }
 
-/* Filters bar */
 .browse-filters {
   border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 28px;
 }
 
-/* Right-align the layout toggle column on md+ */
 @media (min-width: 768px) {
   .browse-filters__layout-col {
     display: flex;
@@ -37,7 +33,6 @@
   }
 }
 
-/* Genre pill buttons */
 .browse-genre-pills {
   margin-bottom: 24px;
   flex-wrap: wrap;
@@ -56,23 +51,19 @@
   opacity: 0.85;
 }
 
-/* Results count */
 .browse-results-count {
   margin-bottom: 20px;
 }
 
-/* ── Pagination — sticky below the nav ───────────────────────────────────── */
 .browse-pagination {
   position: sticky;
-  top: 64px;          /* sits flush under the 64px nav header */
+  top: 64px;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 12px 20px;
   margin-bottom: 20px;
-
-  /* Frosted-glass backdrop so content scrolls behind it */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
@@ -80,12 +71,10 @@
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Subtle shadow once the user has scrolled past the top */
 .browse-pagination.is-stuck {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Theme-aware background set via CSS custom property injected by ThemeContext */
 [data-theme='dark']  .browse-pagination { background: rgba(13,  13,  26,  0.88); border-color: rgba(255,255,255,0.06); }
 [data-theme='light'] .browse-pagination { background: rgba(240, 242, 245, 0.92); border-color: rgba(0,  0,   0,   0.06); }
 
@@ -132,7 +121,6 @@
   height: 36px !important;
 }
 
-/* ── List view row ────────────────────────────────────────────────────────── */
 .browse-list-row {
   border-radius: 12px;
   overflow: hidden;
@@ -188,7 +176,6 @@
   flex-shrink: 0;
 }
 
-/* ── Focus-visible styles for keyboard navigation ────────────────────────── */
 .browse-genre-pill:focus-visible {
   outline: 2px solid #e50914;
   outline-offset: 2px;

@@ -45,7 +45,6 @@ export default function VideoPlayer({
   );
   const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
 
-  // Reset play state when modal closes or movie changes
   useEffect(() => {
     if (!open) {
       setPlaying(false);
@@ -54,10 +53,8 @@ export default function VideoPlayer({
     }
   }, [open, movie?.id]);
 
-  // Pause iframe when modal closes
   useEffect(() => {
     if (!open) {
-      // Attempt to pause any active iframe
       const iframes = fullscreenRef.current?.querySelectorAll('iframe');
       iframes?.forEach((iframe) => {
         iframe.contentWindow?.postMessage(
@@ -96,9 +93,7 @@ export default function VideoPlayer({
         ref={fullscreenRef}
         className={`player__fullscreen-root${isFullscreen ? " player__fullscreen-root--active" : ""}`}
       >
-        {/* ── Video area ── */}
         <div className="player__video-area">
-          {/* Poster / play gate — shown before user clicks play */}
           {!playing && (
             <div className="player__poster-gate" onClick={handlePlay}>
               <img
@@ -118,7 +113,7 @@ export default function VideoPlayer({
             </div>
           )}
 
-          {playing && <ServerIframe server={servers} mediaId={movie.id} mediaType={movie.mediaType} season={season} episode={episode} />}
+        {playing && <ServerIframe server={servers} mediaId={movie.id} mediaType={movie.mediaType} season={season} episode={episode} />}
         </div>
 
         <Flex

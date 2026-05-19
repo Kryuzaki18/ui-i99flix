@@ -1,4 +1,3 @@
-/* ── Hero Banner ──────────────────────────────────────────────────────────── */
 .hero-banner {
   position: relative;
   width: 100%;
@@ -7,7 +6,6 @@
   border-radius: 16px;
 }
 
-/* Skeleton placeholder */
 .hero-banner__skeleton {
   position: absolute;
   inset: 0;
@@ -18,7 +16,6 @@
   gap: 16px;
 }
 
-/* Backdrop image */
 .hero-banner__img {
   position: absolute;
   inset: 0;
@@ -28,7 +25,6 @@
   transition: opacity 0.6s ease;
 }
 
-/* Gradient overlay */
 .hero-banner__gradient {
   position: absolute;
   inset: 0;
@@ -40,7 +36,6 @@
   );
 }
 
-/* Content panel */
 .hero-banner__content {
   position: absolute;
   inset: 0;
@@ -102,7 +97,6 @@
   backdrop-filter: blur(4px);
 }
 
-/* Arrow nav buttons */
 .hero-banner__arrow {
   position: absolute !important;
   top: 50%;
@@ -116,7 +110,6 @@
 .hero-banner__arrow--prev { left: 16px; }
 .hero-banner__arrow--next { right: 16px; }
 
-/* Dot indicators */
 .hero-banner__dots {
   position: absolute;
   bottom: 16px;
@@ -146,7 +139,6 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* ── Focus-visible for keyboard navigation ───────────────────────────────── */
 .hero-banner__dot:focus-visible {
   outline: 2px solid #e50914;
   outline-offset: 3px;

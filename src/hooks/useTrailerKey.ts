@@ -1,16 +1,3 @@
-/**
- * useTrailerKey
- *
- * Fetches the YouTube trailer key for a TMDB movie ID via the backend proxy.
- * Picks the best available video in priority order:
- *   1. Official Trailer on YouTube
- *   2. Any Trailer on YouTube
- *   3. Teaser on YouTube
- *   4. First YouTube result
- *
- * Returns null while loading or when no YouTube video is available.
- */
-
 import { useTmdbMovieVideosQuery } from '../api/useTmdbQuery';
 
 export function useTrailerKey(movieId: number | null): {

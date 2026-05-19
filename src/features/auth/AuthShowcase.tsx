@@ -1,11 +1,3 @@
-/**
- * AuthShowcase — animated left panel for login/signup pages.
- *
- * Fetches trending movies from the public backend endpoint
- * GET /api/v1/tmdb/showcase — no auth or TMDB token required in the browser.
- * The TMDB key stays entirely server-side.
- */
-
 import { useState, useEffect, useRef } from 'react';
 import { StarFilled, FireFilled } from '@ant-design/icons';
 import { Skeleton, Tag } from 'antd';
@@ -15,15 +7,9 @@ import type { Movie } from '../../models/movie';
 import type { TmdbMovieListItem } from '../../models/tmdb';
 import { tmdbMovieListItemToMovie } from '../../utils/tmdbAdapter';
 
-const SLIDE_INTERVAL  = 5000; // ms
-const SHOWCASE_COUNT  = 5;
+const SLIDE_INTERVAL = 5000;
+const SHOWCASE_COUNT = 5;
 
-/**
- * Static TMDB genre ID → name map.
- * Covers all common genres so the showcase works without an authenticated
- * genres API call. The showcase endpoint is public (no auth), but
- * /tmdb/genres/movie requires a session cookie — so we resolve locally.
- */
 const STATIC_GENRE_MAP = new Map<number, string>([
   [28,    'Action'],
   [12,    'Adventure'],
@@ -86,7 +72,6 @@ export default function AuthShowcase() {
     return () => { cancelled = true; };
   }, []);
 
-  // Auto-advance slides once movies are loaded
   useEffect(() => {
     if (movies.length <= 1) return;
 
@@ -97,20 +82,17 @@ export default function AuthShowcase() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [movies.length]);
 
-
   return (
     <div
       className="auth-showcase"
       style={{ '--auth-edge-color': isDark ? '#0d0d1a' : '#f0f2f5' } as React.CSSProperties}
     >
-      {/* ── Loading skeleton ── */}
       {loading && (
         <div className="auth-showcase__skeleton">
           <Skeleton.Image active style={{ width: '100%', height: '100%', borderRadius: 0 }} />
         </div>
       )}
 
-      {/* ── Backdrop slides ── */}
       {movies.map((movie, i) => (
         <div
           key={movie.id}
@@ -119,11 +101,9 @@ export default function AuthShowcase() {
         />
       ))}
 
-      {/* Overlays */}
       <div className="auth-showcase__overlay" />
       <div className="auth-showcase__edge-fade" />
 
-      {/* Ambient orbs */}
       <div className="auth-showcase__orb auth-showcase__orb--1" />
       <div className="auth-showcase__orb auth-showcase__orb--2" />
       <div className="auth-showcase__orb auth-showcase__orb--3" />
@@ -132,7 +112,6 @@ export default function AuthShowcase() {
         <img src="/i99flix-logo.png" alt="i99flix logo" width={70} />
       </div>
 
-      {/* ── Floating movie cards ── */}
       {movies.length > 0 && (
         <div className="auth-showcase__cards">
           {movies.map((movie) => (
@@ -144,7 +123,6 @@ export default function AuthShowcase() {
         </div>
       )}
 
-      {/* ── Active movie info + slide dots ── */}
       {movies.length > 0 && (
         <div className="auth-showcase__info">
           {movies.map((movie, i) => (
@@ -182,7 +160,6 @@ export default function AuthShowcase() {
             </div>
           ))}
 
-          {/* Dots always visible, no flicker */}
           {movies.length > 1 && (
             <div className="auth-showcase__dots">
               {movies.map((_, i) => (

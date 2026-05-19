@@ -1,4 +1,3 @@
-/* ── Full-page Player ─────────────────────────────────────────────────────── */
 .player-page {
   min-height: 100vh;
   display: flex;
@@ -11,7 +10,6 @@
   justify-content: center;
 }
 
-/* ── Video area ───────────────────────────────────────────────────────────── */
 .player-page__video {
   position: relative;
   width: 100%;
@@ -32,7 +30,6 @@
   transition: opacity 0.25s ease;
 }
 
-/* ── Iframe wrap ──────────────────────────────────────────────────────────── */
 .player-page__iframe-wrap {
   position: relative;
   flex: 1;
@@ -71,7 +68,6 @@
   transform: scale(1.08);
 }
 
-/* Vignette overlay */
 .player-page__vignette {
   position: absolute;
   inset: 0;
@@ -81,7 +77,6 @@
   pointer-events: none;
 }
 
-/* ── Top bar ──────────────────────────────────────────────────────────────── */
 .player-page__topbar {
   position: absolute;
   top: 0;
@@ -119,7 +114,6 @@
   letter-spacing: -0.5px;
 }
 
-/* ── Centre overlay ───────────────────────────────────────────────────────── */
 .player-page__overlay {
   position: absolute;
   inset: 0;
@@ -136,24 +130,12 @@
   gap: 10px;
 }
 
-.player-page__play-icon {
-  font-size: clamp(56px, 8vw, 88px) !important;
-  color: rgba(255,255,255,0.92) !important;
-  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.8));
-  transition: transform 0.15s ease;
-}
-
-.player-page__play-icon:hover {
-  transform: scale(1.08);
-}
-
 .player-page__play-hint {
   color: rgba(255,255,255,0.55) !important;
   font-size: 13px !important;
   letter-spacing: 0.5px;
 }
 
-/* ── Bottom title overlay ─────────────────────────────────────────────────── */
 .player-page__title-overlay {
   position: absolute;
   bottom: 0;
@@ -171,7 +153,6 @@
   line-height: 1.2 !important;
 }
 
-/* ── Controls bar ─────────────────────────────────────────────────────────── */
 .player-page__btn-nav {
   color: #ccc !important;
   transition: color 0.15s ease;
@@ -181,7 +162,6 @@
   color: #fff !important;
 }
 
-/* ── Info panel ───────────────────────────────────────────────────────────── */
 .player-page__info {
   flex: 1;
   padding: 24px clamp(16px, 4vw, 48px);
@@ -219,7 +199,6 @@
   letter-spacing: 0.8px;
 }
 
-/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .player-page__video {
     max-height: 56vw;
@@ -232,7 +211,6 @@
   }
 }
 
-/* ── Fullscreen ───────────────────────────────────────────────────────────── */
 .player-page__video--fullscreen,
 .player-page__video:fullscreen,
 .player-page__video:-webkit-full-screen {

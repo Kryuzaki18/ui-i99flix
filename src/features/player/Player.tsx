@@ -61,7 +61,6 @@ export default function Player() {
   const [playing, setPlaying] = useState(false);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
-  // Pause iframes when navigating away
   useEffect(() => {
     return () => {
       fullscreenRef.current?.querySelectorAll("iframe").forEach((iframe) => {

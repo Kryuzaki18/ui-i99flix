@@ -1,4 +1,3 @@
-/* ── Top Navigation Bar ───────────────────────────────────────────────────── */
 .nav-header {
   position: sticky;
   top: 0;
@@ -17,7 +16,6 @@
   justify-content: center;
 }
 
-/* Nav link buttons */
 .nav-link-btn {
   border-radius: 0 !important;
   height: 64px !important;
@@ -34,13 +32,11 @@
   border-bottom: 2px solid transparent !important;
 }
 
-/* Search input */
 .nav-search-input {
   border-radius: 20px !important;
   width: clamp(160px, 20vw, 240px);
 }
 
-/* Theme toggle */
 .nav-theme-toggle .anticon {
   transition: transform 0.3s ease;
 }
@@ -49,14 +45,12 @@
   transform: rotate(20deg) scale(1.15);
 }
 
-/* User avatar */
 .nav-avatar {
   background: #e50914 !important;
   cursor: pointer;
   flex-shrink: 0;
 }
 
-/* Responsive — hide links, show hamburger on mobile */
 @media (max-width: 768px) {
   .nav-links    { display: none !important; }
   .nav-hamburger { display: inline-flex !important; }

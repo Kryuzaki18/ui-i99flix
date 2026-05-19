@@ -22,12 +22,8 @@ const Home = lazy(() => import("./features/home/Home"));
 const Browse = lazy(() => import("./features/browse/Browse"));
 const Login = lazy(() => import("./features/auth/login/Login"));
 const Signup = lazy(() => import("./features/auth/signup/Signup"));
-const ForgotPassword = lazy(
-  () => import("./features/auth/forgot-password/ForgotPassword"),
-);
-const ResetPassword = lazy(
-  () => import("./features/auth/reset-password/ResetPassword"),
-);
+const ForgotPassword = lazy(() => import("./features/auth/forgot-password/ForgotPassword"));
+const ResetPassword = lazy(() => import("./features/auth/reset-password/ResetPassword"));
 const PlayerPage = lazy(() => import("./features/player/Player"));
 
 const { Content, Footer } = Layout;
@@ -64,7 +60,6 @@ function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart
       }}
     >
       <img src="/i99flix-logo.png" alt="i99flix logo" width={200} />
-
       <div
         style={{
           width: 180,
@@ -88,14 +83,12 @@ function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart
           }}
         />
       </div>
-
       <style>{`
         @keyframes splashBar {
           0%   { left: -40%; }
           100% { left: 110%; }
         }
       `}</style>
-
       {slowStart && (
         <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, marginTop: 8, textAlign: 'center' }}>
           Server is waking up, please wait…
@@ -105,41 +98,25 @@ function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart
   );
 }
 
-// ─── Route guards ─────────────────────────────────────────────────────────────
-
-/** Blocks protected pages until auth is confirmed. Never flashes content. */
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isCheckingAuth } = useAuthStore();
-
-  // Auth check still in-flight — render nothing (AppBootstrap already shows splash)
   if (isCheckingAuth) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }
 
-/** Redirects already-authenticated users away from auth pages. */
 function GuestRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isCheckingAuth } = useAuthStore();
-
   if (isCheckingAuth) return null;
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 
-// ─── App shell ────────────────────────────────────────────────────────────────
-
 function AppLayout() {
   const location = useLocation();
   const { colors } = useTheme();
-
   const { sidebarOpen, openSidebar, closeSidebar } = useUIStore();
-  const {
-    playingMovie,
-    closePlayer,
-    detailMovie,
-    closeDetail,
-    playFromDetail,
-  } = usePlayerStore();
+  const { playingMovie, closePlayer, detailMovie, closeDetail, playFromDetail } = usePlayerStore();
 
   const isAuthPage =
     location.pathname === "/login" ||
@@ -151,38 +128,10 @@ function AppLayout() {
     return (
       <Suspense fallback={<AppSplash visible />}>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <GuestRoute>
-                <Login />
-              </GuestRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <GuestRoute>
-                <Signup />
-              </GuestRoute>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <GuestRoute>
-                <ForgotPassword />
-              </GuestRoute>
-            }
-          />
-          <Route
-            path="/reset-password"
-            element={
-              <GuestRoute>
-                <ResetPassword />
-              </GuestRoute>
-            }
-          />
+          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
+          <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+          <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
         </Routes>
       </Suspense>
     );
@@ -192,7 +141,6 @@ function AppLayout() {
     <Layout style={{ minHeight: "100vh", background: colors.bgBase }}>
       <Nav onMenuOpen={openSidebar} />
       <Sidebar open={sidebarOpen} onClose={closeSidebar} />
-
       <Content
         style={{
           padding: "clamp(16px, 3vw, 32px) clamp(16px, 4vw, 48px)",
@@ -204,26 +152,11 @@ function AppLayout() {
       >
         <Suspense fallback={<AppSplash visible />}>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/browse"
-              element={
-                <ProtectedRoute>
-                  <Browse />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
           </Routes>
         </Suspense>
       </Content>
-
       <Footer
         style={{
           background: colors.footerBg,
@@ -233,31 +166,9 @@ function AppLayout() {
           color: colors.textMuted,
         }}
       >
-        <div
-          style={{
-            marginBottom: 12,
-            display: "flex",
-            justifyContent: "center",
-            gap: 24,
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            "About",
-            "Privacy Policy",
-            "Terms of Service",
-            "Help Center",
-            "Contact",
-          ].map((item) => (
-            <a
-              key={item}
-              href="#"
-              style={{
-                color: colors.textMuted,
-                fontSize: 13,
-                textDecoration: "none",
-              }}
-            >
+        <div style={{ marginBottom: 12, display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
+          {["About", "Privacy Policy", "Terms of Service", "Help Center", "Contact"].map((item) => (
+            <a key={item} href="#" style={{ color: colors.textMuted, fontSize: 13, textDecoration: "none" }}>
               {item}
             </a>
           ))}
@@ -266,30 +177,17 @@ function AppLayout() {
           © 2026 i99flix — Stream unlimited movies, anytime.
         </div>
       </Footer>
-
-      <VideoPlayer
-        movie={playingMovie}
-        open={!!playingMovie}
-        onClose={closePlayer}
-      />
-      <MovieDetailDrawer
-        movie={detailMovie}
-        open={!!detailMovie}
-        onClose={closeDetail}
-        onPlay={playFromDetail}
-      />
+      <VideoPlayer movie={playingMovie} open={!!playingMovie} onClose={closePlayer} />
+      <MovieDetailDrawer movie={detailMovie} open={!!detailMovie} onClose={closeDetail} onPlay={playFromDetail} />
     </Layout>
   );
 }
 
-// ─── Bootstrap: fires the session check BEFORE any route renders ──────────────
 function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth } = useAuthStore();
   const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
 
-  // If the session check takes > 8s (Render free-tier cold start),
-  // show a hint so the user knows the server is waking up.
   useEffect(() => {
     if (!isCheckingAuth) { setSlowStart(false); return; }
     const t = setTimeout(() => setSlowStart(true), 8000);
@@ -304,8 +202,6 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ─── Themed wrapper ───────────────────────────────────────────────────────────
-
 function ThemedApp() {
   const { isDark, colors } = useTheme();
 
@@ -318,8 +214,7 @@ function ThemedApp() {
           colorBgBase: colors.bgBase,
           colorTextBase: colors.textPrimary,
           borderRadius: 8,
-          fontFamily:
-            "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
         components: {
           Layout: {
@@ -359,7 +254,6 @@ function ThemedApp() {
       <BrowserRouter>
         <AppBootstrap>
           <Routes>
-            {/* Standalone full-page player — no nav/footer shell */}
             <Route
               path="/player/:id"
               element={
@@ -368,7 +262,6 @@ function ThemedApp() {
                 </Suspense>
               }
             />
-            {/* Main app shell */}
             <Route path="*" element={<AppLayout />} />
           </Routes>
         </AppBootstrap>

@@ -1,10 +1,3 @@
-/**
- * React Query hooks for the internal i99flix movie API.
- *
- * These hooks call our own Fastify backend (api-movie), not TMDB.
- * They follow the same patterns as useMoviesQuery.ts for consistency.
- */
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchApiMovies,
@@ -16,8 +9,6 @@ import {
   type MoviePayload,
 } from './internalMovieApi';
 
-// ── Query key factory ─────────────────────────────────────────────────────────
-
 export const internalMovieKeys = {
   all:     ['internal-movies'] as const,
   lists:   () => [...internalMovieKeys.all, 'list'] as const,
@@ -26,19 +17,15 @@ export const internalMovieKeys = {
   detail:  (id: string) => [...internalMovieKeys.details(), id] as const,
 };
 
-// ── Read hooks ────────────────────────────────────────────────────────────────
-
-/** Paginated movie list with optional filters */
 export function useApiMoviesQuery(filters: MovieFiltersApi = {}) {
   return useQuery({
     queryKey: internalMovieKeys.list(filters),
     queryFn:  ({ signal }) => fetchApiMovies(filters, { signal }),
-    staleTime: 60 * 1000, // 1 min — real API data can change
+    staleTime: 60 * 1000,
     placeholderData: (prev) => prev,
   });
 }
 
-/** Single movie by MongoDB _id */
 export function useApiMovieQuery(id: string | null) {
   return useQuery({
     queryKey: internalMovieKeys.detail(id ?? ''),
@@ -48,9 +35,6 @@ export function useApiMovieQuery(id: string | null) {
   });
 }
 
-// ── Mutation hooks ────────────────────────────────────────────────────────────
-
-/** Create a new movie */
 export function useCreateMovieMutation() {
   const queryClient = useQueryClient();
 
@@ -62,7 +46,6 @@ export function useCreateMovieMutation() {
   });
 }
 
-/** Update an existing movie */
 export function useUpdateMovieMutation() {
   const queryClient = useQueryClient();
 
@@ -76,7 +59,6 @@ export function useUpdateMovieMutation() {
   });
 }
 
-/** Delete a movie */
 export function useDeleteMovieMutation() {
   const queryClient = useQueryClient();
 

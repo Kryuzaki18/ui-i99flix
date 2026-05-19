@@ -1,9 +1,3 @@
-/**
- * Shared genre map utility.
- * Fetches the TMDB genre list once and returns a Map<id, name>.
- * Used by both useBrowseQuery and useMoviesQuery to avoid duplication.
- */
-
 import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../api/tmdbApi';
 import { buildGenreMap } from './tmdbAdapter';
 
