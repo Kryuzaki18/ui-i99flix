@@ -3,6 +3,7 @@ import { StarFilled, FireFilled } from '@ant-design/icons';
 import { Skeleton, Tag } from 'antd';
 import { useTheme } from '../../context/ThemeContext';
 import { GENRE_COLORS } from '../../constants/genres';
+import { API_ROUTES } from '../../api/environments';
 import type { Movie } from '../../models/movie';
 import type { TmdbMovieListItem } from '../../models/tmdb';
 import { tmdbMovieListItemToMovie } from '../../utils/tmdbAdapter';
@@ -33,7 +34,7 @@ const STATIC_GENRE_MAP = new Map<number, string>([
 ]);
 
 async function fetchShowcaseMovies(): Promise<Movie[]> {
-  const res = await fetch(`api/tmdb/showcase`, {
+  const res = await fetch(API_ROUTES.TMDB.SHOWCASE, {
     headers: { Accept: 'application/json' },
   });
   if (!res.ok) throw new Error(`Showcase fetch failed: ${res.status}`);

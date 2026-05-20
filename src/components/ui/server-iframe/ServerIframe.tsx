@@ -1,9 +1,11 @@
+import { EMBED_SERVERS } from '../../../api/environments';
+
 interface ServerIframeProps {
-  server:    number;
-  mediaId:   number | string;
+  server:     number;
+  mediaId:    number | string;
   mediaType?: 'movie' | 'tv';
-  season?:   number;
-  episode?:  number;
+  season?:    number;
+  episode?:   number;
   className?: string;
 }
 
@@ -15,29 +17,20 @@ export default function ServerIframe({
   episode   = 1,
   className = 'player__iframe',
 }: ServerIframeProps) {
-  const isTV = mediaType === 'tv';
+  const embedServer = EMBED_SERVERS.find((s) => s.id === server) ?? EMBED_SERVERS[0];
 
-  const sources: Record<number, string> = isTV
-    ? {
-        1: `https://ezvidapi.com/embed/tv/${mediaId}/${season}/${episode}?provider=vidsrc`,
-        2: `https://vidlink.pro/tv/${mediaId}/${season}/${episode}`,
-        3: `https://vidsrc.fyi/embed/tv/${mediaId}/${season}/${episode}`,
-        4: `https://www.2embed.stream/embed/tv/${mediaId}&s=${season}&e=${episode}`,
-      }
-    : {
-        1: `https://ezvidapi.com/embed/movie/${mediaId}?provider=vidsrc`,
-        2: `https://vidlink.pro/movie/${mediaId}`,
-        3: `https://vidsrc.fyi/embed/movie/${mediaId}`,
-        4: `https://www.2embed.stream/embed/movie/${mediaId}`,
-      };
+  const src = mediaType === 'tv'
+    ? embedServer.tv(mediaId, season, episode)
+    : embedServer.movie(mediaId);
 
   return (
     <iframe
       key={`${server}-${mediaId}-${season}-${episode}`}
-      src={sources[server]}
+      src={src}
       className={className}
-      allow="autoplay; fullscreen; picture-in-picture"
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer"
       allowFullScreen
+      referrerPolicy="no-referrer"
     />
   );
 }

@@ -20,50 +20,33 @@ const { Title, Text } = Typography;
 
 interface VideoPlayerProps {
   movie: Movie | null;
-  open: boolean;
+  open:  boolean;
   onClose: () => void;
 }
 
-export default function VideoPlayer({
-  movie,
-  open,
-  onClose,
-}: VideoPlayerProps) {
-  const [playing, setPlaying] = useState(false);
-  const [servers, setServers] = useState(1);
-  const [season, setSeason] = useState(1);
-  const [episode, setEpisode] = useState(1);
-  const { colors } = useTheme();
+export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
+  const [playing, setPlaying]   = useState(false);
+  const [server, setServer]     = useState(1);
+  const [season, setSeason]     = useState(1);
+  const [episode, setEpisode]   = useState(1);
+  const { colors }              = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null
   );
 
-  const selectedSeasonData = tvDetail?.seasons?.find(
-    (s) => s.season_number === season
-  );
-  const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
+  const totalEpisodesForSeason =
+    tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ?? 30;
 
   useEffect(() => {
     if (!open) {
       setPlaying(false);
+      setServer(1);
       setSeason(1);
       setEpisode(1);
     }
   }, [open, movie?.id]);
-
-  useEffect(() => {
-    if (!open) {
-      const iframes = fullscreenRef.current?.querySelectorAll('iframe');
-      iframes?.forEach((iframe) => {
-        iframe.contentWindow?.postMessage(
-          '{"event":"command","func":"pauseVideo","args":""}',
-          '*',
-        );
-      });
-    }
-  }, [open, fullscreenRef]);
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
@@ -78,12 +61,7 @@ export default function VideoPlayer({
       centered
       style={{ padding: 0 }}
       styles={{
-        body: {
-          background: "#000",
-          padding: 0,
-          borderRadius: 12,
-          overflow: "hidden",
-        },
+        body: { background: "#000", padding: 0, borderRadius: 12, overflow: "hidden" },
         mask: { backdropFilter: "blur(6px)", background: "rgba(0,0,0,0.85)" },
       }}
       closeIcon={<span className="player__close-icon">✕</span>}
@@ -106,14 +84,20 @@ export default function VideoPlayer({
                 <PlayCircleOutlined className="player__play-icon" />
               </div>
               <div className="player__title-overlay">
-                <Title level={5} className="player__title">
-                  {movie.title}
-                </Title>
+                <Title level={5} className="player__title">{movie.title}</Title>
               </div>
             </div>
           )}
 
-        {playing && <ServerIframe server={servers} mediaId={movie.id} mediaType={movie.mediaType} season={season} episode={episode} />}
+          {playing && (
+            <ServerIframe
+              server={server}
+              mediaId={movie.id}
+              mediaType={movie.mediaType}
+              season={season}
+              episode={episode}
+            />
+          )}
         </div>
 
         <Flex
@@ -123,7 +107,7 @@ export default function VideoPlayer({
           wrap={true}
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
-          <ServerSelector activeServer={servers} onServerChange={setServers} />
+          <ServerSelector activeServer={server} onServerChange={setServer} />
 
           <Space size={8}>
             <Button
@@ -133,27 +117,17 @@ export default function VideoPlayer({
                 const url = movie.mediaType === "tv"
                   ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
                   : `/player/${movie.id}`;
-                window.open(
-                  url,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                window.open(url, "_blank", "noopener,noreferrer");
               }}
             >
               Open in new tab
             </Button>
-
-            <Tooltip
-              title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-              placement="top"
-            >
+            <Tooltip title={isFullscreen ? "Exit fullscreen" : "Fullscreen"} placement="top">
               <Button
                 size="small"
                 icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
                 onClick={toggleFullscreen}
-                aria-label={
-                  isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                }
+                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
               />
             </Tooltip>
           </Space>
@@ -172,7 +146,7 @@ export default function VideoPlayer({
                 episode={episode}
                 onSeasonChange={setSeason}
                 onEpisodeChange={setEpisode}
-                totalSeasons={tvDetail?.number_of_seasons || 20}
+                totalSeasons={tvDetail?.number_of_seasons ?? 20}
                 totalEpisodes={totalEpisodesForSeason}
               />
             )}
@@ -187,19 +161,16 @@ export default function VideoPlayer({
         >
           <Text>{movie.title} ({movie.year})</Text>
           {movie.genre.map((g) => (
-            <Tag key={g} className="player__genre-tag">
-              {g}
-            </Tag>
+            <Tag key={g} className="player__genre-tag">{g}</Tag>
           ))}
         </Flex>
-
 
         <Flex
           gap="small"
           vertical
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
-          <Text strong >Synopsis</Text>
+          <Text strong>Synopsis</Text>
           <Text type="secondary">{movie.description}</Text>
         </Flex>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import {
   Typography,
@@ -60,17 +60,6 @@ export default function Player() {
 
   const [playing, setPlaying] = useState(false);
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
-
-  useEffect(() => {
-    return () => {
-      fullscreenRef.current?.querySelectorAll("iframe").forEach((iframe) => {
-        iframe.contentWindow?.postMessage(
-          '{"event":"command","func":"pauseVideo","args":""}',
-          "*",
-        );
-      });
-    };
-  }, [fullscreenRef]);
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
