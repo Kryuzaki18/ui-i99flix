@@ -58,3 +58,7 @@ export async function resetPassword(payload: ResetPasswordPayload): Promise<{ me
     password: payload.password,
   });
 }
+
+export async function verifyEmail(token: string): Promise<{ message: string }> {
+  return apiGet<{ message: string }>(`${API_ROUTES.AUTH.VERIFY_EMAIL}?token=${encodeURIComponent(token)}`);
+}

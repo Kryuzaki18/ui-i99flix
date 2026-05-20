@@ -10,6 +10,7 @@ export const API_ROUTES = {
     ME: `${API_BASE}/me`,
     FORGOT_PASSWORD: `${API_BASE}/forgot-password`,
     RESET_PASSWORD: `${API_BASE}/reset-password`,
+    VERIFY_EMAIL: `${API_BASE}/verify-email`,
   },
 
   MOVIES: {

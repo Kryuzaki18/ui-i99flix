@@ -24,6 +24,7 @@ const Login = lazy(() => import("./features/auth/login/Login"));
 const Signup = lazy(() => import("./features/auth/signup/Signup"));
 const ForgotPassword = lazy(() => import("./features/auth/forgot-password/ForgotPassword"));
 const ResetPassword = lazy(() => import("./features/auth/reset-password/ResetPassword"));
+const VerifyEmail = lazy(() => import("./features/auth/verify-email/VerifyEmail"));
 const PlayerPage = lazy(() => import("./features/player/Player"));
 
 const { Content, Footer } = Layout;
@@ -122,7 +123,8 @@ function AppLayout() {
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
     location.pathname === "/forgot-password" ||
-    location.pathname === "/reset-password";
+    location.pathname === "/reset-password" ||
+    location.pathname === "/verify-email";
 
   if (isAuthPage) {
     return (
@@ -132,6 +134,7 @@ function AppLayout() {
           <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
           <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
           <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
       </Suspense>
     );
