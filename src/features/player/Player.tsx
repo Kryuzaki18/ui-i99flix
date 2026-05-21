@@ -119,7 +119,7 @@ export default function Player() {
   }
 
   return (
-    <div className="player-page" style={{ background: "#000" }}>
+    <div className="player-page" style={{ background: colors.bgBase }}>
 
       <PlayerHeader />
 
@@ -196,10 +196,18 @@ export default function Player() {
         gap="small"
         align="center"
         justify="space-between"
-        style={{ background: colors.playerControls, padding: "0.5rem" }}
+        style={{ background: colors.bgBase, padding: "0.5rem", position: "relative" }}
       >
-        <ServerSelector activeServer={servers} onServerChange={setServers} />
-
+        {isTv &&
+          <TvEpisodeSelector
+            season={season}
+            episode={episode}
+            onSeasonChange={setSeason}
+            onEpisodeChange={setEpisode}
+            totalSeasons={tvDetail?.number_of_seasons || 20}
+            totalEpisodes={totalEpisodesForSeason}
+          />
+        }
         <Tooltip
           title={
             isFullscreen
@@ -212,26 +220,15 @@ export default function Player() {
             type="text"
             icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
             onClick={toggleFullscreen}
-            className="player-page__btn-nav"
+            style={{ position: "absolute", top: "0", right: "0", marginTop: "7px", marginRight: "7px" }}
             aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
           />
         </Tooltip>
       </Flex>
 
-      {isTv && (
-        <Flex
-          style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
-        >
-          <TvEpisodeSelector
-            season={season}
-            episode={episode}
-            onSeasonChange={setSeason}
-            onEpisodeChange={setEpisode}
-            totalSeasons={tvDetail?.number_of_seasons || 20}
-            totalEpisodes={totalEpisodesForSeason}
-          />
-        </Flex>
-      )}
+      <div style={{ padding: "0 0.5rem 1rem 0.5rem" }}>
+        <ServerSelector activeServer={servers} onServerChange={setServers} />
+      </div>
 
       <div
         className="player-page__info"
@@ -249,7 +246,6 @@ export default function Player() {
               {movie.title}
             </Title>
 
-            {/* Meta row — inline on desktop, wraps on mobile */}
             <div className="player-page__info-meta">
               <div className="player-page__meta-item">
                 <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Year</Text>

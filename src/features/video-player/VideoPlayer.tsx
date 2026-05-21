@@ -1,4 +1,4 @@
-import { Modal, Typography, Space, Button, Tooltip, Flex, Spin } from "antd";
+import { Modal, Typography, Space, Tag, Rate, Button, Tooltip, Flex, Spin } from "antd";
 import {
   PlayCircleOutlined,
   ExpandOutlined,
@@ -14,6 +14,7 @@ import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
+import { GENRE_COLORS } from "../../constants/genres";
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./VideoPlayer.css";
 
@@ -83,12 +84,36 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                 alt={movie.title}
                 className="player__backdrop"
               />
-              <div className="player__poster-overlay" />
+              <div className="player__vignette" />
               <div className="player__overlay">
                 <PlayCircleOutlined className="player__play-icon" />
               </div>
               <div className="player__title-overlay">
-                <Title level={5} className="player__title">{movie.title}</Title>
+                <div className="player__title-genres">
+                  {movie.genre.slice(0, 3).map((g) => (
+                    <Tag
+                      key={g}
+                      color={GENRE_COLORS[g] || "default"}
+                      style={{ fontSize: 11, margin: 0 }}
+                    >
+                      {g}
+                    </Tag>
+                  ))}
+                </div>
+                <Title level={4} className="player__title">{movie.title}</Title>
+                <div className="player__title-meta">
+                  <Rate
+                    disabled
+                    allowHalf
+                    defaultValue={movie.rating / 2}
+                    className="player__title-rate"
+                  />
+                  <Text className="player__title-rating">{movie.rating}/10</Text>
+                  <Text className="player__title-year">{movie.year}</Text>
+                  {movie.duration && movie.duration !== 'N/A' && (
+                    <Text className="player__title-duration">{movie.duration}</Text>
+                  )}
+                </div>
               </div>
             </div>
           )}

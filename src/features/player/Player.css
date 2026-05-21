@@ -1,5 +1,3 @@
-/* ── Page shell ──────────────────────────────────────────────────────────── */
-
 .player-page {
   min-height: 100vh;
   display: flex;
@@ -11,8 +9,6 @@
   align-items: center;
   justify-content: center;
 }
-
-/* ── Header ──────────────────────────────────────────────────────────────── */
 
 .player-page__header {
   display: flex;
@@ -66,14 +62,11 @@
   flex-shrink: 0;
 }
 
-/* Hide "Back" text label on very small screens — keep just the icon */
 @media (max-width: 360px) {
   .player-page__back-label {
     display: none;
   }
 }
-
-/* ── Video area ──────────────────────────────────────────────────────────── */
 
 .player-page__video {
   position: relative;
@@ -121,8 +114,6 @@
   display: none;
 }
 
-/* ── Poster gate overlays ────────────────────────────────────────────────── */
-
 .player-page__vignette {
   position: absolute;
   inset: 0;
@@ -164,8 +155,6 @@
   font-size: 12px !important;
   letter-spacing: 0.5px;
 }
-
-/* ── Title overlay (poster gate) ─────────────────────────────────────────── */
 
 .player-page__title-overlay {
   position: absolute;
@@ -229,20 +218,6 @@
   white-space: nowrap;
 }
 
-/* ── Controls bar ────────────────────────────────────────────────────────── */
-
-.player-page__btn-nav {
-  color: #ccc !important;
-  transition: color 0.15s ease;
-  flex-shrink: 0;
-}
-
-.player-page__btn-nav:hover {
-  color: #fff !important;
-}
-
-/* ── Info section ────────────────────────────────────────────────────────── */
-
 .player-page__info {
   flex: 1;
   padding: 20px clamp(12px, 4vw, 48px);
@@ -257,7 +232,6 @@
   min-width: 0;
 }
 
-/* Meta row — horizontal pill strip */
 .player-page__info-meta {
   display: flex;
   flex-direction: row;
@@ -280,8 +254,6 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
-
-/* ── Fullscreen ──────────────────────────────────────────────────────────── */
 
 .player-page__video--fullscreen,
 .player-page__video:fullscreen,
