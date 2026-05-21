@@ -88,7 +88,7 @@ export default function Browse() {
       style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
     >
       <Row gutter={[16, 16]} align="middle">
-        <Col xs={24} sm={24} md={10} lg={8}>
+        <Col xs={24} sm={12} md={8} lg={8}>
           <Input
             placeholder={isMovie ? 'Search movies…' : 'Search TV series…'}
             prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
@@ -107,7 +107,7 @@ export default function Browse() {
             placeholder="Select genre"
           />
         </Col>
-        <Col xs={24} sm={12} md={5} lg={5}>
+        <Col xs={24} sm={12} md={6} lg={5}>
           <Select
             value={selectedYear}
             onChange={(v) => { setYear(v); setPage(1); }}
@@ -117,7 +117,7 @@ export default function Browse() {
             options={YEAR_RANGES.map((r) => ({ label: r.label, value: r.value }))}
           />
         </Col>
-        <Col xs={24} sm={24} md={2} lg={4} className="browse-filters__layout-col">
+        <Col xs={24} sm={12} md={3} lg={4} className="browse-filters__layout-col">
           <Segmented
             value={layout}
             onChange={(v) => setLayout(v as 'grid' | 'list')}

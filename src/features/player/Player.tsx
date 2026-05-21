@@ -16,6 +16,8 @@ import {
   ExpandOutlined,
   CompressOutlined,
   ArrowLeftOutlined,
+  SunOutlined,
+  MoonOutlined,
 } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/useMoviesQuery";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
@@ -33,7 +35,7 @@ import "./Player.css";
 const { Title, Text } = Typography;
 
 function PlayerHeader() {
-  const { colors } = useTheme();
+  const { colors, isDark, toggle } = useTheme();
   return (
     <header
       className="player-page__header"
@@ -51,6 +53,19 @@ function PlayerHeader() {
       <Link to="/" className="player-page__header-logo-link">
         <img src="/i99flix-logo.png" alt="i99flix" className="player-page__header-logo" />
       </Link>
+
+      <Tooltip title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+        <Button
+          type="text"
+          onClick={toggle}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          icon={
+            isDark
+              ? <SunOutlined style={{ fontSize: 18, color: "#fadb14" }} aria-hidden="true" />
+              : <MoonOutlined style={{ fontSize: 18, color: "#6366f1" }} aria-hidden="true" />
+          }
+        />
+      </Tooltip>
     </header>
   );
 }
