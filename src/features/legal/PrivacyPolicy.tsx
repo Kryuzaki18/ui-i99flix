@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
         <Ul items={[
           'Name and email address (provided during registration or social sign-in)',
           'Encrypted password (for email/password accounts — never stored in plain text)',
-          'Profile picture URL (from social providers such as Google, Facebook, or X)',
+          'Profile picture URL (from social providers such as Google or X)',
           'Account activity timestamps (created at, last login)',
           'Session tokens stored in secure, httpOnly cookies',
         ]} />
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
 
       <Section title="3. Social Sign-In">
         <P>
-          When you sign in using Google, Facebook, or X (Twitter), we receive a limited
+          When you sign in using Google or X (Twitter), we receive a limited
           set of profile data from those providers — typically your name, email address,
           and profile picture. We do not receive your social media passwords or access
           to post on your behalf.
@@ -55,7 +55,6 @@ export default function PrivacyPolicy() {
           Your use of social sign-in is also governed by the respective provider's privacy
           policy:{' '}
           <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT }}>Google</a>,{' '}
-          <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT }}>Facebook</a>,{' '}
           <a href="https://twitter.com/en/privacy" target="_blank" rel="noopener noreferrer" style={{ color: ACCENT }}>X (Twitter)</a>.
         </P>
       </Section>
@@ -80,7 +79,7 @@ export default function PrivacyPolicy() {
         <P>i99flix integrates with the following third-party services:</P>
         <Ul items={[
           'TMDB (The Movie Database) — for movie and TV show metadata and images',
-          'Firebase Authentication — for social sign-in (Google, Facebook, X)',
+          'Firebase Authentication — for social sign-in (Google, X)',
           'Resend — for transactional email delivery',
           'Third-party video embed providers — for streaming playback',
           'MongoDB Atlas — for secure cloud database storage',
