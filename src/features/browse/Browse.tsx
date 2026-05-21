@@ -1,76 +1,26 @@
 import { useRef, useEffect } from 'react';
 import {
   Typography, Row, Col, Input, Select, Space, Empty,
-  Segmented, Pagination, Skeleton, Button, Tabs, Tag,
+  Segmented, Pagination, Skeleton, Tabs,
 } from 'antd';
 import {
   SearchOutlined, AppstoreOutlined, BarsOutlined,
   CalendarOutlined, VideoCameraOutlined, PlaySquareOutlined,
 } from '@ant-design/icons';
 import MovieCard from '../../components/ui/movie-card/MovieCard';
+import MovieListRow from '../../components/ui/movie-list-row/MovieListRow';
 import { useBrowseStore } from '../../store/browseStore';
 import { usePlayerStore } from '../../store/playerStore';
 import { useBrowseQuery } from '../../api/useBrowseQuery';
-import { GENRES, TV_GENRES, GENRE_COLORS, YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
+import { GENRES, TV_GENRES, YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
 import type { MediaType } from '../../store/browseStore';
-import type { Movie } from '../../models/movie';
 import './Browse.css';
 
 const { Title, Text } = Typography;
 
 // TMDB returns 20 results per page — pageSize selector controls display only
 const TMDB_PAGE_SIZE = 20;
-
-// ── List row item ─────────────────────────────────────────────────────────────
-
-interface ListRowProps {
-  movie: Movie;
-  onPlay: (m: Movie) => void;
-  onDetail: (m: Movie) => void;
-}
-
-function BrowseListRow({ movie, onPlay, onDetail }: ListRowProps) {
-  const { colors } = useTheme();
-  return (
-    <div
-      className="browse-list-row"
-      style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
-    >
-      <img src={movie.thumbnail} alt={movie.title} className="browse-list-row__thumb" />
-      <div className="browse-list-row__body">
-        <Row justify="space-between" align="top" wrap={false}>
-          <Col flex="auto" style={{ minWidth: 0, paddingRight: 16 }}>
-            <Text strong className="browse-list-row__title">{movie.title}</Text>
-            <Space size={8} className="browse-list-row__meta" wrap>
-              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>
-              {movie.duration && movie.duration !== 'N/A' && (
-                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.duration}</Text>
-              )}
-              {movie.genre.slice(0, 3).map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] ?? 'default'} style={{ margin: 0, fontSize: 11 }}>
-                  {g}
-                </Tag>
-              ))}
-            </Space>
-            <Text className="browse-list-row__desc" style={{ color: colors.textMuted }}>
-              {movie.description}
-            </Text>
-          </Col>
-          <Col className="browse-list-row__actions">
-            <Space direction="vertical" size={6} align="end">
-              <Text className="browse-list-row__rating">★ {movie.rating}</Text>
-              <Space size={6}>
-                <Button size="small" type="primary" onClick={() => onPlay(movie)}>Play</Button>
-                <Button size="small" onClick={() => onDetail(movie)}>Info</Button>
-              </Space>
-            </Space>
-          </Col>
-        </Row>
-      </div>
-    </div>
-  );
-}
 
 // ── Main Browse component ─────────────────────────────────────────────────────
 
@@ -232,7 +182,7 @@ export default function Browse() {
   ) : (
     <Space direction="vertical" size={12} style={{ width: '100%' }}>
       {displayItems.map((item) => (
-        <BrowseListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
+        <MovieListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
       ))}
     </Space>
   );
