@@ -14,6 +14,7 @@ import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
+import { GENRE_COLORS } from "../../constants/genres";
 import "./VideoPlayer.css";
 
 const { Title, Text } = Typography;
@@ -161,7 +162,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
         >
           <Text>{movie.title} ({movie.year})</Text>
           {movie.genre.map((g) => (
-            <Tag key={g} className="player__genre-tag">{g}</Tag>
+            <Tag key={g} color={GENRE_COLORS[g] ?? 'default'} className="player__genre-tag">{g}</Tag>
           ))}
         </Flex>
 

@@ -31,6 +31,26 @@ import "./Player.css";
 
 const { Title, Text, Paragraph } = Typography;
 
+function PlayerHeader() {
+  const { colors } = useTheme();
+  return (
+    <header className="player-page__header" style={{ background: colors.bgBase, borderBottom: `1px solid ${colors.border}` }}>
+      <Link to="/" className="player-page__back-link">
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+        >
+          Back
+        </Button>
+      </Link>
+
+      <Link to="/" className="player-page__header-logo-link">
+        <img src="/i99flix-logo.png" alt="i99flix" width={100} />
+      </Link>
+    </header>
+  );
+}
+
 export default function Player() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
@@ -96,6 +116,9 @@ export default function Player() {
 
   return (
     <div className="player-page" style={{ background: "#000" }}>
+
+      <PlayerHeader />
+
       <div
         ref={fullscreenRef}
         className={`player-page__video${isFullscreen ? " player-page__video--fullscreen" : ""}`}
@@ -109,20 +132,6 @@ export default function Player() {
               className="player-page__backdrop"
             />
             <div className="player-page__vignette" />
-
-            <div className="player-page__topbar">
-              <Link to="/" className="player-page__back-link">
-                <Button
-                  type="text"
-                  icon={<ArrowLeftOutlined />}
-                  className="player-page__back-btn"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Back
-                </Button>
-              </Link>
-              <img src="/i99flix-logo.png" alt="i99flix logo" width={100} />
-            </div>
 
             <div className="player-page__overlay">
               <div className="player-page__play-wrap">
@@ -171,19 +180,6 @@ export default function Player() {
 
         {playing && (
           <div className="player-page__iframe-wrap">
-            <div className="player-page__topbar player-page__topbar--over-iframe">
-              <Link to="/" className="player-page__back-link">
-                <Button
-                  type="text"
-                  icon={<ArrowLeftOutlined />}
-                  className="player-page__back-btn"
-                >
-                  Back
-                </Button>
-              </Link>
-              <img src="/i99flix-logo.png" alt="i99flix logo" width={100} />
-            </div>
-
             <ServerIframe
               server={servers}
               mediaId={movie.id}
@@ -202,10 +198,6 @@ export default function Player() {
         justify="space-between"
         style={{ background: colors.playerControls, padding: "0.5rem" }}
       >
-        <Text>
-          {movie.title} ({movie.year}) • {movie.duration}
-        </Text>
-
         <ServerSelector activeServer={servers} onServerChange={setServers} />
 
         <Tooltip
@@ -249,39 +241,6 @@ export default function Player() {
         }}
       >
         <div className="player-page__info-inner">
-          <div className="player-page__info-main">
-            <Title
-              level={4}
-              style={{ margin: "0 0 8px", color: colors.textPrimary }}
-            >
-              {movie.title}
-            </Title>
-            <Space size={8} wrap style={{ marginBottom: 12 }}>
-              {movie.genre.map((g) => (
-                <Tag key={g} color={GENRE_COLORS[g] || "default"}>
-                  {g}
-                </Tag>
-              ))}
-              {movie.newRelease && <Tag color="gold">New Release</Tag>}
-              {movie.trending && <Tag color="red">Trending</Tag>}
-            </Space>
-            <Paragraph
-              style={{
-                color: colors.textSecondary,
-                lineHeight: 1.7,
-                margin: 0,
-              }}
-            >
-              {movie.description}
-            </Paragraph>
-
-            {safeId && (
-              <div style={{ marginTop: 24 }}>
-                <CastSection tmdbId={safeId} mediaType={movie.mediaType} />
-              </div>
-            )}
-          </div>
-
           <div className="player-page__info-meta">
             <div className="player-page__meta-item">
               <Text
@@ -316,6 +275,39 @@ export default function Player() {
                 ★ {movie.rating}
               </Text>
             </div>
+          </div>
+
+          <div className="player-page__info-main">
+            <Title
+              level={4}
+              style={{ margin: "0 0 8px", color: colors.textPrimary }}
+            >
+              {movie.title}
+            </Title>
+            <Space size={8} wrap style={{ marginBottom: 12 }}>
+              {movie.genre.map((g) => (
+                <Tag key={g} color={GENRE_COLORS[g] || "default"}>
+                  {g}
+                </Tag>
+              ))}
+              {movie.newRelease && <Tag color="gold">New Release</Tag>}
+              {movie.trending && <Tag color="red">Trending</Tag>}
+            </Space>
+            <Paragraph
+              style={{
+                color: colors.textSecondary,
+                lineHeight: 1.7,
+                margin: 0,
+              }}
+            >
+              {movie.description}
+            </Paragraph>
+
+            {safeId && (
+              <div style={{ marginTop: 24 }}>
+                <CastSection tmdbId={safeId} mediaType={movie.mediaType} />
+              </div>
+            )}
           </div>
         </div>
       </div>
