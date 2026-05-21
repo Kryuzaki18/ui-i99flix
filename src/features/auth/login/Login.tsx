@@ -32,11 +32,14 @@ const submitBtnStyle: React.CSSProperties = {
 };
 
 export default function Login() {
-  const [error, setError] = useState('');
-  const [form]            = Form.useForm<LoginForm>();
-  const { colors }        = useTheme();
-  const navigate          = useNavigate();
-  const signinMutation    = useSigninMutation();
+  const [error, setError]           = useState('');
+  const [socialBusy, setSocialBusy] = useState(false);
+  const [form]                      = Form.useForm<LoginForm>();
+  const { colors }                  = useTheme();
+  const navigate                    = useNavigate();
+  const signinMutation              = useSigninMutation();
+
+  const isBusy = signinMutation.isPending || socialBusy;
 
   const handleSubmit = (values: LoginForm) => {
     setError('');
@@ -82,6 +85,7 @@ export default function Login() {
             size="large"
             style={{ borderRadius: 8 }}
             autoComplete="new-password"
+            disabled={isBusy}
           />
         </Form.Item>
 
@@ -95,13 +99,14 @@ export default function Login() {
             size="large"
             style={{ borderRadius: 8 }}
             autoComplete="new-password"
+            disabled={isBusy}
           />
         </Form.Item>
 
         <Form.Item>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>
+              <Checkbox disabled={isBusy}>
                 Remember me
                 <Tooltip title="Keeps you signed in for 30 days.">
                   <InfoCircleOutlined style={{ marginLeft: 6, color: colors.textMuted, fontSize: 13 }} />
@@ -121,6 +126,7 @@ export default function Login() {
             size="large"
             block
             loading={signinMutation.isPending}
+            disabled={isBusy}
             style={submitBtnStyle}
           >
             Sign In
@@ -128,7 +134,11 @@ export default function Login() {
         </Form.Item>
       </Form>
 
-      <SocialLoginButtons mode="signin" rememberMe={form.getFieldValue('remember') as boolean} />
+      <SocialLoginButtons
+        mode="signin"
+        rememberMe={form.getFieldValue('remember') as boolean}
+        onLoadingChange={setSocialBusy}
+      />
 
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <Text style={{ color: colors.textMuted }}>

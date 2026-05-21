@@ -30,7 +30,6 @@ export default function ServerIframe({
       className={className}
       allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer"
       allowFullScreen
-      referrerPolicy="no-referrer"
     />
   );
 }

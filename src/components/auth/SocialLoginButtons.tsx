@@ -14,7 +14,6 @@ import { ApiError } from '../../services/internalApiClient';
 
 const { Text } = Typography;
 
-/** X (Twitter) logo as an inline SVG */
 function XIcon() {
   return (
     <svg
@@ -48,23 +47,30 @@ const PROVIDER_CONFIGS = [
 interface SocialLoginButtonsProps {
   mode?: 'signin' | 'signup';
   rememberMe?: boolean;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 export default function SocialLoginButtons({
   mode = 'signin',
   rememberMe = false,
+  onLoadingChange,
 }: SocialLoginButtonsProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const socialMutation = useSocialSigninMutation();
 
+  const setLoading = (id: string | null) => {
+    setLoadingId(id);
+    onLoadingChange?.(id !== null);
+  };
+
   const handleSocialLogin = async (
     providerId: string,
     getProvider: () => AuthProvider,
   ) => {
     setError('');
-    setLoadingId(providerId);
+    setLoading(providerId);
 
     try {
       const result = await signInWithPopup(auth, getProvider());
@@ -75,20 +81,18 @@ export default function SocialLoginButtons({
         {
           onSuccess: () => navigate('/'),
           onError: (err) => {
-            setLoadingId(null);
+            setLoading(null);
             if (import.meta.env.DEV) console.error('[SocialLogin] backend error:', err);
             setError(err instanceof ApiError ? err.message : 'Social sign-in failed. Please try again.');
           },
         },
       );
-      // loading stays on until onSuccess navigates away or onError clears it
     } catch (err: unknown) {
-      setLoadingId(null);
+      setLoading(null);
 
       const code = (err as { code?: string }).code ?? '';
       const message = (err as { message?: string }).message ?? '';
 
-      // Silently ignore user-dismissed popup — no error shown, no console noise
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
         return;
       }
