@@ -181,11 +181,6 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
 
       <ServerSelector activeServer={server} onServerChange={setServer} />
 
-      {/* <Text strong style={{ color: colors.textPrimary }}>{movie.title} ({movie.year})</Text>
-      {movie.genre.map((g) => (
-        <Tag key={g} color={GENRE_COLORS[g] ?? 'default'} className="player__genre-tag">{g}</Tag>
-      ))} */}
-
       <Flex
         gap="small"
         vertical
