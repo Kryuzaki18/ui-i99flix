@@ -77,6 +77,8 @@
   background: #000;
 }
 
+/* ── Fullscreen mode ─────────────────────────────────────────────────────── */
+
 .player__fullscreen-root--active,
 .player__fullscreen-root:fullscreen,
 .player__fullscreen-root:-webkit-full-screen {
@@ -84,18 +86,16 @@
   height: 100vh !important;
 }
 
+/* Video area fills the entire screen */
 .player__fullscreen-root--active .player__video-area,
 .player__fullscreen-root:fullscreen .player__video-area,
 .player__fullscreen-root:-webkit-full-screen .player__video-area {
   flex: 1;
   aspect-ratio: unset !important;
   max-height: none !important;
+  height: 100% !important;
 }
 
 .player__fullscreen-root--active .player__video-area {
-  cursor: none;
-}
-
-.player__fullscreen-root--active:hover .player__video-area {
   cursor: default;
 }

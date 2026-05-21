@@ -22,16 +22,16 @@ const { Title, Text } = Typography;
 
 interface VideoPlayerProps {
   movie: Movie | null;
-  open:  boolean;
+  open: boolean;
   onClose: () => void;
 }
 
 export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
-  const [playing, setPlaying]   = useState(false);
-  const [server, setServer]     = useState(1);
-  const [season, setSeason]     = useState(1);
-  const [episode, setEpisode]   = useState(1);
-  const { colors }              = useTheme();
+  const [playing, setPlaying] = useState(false);
+  const [server, setServer] = useState(1);
+  const [season, setSeason] = useState(1);
+  const [episode, setEpisode] = useState(1);
+  const { colors } = useTheme();
   const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
@@ -69,9 +69,11 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       closeIcon={<span className="player__close-icon">✕</span>}
       destroyOnHidden
     >
+      {/* Fullscreen root wraps only the video area — nothing else appears in fullscreen */}
       <div
         ref={fullscreenRef}
         className={`player__fullscreen-root${isFullscreen ? " player__fullscreen-root--active" : ""}`}
+        onDoubleClick={toggleFullscreen}
       >
         <div className="player__video-area">
           {!playing && (
@@ -101,100 +103,102 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             />
           )}
         </div>
+      </div>
 
-        <Flex
-          gap="medium"
-          align="center"
-          justify="space-between"
-          wrap={true}
-          style={{ background: colors.playerControls, padding: "0.5rem" }}
-        >
-          <ServerSelector activeServer={server} onServerChange={setServer} />
+      {/* Controls bar — always outside fullscreen root */}
+      <Flex
+        vertical
+        gap="medium"
+        align="center"
+        justify="space-between"
+        wrap={true}
+        style={{ background: colors.playerControls, padding: "0.5rem" }}
+      >
+        <ServerSelector activeServer={server} onServerChange={setServer} />
 
-          <Space size={8}>
-            <Button
-              size="small"
-              icon={<LinkOutlined />}
-              onClick={() => {
-                const url = movie.mediaType === "tv"
-                  ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
-                  : `/player/${movie.id}`;
-                window.open(url, "_blank", "noopener,noreferrer");
-              }}
-            >
-              Open in new tab
-            </Button>
-            <Tooltip title={isFullscreen ? "Exit fullscreen" : "Fullscreen"} placement="top">
-              <Button
-                size="small"
-                icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
-                onClick={toggleFullscreen}
-                aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-              />
-            </Tooltip>
-          </Space>
-        </Flex>
-
-        {movie.mediaType === "tv" && (
-          <Flex
-            style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
-            justify="center"
-          >
-            {isTvLoading ? (
-              <Spin size="small" style={{ margin: "1rem 0" }} />
-            ) : (
-              <TvEpisodeSelector
-                season={season}
-                episode={episode}
-                onSeasonChange={setSeason}
-                onEpisodeChange={setEpisode}
-                totalSeasons={tvDetail?.number_of_seasons ?? 20}
-                totalEpisodes={totalEpisodesForSeason}
-              />
-            )}
-          </Flex>
-        )}
-
-        <Flex
-          gap="small"
-          align="center"
-          wrap={true}
-          style={{ background: colors.playerControls, padding: "0.5rem" }}
-        >
-          <Text>{movie.title} ({movie.year})</Text>
-          {movie.genre.map((g) => (
-            <Tag key={g} color={GENRE_COLORS[g] ?? 'default'} className="player__genre-tag">{g}</Tag>
-          ))}
-        </Flex>
-
-        <Flex
-          gap="small"
-          vertical
-          style={{ background: colors.playerControls, padding: "0.5rem" }}
-        >
-          <Text strong>Synopsis</Text>
-          <ExpandableText
-            text={movie.description || 'No synopsis available.'}
-            collapsedLines={3}
-            lineHeight={1.7}
-            fontSize={13}
-          />
-        </Flex>
-
-        {typeof movie.id === "number" && (
-          <Flex
-            vertical
-            style={{
-              background: colors.playerControls,
-              padding: "0.5rem 0.75rem 0.75rem",
-              minWidth: 0,
-              overflow: "hidden",
+        <Space size={8}>
+          <Button
+            size="small"
+            icon={<LinkOutlined />}
+            onClick={() => {
+              const url = movie.mediaType === "tv"
+                ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
+                : `/player/${movie.id}`;
+              window.open(url, "_blank", "noopener,noreferrer");
             }}
           >
-            <CastSection tmdbId={movie.id} mediaType={movie.mediaType} />
-          </Flex>
-        )}
-      </div>
+            Open in new tab
+          </Button>
+          <Tooltip title={isFullscreen ? "Exit fullscreen (F · double-click)" : "Fullscreen (F · double-click)"} placement="top">
+            <Button
+              size="small"
+              icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            />
+          </Tooltip>
+        </Space>
+      </Flex>
+
+      {movie.mediaType === "tv" && (
+        <Flex
+          style={{ background: colors.playerControls, padding: "0 0.5rem 0.5rem" }}
+          justify="center"
+        >
+          {isTvLoading ? (
+            <Spin size="small" style={{ margin: "1rem 0" }} />
+          ) : (
+            <TvEpisodeSelector
+              season={season}
+              episode={episode}
+              onSeasonChange={setSeason}
+              onEpisodeChange={setEpisode}
+              totalSeasons={tvDetail?.number_of_seasons ?? 20}
+              totalEpisodes={totalEpisodesForSeason}
+            />
+          )}
+        </Flex>
+      )}
+
+      <Flex
+        gap="small"
+        align="center"
+        wrap={true}
+        style={{ background: colors.playerControls, padding: "0.5rem" }}
+      >
+        <Text>{movie.title} ({movie.year})</Text>
+        {movie.genre.map((g) => (
+          <Tag key={g} color={GENRE_COLORS[g] ?? 'default'} className="player__genre-tag">{g}</Tag>
+        ))}
+      </Flex>
+
+      <Flex
+        gap="small"
+        vertical
+        style={{ background: colors.playerControls, padding: "0.5rem" }}
+      >
+        <Text strong>Synopsis</Text>
+        <ExpandableText
+          text={movie.description || 'No synopsis available.'}
+          collapsedLines={3}
+          lineHeight={1.7}
+          fontSize={13}
+        />
+      </Flex>
+
+      {typeof movie.id === "number" && (
+        <Flex
+          vertical
+          style={{
+            background: colors.playerControls,
+            padding: "0.5rem 0.75rem 0.75rem",
+            minWidth: 0,
+            overflow: "hidden",
+          }}
+        >
+          <CastSection tmdbId={movie.id} mediaType={movie.mediaType} />
+        </Flex>
+      )}
     </Modal>
   );
 }
