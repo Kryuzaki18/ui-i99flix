@@ -1,8 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Typography } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-
-const { Text } = Typography;
 
 interface ExpandableTextProps {
   text: string;
@@ -20,9 +17,9 @@ export default function ExpandableText({
   fontSize = 14,
   lineHeight = 1.7,
 }: ExpandableTextProps) {
-  const [expanded, setExpanded]     = useState(false);
-  const [overflows, setOverflows]   = useState(false);
-  const measureRef                  = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const measureRef = useRef<HTMLDivElement>(null);
 
   // Detect whether the text actually overflows the collapsed height
   useEffect(() => {
@@ -32,10 +29,10 @@ export default function ExpandableText({
   }, [text, collapsedLines]);
 
   const collapsedStyle: React.CSSProperties = {
-    display:           '-webkit-box',
-    WebkitLineClamp:   collapsedLines,
-    WebkitBoxOrient:   'vertical' as const,
-    overflow:          'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: collapsedLines,
+    WebkitBoxOrient: 'vertical' as const,
+    overflow: 'hidden',
   };
 
   return (
@@ -46,7 +43,7 @@ export default function ExpandableText({
         aria-hidden
         style={{
           ...collapsedStyle,
-          position:   'absolute',
+          position: 'absolute',
           visibility: 'hidden',
           pointerEvents: 'none',
           fontSize,
@@ -62,8 +59,8 @@ export default function ExpandableText({
           fontSize,
           lineHeight,
           color,
-          overflow:   'hidden',
-          maxHeight:  expanded ? undefined : `calc(${collapsedLines} * ${lineHeight}em)`,
+          overflow: 'hidden',
+          maxHeight: expanded ? undefined : `calc(${collapsedLines} * ${lineHeight}em)`,
           transition: 'max-height 0.35s ease',
         }}
       >
@@ -74,19 +71,19 @@ export default function ExpandableText({
         <button
           onClick={() => setExpanded((v) => !v)}
           style={{
-            marginTop:       6,
-            background:      'none',
-            border:          'none',
-            padding:         0,
-            cursor:          'pointer',
-            display:         'flex',
-            alignItems:      'center',
-            gap:             4,
-            fontSize:        12,
-            fontWeight:      600,
-            color:           '#e50914',
-            letterSpacing:   '0.3px',
-            transition:      'opacity 0.2s ease',
+            marginTop: 6,
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            fontSize: 12,
+            fontWeight: 600,
+            color: '#e50914',
+            letterSpacing: '0.3px',
+            transition: 'opacity 0.2s ease',
           }}
           aria-expanded={expanded}
         >
