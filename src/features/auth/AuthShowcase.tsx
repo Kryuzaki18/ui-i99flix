@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { StarFilled, FireFilled } from '@ant-design/icons';
-import { Skeleton, Tag } from 'antd';
+import { Tag } from 'antd';
 import { useTheme } from '../../context/ThemeContext';
 import { GENRE_COLORS } from '../../constants/genres';
 import { API_ROUTES } from '../../api/environments';
@@ -47,7 +47,6 @@ async function fetchShowcaseMovies(): Promise<Movie[]> {
 export default function AuthShowcase() {
   const [movies, setMovies]       = useState<Movie[]>([]);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [loading, setLoading]     = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { isDark } = useTheme();
 
@@ -58,7 +57,6 @@ export default function AuthShowcase() {
       .then((result) => {
         if (!cancelled) {
           setMovies(result);
-          setLoading(false);
         }
       })
       .catch((err) => {
@@ -66,7 +64,6 @@ export default function AuthShowcase() {
           if (import.meta.env.DEV) {
             console.warn('[AuthShowcase] Failed to load showcase movies:', err?.message ?? err);
           }
-          setLoading(false);
         }
       });
 
@@ -83,17 +80,19 @@ export default function AuthShowcase() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [movies.length]);
 
+  const goToSlide = (i: number) => {
+    setActiveIdx(i);
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setActiveIdx((idx) => (idx + 1) % movies.length);
+    }, SLIDE_INTERVAL);
+  };
+
   return (
     <div
       className="auth-showcase"
       style={{ '--auth-edge-color': isDark ? '#0d0d1a' : '#f0f2f5' } as React.CSSProperties}
     >
-      {loading && (
-        <div className="auth-showcase__skeleton">
-          <Skeleton.Image active style={{ width: '100%', height: '100%', borderRadius: 0 }} />
-        </div>
-      )}
-
       {movies.map((movie, i) => (
         <div
           key={movie.id}
@@ -109,14 +108,18 @@ export default function AuthShowcase() {
       <div className="auth-showcase__orb auth-showcase__orb--2" />
       <div className="auth-showcase__orb auth-showcase__orb--3" />
 
-      <div className="auth-showcase__brand">
-        <img src="/i99flix-logo.png" alt="i99flix logo" width={70} />
-      </div>
-
       {movies.length > 0 && (
         <div className="auth-showcase__cards">
-          {movies.map((movie) => (
-            <div key={movie.id} className="auth-showcase__movie-card">
+          {movies.map((movie, i) => (
+            <div
+              key={movie.id}
+              className={`auth-showcase__movie-card ${i === activeIdx ? 'is-active' : ''}`}
+              onClick={() => goToSlide(i)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${movie.title}`}
+              onKeyDown={(e) => e.key === 'Enter' && goToSlide(i)}
+            >
               <img src={movie.thumbnail} alt={movie.title} loading="lazy" />
               <div className="auth-showcase__card-label">{movie.title}</div>
             </div>
@@ -167,13 +170,7 @@ export default function AuthShowcase() {
                 <button
                   key={i}
                   className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setActiveIdx(i);
-                    if (timerRef.current) clearInterval(timerRef.current);
-                    timerRef.current = setInterval(() => {
-                      setActiveIdx((idx) => (idx + 1) % movies.length);
-                    }, SLIDE_INTERVAL);
-                  }}
+                  onClick={() => goToSlide(i)}
                   aria-label={`Go to slide ${i + 1}`}
                 />
               ))}

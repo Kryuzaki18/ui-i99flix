@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    headers: {
+      // Allows Firebase Auth popups to communicate back without COOP blocking window.closed
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    },
     proxy: {
       "/api": {
         target: "http://localhost:4321",

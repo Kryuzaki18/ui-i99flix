@@ -6,6 +6,7 @@ export const API_ROUTES = {
   AUTH: {
     SIGNIN: `${API_BASE}/signin`,
     SIGNUP: `${API_BASE}/signup`,
+    SOCIAL_SIGNIN: `${API_BASE}/social-signin`,
     SIGNOUT: `${API_BASE}/signout`,
     ME: `${API_BASE}/me`,
     FORGOT_PASSWORD: `${API_BASE}/forgot-password`,

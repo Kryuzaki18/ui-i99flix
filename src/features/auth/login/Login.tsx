@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography, Divider, Checkbox, Space, Alert, Tooltip } from 'antd';
+import { Form, Input, Button, Typography, Checkbox, Alert, Tooltip } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
   InfoCircleOutlined,
-  GoogleOutlined,
-  FacebookOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSigninMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
 import AuthLayout from '../AuthLayout';
+import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
 
 const { Title, Text } = Typography;
 
@@ -129,14 +128,7 @@ export default function Login() {
         </Form.Item>
       </Form>
 
-      <Divider>
-        <Text style={{ color: colors.textMuted, fontSize: 12 }}>or continue with</Text>
-      </Divider>
-
-      <Space style={{ width: '100%', justifyContent: 'center' }} size={15}>
-        <Button shape="circle" icon={<GoogleOutlined />} />
-        <Button shape="circle" icon={<FacebookOutlined />} />
-      </Space>
+      <SocialLoginButtons mode="signin" rememberMe={form.getFieldValue('remember') as boolean} />
 
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <Text style={{ color: colors.textMuted }}>

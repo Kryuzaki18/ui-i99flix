@@ -1,11 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { Link, BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Layout, ConfigProvider, theme } from "antd";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { useUIStore } from "./store/uiStore";
@@ -26,6 +20,9 @@ const ForgotPassword = lazy(() => import("./features/auth/forgot-password/Forgot
 const ResetPassword = lazy(() => import("./features/auth/reset-password/ResetPassword"));
 const VerifyEmail = lazy(() => import("./features/auth/verify-email/VerifyEmail"));
 const PlayerPage = lazy(() => import("./features/player/Player"));
+const About = lazy(() => import("./features/legal/About"));
+const PrivacyPolicy = lazy(() => import("./features/legal/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./features/legal/TermsOfService"));
 
 const { Content, Footer } = Layout;
 
@@ -126,6 +123,11 @@ function AppLayout() {
     location.pathname === "/reset-password" ||
     location.pathname === "/verify-email";
 
+  const isLegalPage =
+    location.pathname === "/about" ||
+    location.pathname === "/privacy-policy" ||
+    location.pathname === "/terms-of-service";
+
   if (isAuthPage) {
     return (
       <Suspense fallback={<AppSplash visible />}>
@@ -136,6 +138,18 @@ function AppLayout() {
           <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Suspense>
+    );
+  }
+
+  if (isLegalPage) {
+    return (
+      <Suspense fallback={<AppSplash visible />}>
+        <Routes>
+          <Route path="/about"           element={<About />} />
+          <Route path="/privacy-policy"  element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
       </Suspense>
     );
@@ -172,10 +186,14 @@ function AppLayout() {
         }}
       >
         <div style={{ marginBottom: 12, display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
-          {["About", "Privacy Policy", "Terms of Service", "Help Center", "Contact"].map((item) => (
-            <a key={item} href="#" style={{ color: colors.textMuted, fontSize: 13, textDecoration: "none" }}>
-              {item}
-            </a>
+          {[
+            { label: "About",            to: "/about" },
+            { label: "Privacy Policy",   to: "/privacy-policy" },
+            { label: "Terms of Service", to: "/terms-of-service" },
+          ].map(({ label, to }) => (
+            <Link key={to} to={to} style={{ color: colors.textMuted, fontSize: 13, textDecoration: "none" }}>
+              {label}
+            </Link>
           ))}
         </div>
         <div style={{ color: colors.textMuted, fontSize: 12 }}>

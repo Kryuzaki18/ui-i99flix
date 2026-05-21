@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography, Divider, Space, Steps, Alert } from 'antd';
+import { Form, Input, Button, Typography, Space, Steps, Alert } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
@@ -11,6 +11,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useSignupMutation } from '../../../api/useAuthQuery';
 import { ApiError } from '../../../services/internalApiClient';
 import AuthLayout from '../AuthLayout';
+import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
 
 const { Title, Text } = Typography;
 
@@ -217,8 +218,8 @@ export default function Signup() {
 
       {!done && (
         <>
-          <Divider />
-          <div style={{ textAlign: 'center', marginTop: 24 }}>
+          <SocialLoginButtons mode="signup" />
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
             <Text style={{ color: colors.textMuted }}>
               Already have an account?{' '}
               <Link to="/login" style={{ color: ACCENT, fontWeight: 600 }}>

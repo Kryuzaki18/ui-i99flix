@@ -17,6 +17,11 @@ export interface ForgotPasswordPayload {
   email: string;
 }
 
+export interface SocialSigninPayload {
+  idToken:    string;
+  rememberMe?: boolean;
+}
+
 export interface ResetPasswordPayload {
   token:    string;
   password: string;
@@ -40,6 +45,13 @@ export async function signup(payload: SignupPayload): Promise<{ message: string 
 
 export async function signout(): Promise<{ message: string }> {
   return apiPost<{ message: string }>(API_ROUTES.AUTH.SIGNOUT, {});
+}
+
+export async function socialSignin(payload: SocialSigninPayload): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.SOCIAL_SIGNIN, {
+    idToken:    payload.idToken,
+    rememberMe: payload.rememberMe ?? false,
+  });
 }
 
 export async function getMe(): Promise<boolean> {
