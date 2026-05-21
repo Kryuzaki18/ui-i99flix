@@ -1,8 +1,6 @@
 import { Typography } from 'antd';
 import {
   PlayCircleOutlined,
-  GlobalOutlined,
-  SafetyOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../../context/ThemeContext';
@@ -71,8 +69,6 @@ export default function About() {
       {/* Stats */}
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 48 }}>
         <StatCard icon={<PlayCircleOutlined />} value="10K+" label="Movies & Shows" />
-        {/* <StatCard icon={<GlobalOutlined />}     value="4K"    label="Stream Quality" /> */}
-        {/* <StatCard icon={<SafetyOutlined />}     value="100%"  label="Ad-Free" /> */}
         <StatCard icon={<TeamOutlined />} value="Free" label="Always" />
       </div>
 
