@@ -183,7 +183,7 @@ export default function Browse() {
 
   // ── Genre quick-filter pills ──────────────────────────────────────────────
   const genrePills = (
-    <Space size={8} className="browse-genre-pills">
+    <div className="browse-genre-pills">
       {genres.map((g) => (
         <button
           key={g.value}
@@ -199,7 +199,7 @@ export default function Browse() {
           {g.label}
         </button>
       ))}
-    </Space>
+    </div>
   );
 
   // ── Results grid / list ───────────────────────────────────────────────────
@@ -242,6 +242,17 @@ export default function Browse() {
     <>
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
       <div ref={paginationRef} className="browse-pagination">
+        {/* Results count — own line so it never fights with page buttons */}
+        {cappedTotal > 0 && (
+          <Text className="browse-pagination__total" style={{ color: colors.textMuted }}>
+            {((page - 1) * pageSize) + 1}–{Math.min(page * pageSize, cappedTotal)} of{' '}
+            <Text strong style={{ color: colors.textPrimary }}>{cappedTotal.toLocaleString()}</Text>
+            {' '}{isMovie ? 'movies' : 'series'}
+            {searchQuery && (
+              <> for "<Text style={{ color: '#e50914' }}>{searchQuery}</Text>"</>
+            )}
+          </Text>
+        )}
         <Pagination
           current={page}
           pageSize={pageSize}
@@ -250,17 +261,8 @@ export default function Browse() {
           onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
           showSizeChanger
           pageSizeOptions={PAGE_SIZE_OPTIONS}
-          showTotal={(t, range) => (
-            <Text style={{ color: colors.textMuted }}>
-              {range[0]}–{range[1]} of{' '}
-              <Text strong style={{ color: colors.textPrimary }}>{t.toLocaleString()}</Text>
-              {' '}{isMovie ? 'movies' : 'series'}
-              {searchQuery && (
-                <> for "<Text style={{ color: '#e50914' }}>{searchQuery}</Text>"</>
-              )}
-            </Text>
-          )}
           disabled={total === 0 || isFetching}
+          responsive
         />
       </div>
     </>

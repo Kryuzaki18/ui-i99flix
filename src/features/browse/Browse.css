@@ -20,22 +20,32 @@
   background: #e50914;
 }
 
+/* ── Filter bar ──────────────────────────────────────────────────────────── */
+
 .browse-filters {
   border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 28px;
 }
 
+.browse-filters__layout-col {
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 768px) {
   .browse-filters__layout-col {
-    display: flex;
     justify-content: flex-end;
   }
 }
 
+/* ── Genre pills ─────────────────────────────────────────────────────────── */
+
 .browse-genre-pills {
-  margin-bottom: 24px;
+  display: flex;
   flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .browse-genre-pill {
@@ -45,24 +55,30 @@
   font-size: 13px;
   transition: all 0.2s ease;
   background: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .browse-genre-pill:hover {
   opacity: 0.85;
 }
 
-.browse-results-count {
-  margin-bottom: 20px;
+.browse-genre-pill:focus-visible {
+  outline: 2px solid #e50914;
+  outline-offset: 2px;
 }
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
 
 .browse-pagination {
   position: sticky;
   top: 64px;
   z-index: 50;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 12px 20px;
+  gap: 8px;
+  padding: 10px 16px;
   margin-bottom: 20px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -80,7 +96,9 @@
 
 .browse-pagination .ant-pagination {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 4px;
 }
 
@@ -121,6 +139,42 @@
   height: 36px !important;
 }
 
+/* On small screens hide the ellipsis page items to save space */
+@media (max-width: 480px) {
+  .browse-pagination {
+    top: 56px;
+    padding: 8px 12px;
+  }
+
+  .browse-pagination .ant-pagination-jump-prev,
+  .browse-pagination .ant-pagination-jump-next {
+    display: none;
+  }
+
+  /* Show fewer page number buttons */
+  .browse-pagination .ant-pagination-item:not(.ant-pagination-item-active):not(:nth-child(2)):not(:nth-last-child(3)) {
+    display: none;
+  }
+
+  .browse-pagination .ant-pagination-options {
+    margin-left: 4px;
+  }
+}
+
+/* ── Results count ───────────────────────────────────────────────────────── */
+
+.browse-results-count {
+  margin-bottom: 20px;
+}
+
+.browse-pagination__total {
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ── List row ────────────────────────────────────────────────────────────── */
+
 .browse-list-row {
   border-radius: 12px;
   overflow: hidden;
@@ -135,22 +189,38 @@
 }
 
 .browse-list-row__thumb {
-  width: 140px;
-  height: 90px;
+  width: 100px;
+  height: 80px;
   object-fit: cover;
   flex-shrink: 0;
   display: block;
 }
 
+@media (min-width: 480px) {
+  .browse-list-row__thumb {
+    width: 140px;
+    height: 90px;
+  }
+}
+
 .browse-list-row__body {
-  padding: 12px 16px;
+  padding: 10px 12px;
   flex: 1;
   min-width: 0;
 }
 
 .browse-list-row__title {
-  font-size: 15px;
+  font-size: 14px;
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 480px) {
+  .browse-list-row__title {
+    font-size: 15px;
+  }
 }
 
 .browse-list-row__meta {
@@ -158,25 +228,42 @@
 }
 
 .browse-list-row__desc {
-  font-size: 13px;
+  font-size: 12px;
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Hide description on very small screens */
+@media (max-width: 400px) {
+  .browse-list-row__desc {
+    display: none;
+  }
+}
+
 .browse-list-row__rating {
   color: #fadb14;
   font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .browse-list-row__actions {
-  padding-left: 12px;
+  padding-left: 8px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
 }
 
-.browse-genre-pill:focus-visible {
-  outline: 2px solid #e50914;
-  outline-offset: 2px;
+/* Stack action buttons vertically on small screens */
+@media (max-width: 400px) {
+  .browse-list-row__actions .ant-space {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
