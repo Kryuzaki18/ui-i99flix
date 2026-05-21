@@ -27,9 +27,10 @@ import { useTheme } from "../../context/ThemeContext";
 import { useFullscreen } from "../../hooks/useFullscreen";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
+import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./Player.css";
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 function PlayerHeader() {
   const { colors } = useTheme();
@@ -293,15 +294,12 @@ export default function Player() {
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
-            <Paragraph
-              style={{
-                color: colors.textSecondary,
-                lineHeight: 1.7,
-                margin: 0,
-              }}
-            >
-              {movie.description}
-            </Paragraph>
+            <ExpandableText
+              text={movie.description || 'No synopsis available.'}
+              collapsedLines={3}
+              color={colors.textSecondary}
+              lineHeight={1.7}
+            />
 
             {safeId && (
               <div style={{ marginTop: 24 }}>

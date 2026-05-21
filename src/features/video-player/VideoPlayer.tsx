@@ -15,6 +15,7 @@ import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisode
 import CastSection from "../../components/ui/cast-section/CastSection";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import { GENRE_COLORS } from "../../constants/genres";
+import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./VideoPlayer.css";
 
 const { Title, Text } = Typography;
@@ -172,7 +173,12 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           style={{ background: colors.playerControls, padding: "0.5rem" }}
         >
           <Text strong>Synopsis</Text>
-          <Text type="secondary">{movie.description}</Text>
+          <ExpandableText
+            text={movie.description || 'No synopsis available.'}
+            collapsedLines={3}
+            lineHeight={1.7}
+            fontSize={13}
+          />
         </Flex>
 
         {typeof movie.id === "number" && (

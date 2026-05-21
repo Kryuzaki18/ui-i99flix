@@ -22,9 +22,10 @@ import type { Movie } from "../../../models/movie";
 import { useTheme } from "../../../context/ThemeContext";
 import { GENRE_COLORS } from "../../../constants/genres";
 import CastSection from "../cast-section/CastSection";
+import ExpandableText from "../expandable-text/ExpandableText";
 import "./MovieDetailDrawer.css";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 interface MovieDetailDrawerProps {
   movie: Movie | null;
@@ -192,12 +193,12 @@ function MovieDetailDrawerInner({
             >
               Synopsis
             </Text>
-            <Paragraph
-              className="detail-drawer__synopsis-text"
-              style={{ color: colors.textSecondary }}
-            >
-              {movie.description || "No synopsis available."}
-            </Paragraph>
+            <ExpandableText
+              text={movie.description || 'No synopsis available.'}
+              collapsedLines={3}
+              color={colors.textSecondary}
+              lineHeight={1.7}
+            />
 
             <Divider />
 
