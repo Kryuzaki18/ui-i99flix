@@ -137,7 +137,7 @@ function NavInner({ onMenuOpen }: NavProps) {
                 />
               ) : (
                 <MoonOutlined
-                  style={{ fontSize: 18, color: "#6366f1" }}
+                  style={{ fontSize: 18, color: colors.accent }}
                   aria-hidden="true"
                 />
               )

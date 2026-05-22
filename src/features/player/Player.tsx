@@ -59,7 +59,7 @@ function PlayerHeader() {
           icon={
             isDark
               ? <SunOutlined style={{ fontSize: 18, color: "#fadb14" }} aria-hidden="true" />
-              : <MoonOutlined style={{ fontSize: 18, color: "#6366f1" }} aria-hidden="true" />
+              : <MoonOutlined style={{ fontSize: 18, color: colors.accent }} aria-hidden="true" />
           }
         />
       </Tooltip>

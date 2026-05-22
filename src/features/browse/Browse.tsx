@@ -81,7 +81,6 @@ export default function Browse() {
     setMediaType(key as MediaType);
   };
 
-  // ── Shared filter bar (used by both tabs) ─────────────────────────────────
   const filterBar = (
     <div
       className="browse-filters"
@@ -131,7 +130,6 @@ export default function Browse() {
     </div>
   );
 
-  // ── Genre quick-filter pills ──────────────────────────────────────────────
   const genrePills = (
     <div className="browse-genre-pills">
       {genres.map((g) => (
@@ -152,7 +150,6 @@ export default function Browse() {
     </div>
   );
 
-  // ── Results grid / list ───────────────────────────────────────────────────
   const resultContent = isLoading ? (
     <Row gutter={[16, 20]}>
       {skeletonCols.map((_, i) => (
@@ -187,12 +184,10 @@ export default function Browse() {
     </Space>
   );
 
-  // ── Shared pagination ─────────────────────────────────────────────────────
   const pagination = (
     <>
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
       <div ref={paginationRef} className="browse-pagination">
-        {/* Results count — own line so it never fights with page buttons */}
         {cappedTotal > 0 && (
           <Text className="browse-pagination__total" style={{ color: colors.textMuted }}>
             {((page - 1) * pageSize) + 1}–{Math.min(page * pageSize, cappedTotal)} of{' '}
