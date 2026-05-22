@@ -11,19 +11,19 @@ import {
   tmdbMovieListItemToMovie,
   tmdbMovieDetailToMovie,
 } from '../utils/tmdbAdapter';
-import { getGenreMap } from '../utils/genreMap';
+import { useTmdbGenresMovieQuery } from './useTmdbQuery';
 import type { Movie } from '../models/movie';
 
 const STALE_TIME = 5 * 60 * 1000;
 
 export function useFeaturedMoviesQuery() {
+  const { data: genresData } = useTmdbGenresMovieQuery();
+  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
     queryFn:  async ({ signal }) => {
-      const [res, genreMap] = await Promise.all([
-        fetchTmdbMoviesPopular({ page: 1 }, { signal }),
-        getGenreMap(),
-      ]);
+      const res = await fetchTmdbMoviesPopular({ page: 1 }, { signal });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -31,13 +31,13 @@ export function useFeaturedMoviesQuery() {
 }
 
 export function useTrendingMoviesQuery() {
+  const { data: genresData } = useTmdbGenresMovieQuery();
+  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.trending({}),
     queryFn:  async ({ signal }) => {
-      const [res, genreMap] = await Promise.all([
-        fetchTmdbMoviesTrending({ page: 1 }, { signal }),
-        getGenreMap(),
-      ]);
+      const res = await fetchTmdbMoviesTrending({ page: 1 }, { signal });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -45,13 +45,13 @@ export function useTrendingMoviesQuery() {
 }
 
 export function useNewReleasesQuery() {
+  const { data: genresData } = useTmdbGenresMovieQuery();
+  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
     queryFn:  async ({ signal }) => {
-      const [res, genreMap] = await Promise.all([
-        fetchTmdbMoviesNowPlaying({ page: 1 }, { signal }),
-        getGenreMap(),
-      ]);
+      const res = await fetchTmdbMoviesNowPlaying({ page: 1 }, { signal });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
@@ -59,13 +59,13 @@ export function useNewReleasesQuery() {
 }
 
 export function useTopRatedMoviesQuery() {
+  const { data: genresData } = useTmdbGenresMovieQuery();
+  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),
     queryFn:  async ({ signal }) => {
-      const [res, genreMap] = await Promise.all([
-        fetchTmdbMoviesTopRated({ page: 1 }, { signal }),
-        getGenreMap(),
-      ]);
+      const res = await fetchTmdbMoviesTopRated({ page: 1 }, { signal });
       return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,

@@ -5,9 +5,7 @@ import {
   fetchTmdbMoviesSearch,
   fetchTmdbTvDiscover,
   fetchTmdbTvSearch,
-  type TmdbTvListItem,
 } from './tmdbApi';
-import type { TmdbMovieListItem } from '../models/tmdb';
 import { tmdbMovieListItemToMovie, tmdbTvListItemToMovie } from '../utils/tmdbAdapter';
 import { useBrowseStore } from '../store/browseStore';
 import { useDebounce } from '../hooks/useDebounce';
@@ -52,25 +50,18 @@ export function useBrowseQuery() {
       ? tmdbKeys.movies.search({ query: debouncedSearch, page })
       : tmdbKeys.tv.search({ query: debouncedSearch, page }),
     queryFn: async ({ signal }) => {
-      if (isMovie) {
-        const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page }, { signal });
-        const movies = res.results.map((m) => tmdbMovieListItemToMovie(m as TmdbMovieListItem, genreMap));
-        return {
-          movies,
-          total: res.total_results,
-          page: res.page,
-          totalPages: res.total_pages,
-        };
-      } else {
-        const res = await fetchTmdbTvSearch({ query: debouncedSearch, page }, { signal });
-        const movies = res.results.map((m) => tmdbTvListItemToMovie(m as TmdbTvListItem, genreMap));
-        return {
-          movies,
-          total: res.total_results,
-          page: res.page,
-          totalPages: res.total_pages,
-        };
-      }
+      const res = await (isMovie
+        ? fetchTmdbMoviesSearch({ query: debouncedSearch, page }, { signal })
+        : fetchTmdbTvSearch({ query: debouncedSearch, page }, { signal }));
+      const movies = isMovie
+        ? res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap))
+        : res.results.map((m) => tmdbTvListItemToMovie(m, genreMap));
+      return {
+        movies,
+        total: res.total_results,
+        page: res.page,
+        totalPages: res.total_pages,
+      };
     },
     enabled: isSearching,
     staleTime: STALE_TIME,
@@ -98,25 +89,18 @@ export function useBrowseQuery() {
       ? tmdbKeys.movies.discover(movieDiscoverParams)
       : tmdbKeys.tv.discover(tvDiscoverParams),
     queryFn: async ({ signal }) => {
-      if (isMovie) {
-        const res = await fetchTmdbMoviesDiscover(movieDiscoverParams, { signal });
-        const movies = res.results.map((m) => tmdbMovieListItemToMovie(m as TmdbMovieListItem, genreMap));
-        return {
-          movies,
-          total: res.total_results,
-          page: res.page,
-          totalPages: res.total_pages,
-        };
-      } else {
-        const res = await fetchTmdbTvDiscover(tvDiscoverParams, { signal });
-        const movies = res.results.map((m) => tmdbTvListItemToMovie(m as TmdbTvListItem, genreMap));
-        return {
-          movies,
-          total: res.total_results,
-          page: res.page,
-          totalPages: res.total_pages,
-        };
-      }
+      const res = await (isMovie
+        ? fetchTmdbMoviesDiscover(movieDiscoverParams, { signal })
+        : fetchTmdbTvDiscover(tvDiscoverParams, { signal }));
+      const movies = isMovie
+        ? res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap))
+        : res.results.map((m) => tmdbTvListItemToMovie(m, genreMap));
+      return {
+        movies,
+        total: res.total_results,
+        page: res.page,
+        totalPages: res.total_pages,
+      };
     },
     enabled: !isSearching,
     staleTime: STALE_TIME,

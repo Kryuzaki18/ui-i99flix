@@ -6,42 +6,30 @@ import { GENRE_COLORS } from '../../constants/genres';
 import { API_ROUTES } from '../../api/environments';
 import type { Movie } from '../../models/movie';
 import type { TmdbMovieListItem } from '../../models/tmdb';
-import { tmdbMovieListItemToMovie } from '../../utils/tmdbAdapter';
+import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../../api/tmdbApi';
+import { tmdbMovieListItemToMovie, buildGenreMap } from '../../utils/tmdbAdapter';
 
 const SLIDE_INTERVAL = 5000;
 const SHOWCASE_COUNT = 5;
 
-const STATIC_GENRE_MAP = new Map<number, string>([
-  [28,    'Action'],
-  [12,    'Adventure'],
-  [16,    'Animation'],
-  [35,    'Comedy'],
-  [80,    'Crime'],
-  [99,    'Documentary'],
-  [18,    'Drama'],
-  [10751, 'Family'],
-  [14,    'Fantasy'],
-  [36,    'History'],
-  [27,    'Horror'],
-  [10402, 'Music'],
-  [9648,  'Mystery'],
-  [10749, 'Romance'],
-  [878,   'Science Fiction'],
-  [10770, 'TV Movie'],
-  [53,    'Thriller'],
-  [10752, 'War'],
-  [37,    'Western'],
-]);
-
 async function fetchShowcaseMovies(): Promise<Movie[]> {
-  const res = await fetch(API_ROUTES.TMDB.SHOWCASE, {
-    headers: { Accept: 'application/json' },
-  });
+  const [res, movieRes, tvRes] = await Promise.all([
+    fetch(API_ROUTES.TMDB.SHOWCASE, {
+      headers: { Accept: 'application/json' },
+    }),
+    fetchTmdbGenresMovie().catch(() => ({ genres: [] })),
+    fetchTmdbGenresTv().catch(() => ({ genres: [] })),
+  ]);
+
   if (!res.ok) throw new Error(`Showcase fetch failed: ${res.status}`);
   const data = await res.json() as { results: TmdbMovieListItem[] };
+
+  const mergedGenres = [...movieRes.genres, ...tvRes.genres];
+  const dynamicGenreMap = buildGenreMap(mergedGenres);
+
   return data.results
     .slice(0, SHOWCASE_COUNT)
-    .map((item) => tmdbMovieListItemToMovie(item, STATIC_GENRE_MAP));
+    .map((item) => tmdbMovieListItemToMovie(item, dynamicGenreMap));
 }
 
 export default function AuthShowcase() {
