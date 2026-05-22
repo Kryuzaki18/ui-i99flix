@@ -116,6 +116,10 @@ function AppLayout() {
   const { sidebarOpen, openSidebar, closeSidebar } = useHomeStore();
   const { playingMovie, closePlayer, detailMovie, closeDetail, playFromDetail } = usePlayerStore();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
   const isAuthPage =
     location.pathname === "/login" ||
     location.pathname === "/signup" ||

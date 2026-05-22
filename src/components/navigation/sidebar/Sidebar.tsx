@@ -68,8 +68,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       if (location.pathname === '/') {
         scrollToSection(key);
       } else {
-        navigate('/');
-        setTimeout(() => scrollToSection(key), 300);
+        navigate('/', { state: { scrollTo: key } });
       }
       return;
     }

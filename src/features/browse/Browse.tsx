@@ -52,6 +52,7 @@ export default function Browse() {
   // ── Sticky pagination sentinel ────────────────────────────────────────────
   const sentinelRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -74,7 +75,12 @@ export default function Browse() {
   const handlePageChange = (p: number, ps: number) => {
     setPage(p);
     if (ps !== pageSize) setPageSize(ps);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const el = resultsRef.current;
+    if (el) {
+      const offset = 170;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   };
 
   const handleTabChange = (key: string) => {
@@ -169,7 +175,7 @@ export default function Browse() {
       style={{ padding: '60px 0' }}
     />
   ) : layout === 'grid' ? (
-    <Row gutter={[16, 20]}>
+    <Row ref={resultsRef} gutter={[16, 20]}>
       {displayItems.map((item) => (
         <Col key={item.id} xs={24} sm={12} md={8} lg={6}>
           <MovieCard movie={item} onPlay={playMovie} onDetail={openDetail} />
@@ -177,7 +183,7 @@ export default function Browse() {
       ))}
     </Row>
   ) : (
-    <Space direction="vertical" size={12} style={{ width: '100%' }}>
+    <Space ref={resultsRef} direction="vertical" size={12} style={{ width: '100%' }}>
       {displayItems.map((item) => (
         <MovieListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
       ))}

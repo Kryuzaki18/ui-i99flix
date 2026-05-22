@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Typography, Row, Col, Space, Segmented } from "antd";
 import {
   FireOutlined,
@@ -84,6 +86,7 @@ function MovieSection({ id, title, icon, movies, isLoading, layout }: SectionPro
 }
 
 export default function Home() {
+  const location = useLocation();
   const { playMovie, openDetail } = usePlayerStore();
   const { homeLayout, setHomeLayout } = useHomeStore();
 
@@ -91,6 +94,20 @@ export default function Home() {
   const { data: trending = [], isLoading: loadingTrending } = useTrendingMoviesQuery();
   const { data: newReleases = [], isLoading: loadingNewReleases } = useNewReleasesQuery();
   const { data: topRated = [], isLoading: loadingTopRated } = useTopRatedMoviesQuery();
+
+  useEffect(() => {
+    const scrollTo = (location.state as { scrollTo?: string } | null)?.scrollTo;
+    if (!scrollTo) return;
+
+    window.history.replaceState({}, '');
+
+    const el = document.getElementById(scrollTo);
+    if (el) {
+      const offset = 70;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, [location.state]);
 
   return (
     <div>
