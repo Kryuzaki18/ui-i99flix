@@ -1,14 +1,12 @@
-import { Modal, Typography, Space, Tag, Rate, Button, Tooltip, Flex, Spin } from "antd";
+import { Modal, Typography, Space, Tag, Rate, Button, Flex, Spin } from "antd";
 import {
   PlayCircleOutlined,
-  ExpandOutlined,
-  CompressOutlined,
   LinkOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { useState, useEffect, useCallback } from "react";
 import type { Movie } from "../../models/movie";
 import { useTheme } from "../../context/ThemeContext";
-import { useFullscreen } from "../../hooks/useFullscreen";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
@@ -32,7 +30,6 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const { colors } = useTheme();
-  const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null
@@ -63,16 +60,17 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       centered
       style={{ padding: 0 }}
       styles={{
-        body: { backgroundColor: colors.bgBase, padding: 0, borderRadius: 12, overflow: "hidden" },
-        mask: { backdropFilter: "blur(6px)", background: "rgba(0,0,0,0.85)" },
+        body: { backgroundColor: colors.bgBase, padding: 0, overflow: "hidden" },
+        mask: { backdropFilter: "blur(1px)", background: "rgba(0,0,0,0.85)" },
+        container: {
+          padding: 0,
+          overflow: "hidden"
+        },
       }}
-      closeIcon={<span style={{ backgroundColor: colors.bgBase, color: colors.textPrimary }} className="player__close-icon">✕</span>}
+      closeIcon={<span style={{ backgroundColor: colors.accent, color: colors.playerText }} className="player__close-icon"><CloseOutlined /></span>}
       destroyOnHidden
     >
       <div
-        ref={fullscreenRef}
-        className={`player__fullscreen-root${isFullscreen ? " player__fullscreen-root--active" : ""}`}
-        onDoubleClick={toggleFullscreen}
       >
         <div className="player__video-area"
           style={{ backgroundColor: colors.bgBase }}
@@ -132,89 +130,89 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
 
       <Flex
         vertical
-        gap="small"
-        align="center"
-        justify="space-between"
-        wrap={true}
-        style={{ backgroundColor: colors.bgBase, padding: "0.5rem 0" }}
+        style={{ padding: "0 1rem" }}
       >
-        <Space size={8}>
-          <Button
-            size="small"
-            icon={<LinkOutlined />}
-            onClick={() => {
-              const url = movie.mediaType === "tv"
-                ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
-                : `/player/${movie.id}`;
-              window.open(url, "_blank", "noopener,noreferrer");
-            }}
-          >
-            Open in new tab
-          </Button>
-          <Tooltip title={isFullscreen ? "Exit fullscreen (F · double-click)" : "Fullscreen (F · double-click)"} placement="top">
+        <Flex
+          vertical
+          gap="small"
+          align="center"
+          justify="space-between"
+          wrap={true}
+          style={{ backgroundColor: colors.bgBase, padding: "0.5rem 0" }}
+        >
+          <Space size={8}>
             <Button
+              type="primary"
               size="small"
-              icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
-              onClick={toggleFullscreen}
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            />
-          </Tooltip>
-        </Space>
-        {movie.mediaType === "tv" && (
-          <>
-            {isTvLoading ? (
-              <Spin size="small" style={{ margin: "1rem 0" }} />
-            ) : (
-              <TvEpisodeSelector
-                season={season}
-                episode={episode}
-                onSeasonChange={setSeason}
-                onEpisodeChange={setEpisode}
-                totalSeasons={tvDetail?.number_of_seasons ?? 20}
-                totalEpisodes={totalEpisodesForSeason}
-              />
-            )}
-          </>
-        )}
+              icon={<LinkOutlined />}
+              onClick={() => {
+                const url = movie.mediaType === "tv"
+                  ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
+                  : `/player/${movie.id}`;
+                window.open(url, "_blank", "noopener,noreferrer");
+              }}
+              style={{ fontSize: 11 }}
+            >
+              Open in new tab
+            </Button>
+          </Space>
 
-      </Flex>
+          {movie.mediaType === "tv" && (
+            <>
+              {isTvLoading ? (
+                <Spin size="small" style={{ margin: "1rem 0" }} />
+              ) : (
+                <TvEpisodeSelector
+                  season={season}
+                  episode={episode}
+                  onSeasonChange={setSeason}
+                  onEpisodeChange={setEpisode}
+                  totalSeasons={tvDetail?.number_of_seasons ?? 20}
+                  totalEpisodes={totalEpisodesForSeason}
+                />
+              )}
+            </>
+          )}
 
-      <ServerSelector activeServer={server} onServerChange={setServer} />
+        </Flex>
 
-      <Flex
-        gap="small"
-        vertical
-        style={{ backgroundColor: colors.bgBase, padding: "1rem 0" }}
-      >
-        <Text strong style={{ color: colors.textPrimary }}>Synopsis</Text>
-        <ExpandableText
-          text={movie.description || 'No synopsis available.'}
-          collapsedLines={3}
-          lineHeight={1.7}
-          fontSize={13}
-          color={colors.playerTextMuted}
-        />
-      </Flex>
+        <ServerSelector activeServer={server} onServerChange={setServer} />
 
-      {typeof movie.id === "number" && (
         <Flex
           vertical
           style={{
-            backgroundColor: colors.bgBase,
-            padding: "0.5rem 0.75rem 0.75rem",
-            minWidth: 0,
-            overflow: "hidden",
+            padding: "1rem 0",
           }}
         >
-          <CastSection
-            tmdbId={movie.id}
-            mediaType={movie.mediaType}
-            labelColor={colors.textMuted}
-            nameColor={colors.textPrimary}
-            charColor={colors.textMuted}
+          <Text strong style={{ color: colors.textMuted }}>Synopsis</Text>
+          <ExpandableText
+            text={movie.description || 'No synopsis available.'}
+            collapsedLines={3}
+            lineHeight={1.7}
+            fontSize={13}
+            color={colors.textSecondary}
           />
         </Flex>
-      )}
+
+        {typeof movie.id === "number" && (
+          <div
+            style={{
+              minWidth: 0,
+              overflow: "hidden",
+              paddingBottom: "1rem",
+            }}
+          >
+            <CastSection
+              tmdbId={movie.id}
+              mediaType={movie.mediaType}
+              labelColor={colors.textMuted}
+              nameColor={colors.textPrimary}
+              charColor={colors.textMuted}
+            />
+          </div>
+        )}
+      </Flex>
+
     </Modal>
   );
 }

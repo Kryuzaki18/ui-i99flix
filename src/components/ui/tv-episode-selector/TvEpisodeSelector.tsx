@@ -29,23 +29,20 @@ export default function TvEpisodeSelector({
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ marginBottom: 8 }}>
-        <Select
-          value={season}
-          onChange={(v) => { onSeasonChange(v); onEpisodeChange(1); }}
-          options={seasonOptions}
-          size="small"
-          style={{ minWidth: 110, maxWidth: 160 }}
-          popupMatchSelectWidth={false}
-        />
-      </div>
+      <Select
+        value={season}
+        onChange={(v) => { onSeasonChange(v); onEpisodeChange(1); }}
+        options={seasonOptions}
+        size="small"
+        style={{ minWidth: 110, maxWidth: 160 }}
+        popupMatchSelectWidth={false}
+      />
 
       <div
         style={{
           overflowX: 'auto',
           overflowY: 'hidden',
           WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
-          paddingBottom: 4,
         }}
       >
         <Flex gap={6} style={{ flexWrap: 'nowrap', width: 'max-content', padding: "0.5rem 0" }}>

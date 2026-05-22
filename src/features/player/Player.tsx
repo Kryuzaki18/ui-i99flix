@@ -13,8 +13,6 @@ import {
 } from "antd";
 import {
   PlayCircleOutlined,
-  ExpandOutlined,
-  CompressOutlined,
   ArrowLeftOutlined,
   SunOutlined,
   MoonOutlined,
@@ -26,7 +24,6 @@ import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisode
 import CastSection from "../../components/ui/cast-section/CastSection";
 import { GENRE_COLORS } from "../../constants/genres";
 import { useTheme } from "../../context/ThemeContext";
-import { useFullscreen } from "../../hooks/useFullscreen";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
@@ -98,7 +95,6 @@ export default function Player() {
   const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
 
   const [playing, setPlaying] = useState(false);
-  const { isFullscreen, toggleFullscreen, fullscreenRef } = useFullscreen();
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
@@ -139,9 +135,7 @@ export default function Player() {
       <PlayerHeader />
 
       <div
-        ref={fullscreenRef}
-        className={`player-page__video${isFullscreen ? " player-page__video--fullscreen" : ""}`}
-        onDoubleClick={toggleFullscreen}
+        className="player-page__video"
       >
         {!playing && (
           <div className="player-page__video-clickzone" onClick={handlePlay}>
@@ -223,25 +217,9 @@ export default function Player() {
             totalEpisodes={totalEpisodesForSeason}
           />
         }
-        <Tooltip
-          title={
-            isFullscreen
-              ? "Exit fullscreen (F)"
-              : "Fullscreen (F · double-click)"
-          }
-          placement="top"
-        >
-          <Button
-            type="text"
-            icon={isFullscreen ? <CompressOutlined /> : <ExpandOutlined />}
-            onClick={toggleFullscreen}
-            style={{ position: "absolute", top: "0", right: "0", marginTop: "7px", marginRight: "7px" }}
-            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          />
-        </Tooltip>
       </Flex>
 
-      <div style={{ padding: "0 0.5rem 1rem 0.5rem" }}>
+      <div style={{ padding: "0.3rem 0.5rem" }}>
         <ServerSelector activeServer={servers} onServerChange={setServers} />
       </div>
 

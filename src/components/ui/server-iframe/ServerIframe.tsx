@@ -1,11 +1,11 @@
 import { EMBED_SERVERS } from '../../../api/environments';
 
 interface ServerIframeProps {
-  server:     number;
-  mediaId:    number | string;
+  server: number;
+  mediaId: number | string;
   mediaType?: 'movie' | 'tv';
-  season?:    number;
-  episode?:   number;
+  season?: number;
+  episode?: number;
   className?: string;
 }
 
@@ -13,8 +13,8 @@ export default function ServerIframe({
   server,
   mediaId,
   mediaType = 'movie',
-  season    = 1,
-  episode   = 1,
+  season = 1,
+  episode = 1,
   className = 'player__iframe',
 }: ServerIframeProps) {
   const embedServer = EMBED_SERVERS.find((s) => s.id === server) ?? EMBED_SERVERS[0];

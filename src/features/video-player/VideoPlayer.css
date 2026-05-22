@@ -36,6 +36,7 @@
   inset: 0;
 }
 
+
 .player__vignette {
   position: absolute;
   inset: 0;
@@ -50,7 +51,6 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
   pointer-events: none;
-  border-radius: 12px;
 }
 
 .player__backdrop {
@@ -58,7 +58,6 @@
   height: 100%;
   object-fit: cover;
   transition: opacity 0.2s ease;
-  border-radius: 12px;
 }
 
 .player__overlay {
@@ -145,32 +144,4 @@
 .player__genre-tag {
   height: 22px;
   font-size: 11px;
-}
-
-.player__fullscreen-root {
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── Fullscreen mode ─────────────────────────────────────────────────────── */
-
-.player__fullscreen-root--active,
-.player__fullscreen-root:fullscreen,
-.player__fullscreen-root:-webkit-full-screen {
-  width: 100vw !important;
-  height: 100vh !important;
-}
-
-/* Video area fills the entire screen */
-.player__fullscreen-root--active .player__video-area,
-.player__fullscreen-root:fullscreen .player__video-area,
-.player__fullscreen-root:-webkit-full-screen .player__video-area {
-  flex: 1;
-  aspect-ratio: unset !important;
-  max-height: none !important;
-  height: 100% !important;
-}
-
-.player__fullscreen-root--active .player__video-area {
-  cursor: default;
 }
