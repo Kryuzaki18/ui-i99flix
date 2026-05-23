@@ -218,15 +218,13 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   useSessionQuery();
 
   useEffect(() => {
-    const ac = new AbortController();
     const s = useTmdbStore.getState();
     if (!s.movieGenres || s.movieGenres.length === 0) {
-      fetchTmdbGenresMovie({ signal: ac.signal }).catch(() => {});
+      fetchTmdbGenresMovie().catch(() => {});
     }
     if (!s.tvGenres || s.tvGenres.length === 0) {
-      fetchTmdbGenresTv({ signal: ac.signal }).catch(() => {});
+      fetchTmdbGenresTv().catch(() => {});
     }
-    return () => ac.abort();
   }, [isAuthenticated]);
 
   useEffect(() => {
