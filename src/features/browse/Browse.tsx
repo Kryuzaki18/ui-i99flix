@@ -12,7 +12,7 @@ import MovieListRow from '../../components/ui/movie-list-row/MovieListRow';
 import { useBrowseStore } from '../../store/browseStore';
 import { usePlayerStore } from '../../store/playerStore';
 import { useBrowseQuery } from '../../api/useBrowseQuery';
-import { useTmdbGenresMovieQuery, useTmdbGenresTvQuery } from '../../api/useTmdbQuery';
+import { useTmdbStore } from '../../store/tmdbStore';
 import { YEAR_RANGES, PAGE_SIZE_OPTIONS } from '../../constants';
 import { useTheme } from '../../context/ThemeContext';
 import type { MediaType } from '../../store/browseStore';
@@ -47,11 +47,8 @@ export default function Browse() {
   const isLoading = result.isLoading;
   const isFetching = result.isFetching;
 
-  const movieGenresQuery = useTmdbGenresMovieQuery();
-  const tvGenresQuery = useTmdbGenresTvQuery();
-
-  const movieGenres = movieGenresQuery.data?.genres ?? [];
-  const tvGenres = tvGenresQuery.data?.genres ?? [];
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const tvGenres = useTmdbStore((s) => s.tvGenres);
   const activeGenres = mediaType === 'movie' ? movieGenres : tvGenres;
 
   const genres = [

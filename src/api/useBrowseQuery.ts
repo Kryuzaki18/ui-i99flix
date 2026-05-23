@@ -10,7 +10,7 @@ import { tmdbMovieListItemToMovie, tmdbTvListItemToMovie } from '../utils/tmdbAd
 import { useBrowseStore } from '../store/browseStore';
 import { useDebounce } from '../hooks/useDebounce';
 import { YEAR_RANGES } from '../constants/yearRanges';
-import { useTmdbGenresMovieQuery, useTmdbGenresTvQuery } from './useTmdbQuery';
+import { useTmdbStore } from '../store/tmdbStore';
 import type { Movie } from '../models/movie';
 
 export interface BrowseResult {
@@ -25,11 +25,8 @@ const STALE_TIME = 5 * 60 * 1000;
 export function useBrowseQuery() {
   const { mediaType, selectedGenre, selectedYear, searchQuery, page } = useBrowseStore();
 
-  const { data: movieGenresData } = useTmdbGenresMovieQuery();
-  const { data: tvGenresData } = useTmdbGenresTvQuery();
-
-  const movieGenres = movieGenresData?.genres ?? [];
-  const tvGenres = tvGenresData?.genres ?? [];
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const tvGenres = useTmdbStore((s) => s.tvGenres);
 
   const genreMap = new Map([...movieGenres, ...tvGenres].map((g) => [g.id, g.name]));
 

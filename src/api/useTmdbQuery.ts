@@ -26,8 +26,6 @@ import {
   fetchTmdbTvSimilar,
   fetchTmdbTvRecommendations,
   fetchTmdbSearchMulti,
-  fetchTmdbGenresMovie,
-  fetchTmdbGenresTv,
   type PageParams,
   type SearchParams,
   type DiscoverMovieParams,
@@ -36,7 +34,6 @@ import {
 
 const LIST_STALE_TIME   = 5  * 60 * 1000;
 const DETAIL_STALE_TIME = 10 * 60 * 1000;
-const GENRE_STALE_TIME  = 60 * 60 * 1000;
 
 export function useTmdbMoviesPopularQuery(params: PageParams = {}) {
   return useQuery({
@@ -270,21 +267,5 @@ export function useTmdbSearchMultiQuery(params: SearchParams) {
     enabled,
     staleTime: LIST_STALE_TIME,
     placeholderData: (prev) => prev,
-  });
-}
-
-export function useTmdbGenresMovieQuery() {
-  return useQuery({
-    queryKey: tmdbKeys.genresMovie(),
-    queryFn:  ({ signal }) => fetchTmdbGenresMovie({ signal }),
-    staleTime: GENRE_STALE_TIME,
-  });
-}
-
-export function useTmdbGenresTvQuery() {
-  return useQuery({
-    queryKey: tmdbKeys.genresTv(),
-    queryFn:  ({ signal }) => fetchTmdbGenresTv({ signal }),
-    staleTime: GENRE_STALE_TIME,
   });
 }

@@ -11,14 +11,14 @@ import {
   tmdbMovieListItemToMovie,
   tmdbMovieDetailToMovie,
 } from '../utils/tmdbAdapter';
-import { useTmdbGenresMovieQuery } from './useTmdbQuery';
+import { useTmdbStore } from '../store/tmdbStore';
 import type { Movie } from '../models/movie';
 
 const STALE_TIME = 5 * 60 * 1000;
 
 export function useFeaturedMoviesQuery() {
-  const { data: genresData } = useTmdbGenresMovieQuery();
-  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
@@ -31,8 +31,8 @@ export function useFeaturedMoviesQuery() {
 }
 
 export function useTrendingMoviesQuery() {
-  const { data: genresData } = useTmdbGenresMovieQuery();
-  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.trending({}),
@@ -45,8 +45,8 @@ export function useTrendingMoviesQuery() {
 }
 
 export function useNewReleasesQuery() {
-  const { data: genresData } = useTmdbGenresMovieQuery();
-  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
@@ -59,8 +59,8 @@ export function useNewReleasesQuery() {
 }
 
 export function useTopRatedMoviesQuery() {
-  const { data: genresData } = useTmdbGenresMovieQuery();
-  const genreMap = new Map((genresData?.genres ?? []).map((g) => [g.id, g.name]));
+  const movieGenres = useTmdbStore((s) => s.movieGenres);
+  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),

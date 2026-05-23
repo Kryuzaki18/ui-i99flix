@@ -6,12 +6,13 @@ import { useHomeStore } from "./store/homeStore";
 import { usePlayerStore } from "./store/playerStore";
 import { useAuthStore } from "./store/authStore";
 import { useSessionQuery } from "./api/useAuthQuery";
+import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from "./api/tmdbApi";
+import { useTmdbStore } from "./store/tmdbStore";
 import Nav from "./components/navigation/nav/Nav";
 import Sidebar from "./components/navigation/sidebar/Sidebar";
 import VideoPlayer from "./features/video-player/VideoPlayer";
 import MovieDetailDrawer from "./components/ui/movie-detail-drawer/MovieDetailDrawer";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { useTmdbGenresMovieQuery, useTmdbGenresTvQuery } from "./api/useTmdbQuery";
 
 const Home = lazy(() => import("./features/home/Home"));
 const Browse = lazy(() => import("./features/browse/Browse"));
@@ -215,8 +216,18 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth } = useAuthStore();
   const [slowStart, setSlowStart] = useState(false);
   useSessionQuery();
-  useTmdbGenresMovieQuery();
-  useTmdbGenresTvQuery();
+
+  useEffect(() => {
+    const ac = new AbortController();
+    const s = useTmdbStore.getState();
+    if (!s.movieGenres || s.movieGenres.length === 0) {
+      fetchTmdbGenresMovie({ signal: ac.signal }).catch(() => {});
+    }
+    if (!s.tvGenres || s.tvGenres.length === 0) {
+      fetchTmdbGenresTv({ signal: ac.signal }).catch(() => {});
+    }
+    return () => ac.abort();
+  }, []);
 
   useEffect(() => {
     if (!isCheckingAuth) { setSlowStart(false); return; }

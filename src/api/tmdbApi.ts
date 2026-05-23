@@ -1,5 +1,6 @@
 import { apiGet } from '../services/internalApiClient';
 import { API_ROUTES } from './environments';
+import { useTmdbStore } from '../store/tmdbStore';
 import type {
   TmdbPaginatedResponse,
   TmdbMovieListItem,
@@ -10,58 +11,58 @@ import type {
 } from '../models/tmdb';
 
 export interface TmdbTvListItem {
-  id:                number;
-  name:              string;
-  original_name:     string;
-  overview:          string;
-  first_air_date:    string;
-  poster_path:       string | null;
-  backdrop_path:     string | null;
-  genre_ids:         number[];
-  vote_average:      number;
-  vote_count:        number;
-  popularity:        number;
+  id: number;
+  name: string;
+  original_name: string;
+  overview: string;
+  first_air_date: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  genre_ids: number[];
+  vote_average: number;
+  vote_count: number;
+  popularity: number;
   original_language: string;
 }
 
 export interface TmdbTvSeason {
-  air_date:      string | null;
+  air_date: string | null;
   episode_count: number;
-  id:            number;
-  name:          string;
-  overview:      string;
-  poster_path:   string | null;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
   season_number: number;
 }
 
 export interface TmdbTvDetail extends Omit<TmdbTvListItem, 'genre_ids'> {
-  genres:             TmdbGenre[];
-  episode_run_time:   number[];
-  number_of_seasons:  number;
+  genres: TmdbGenre[];
+  episode_run_time: number[];
+  number_of_seasons: number;
   number_of_episodes: number;
-  seasons:            TmdbTvSeason[];
-  status:             string;
-  tagline:            string;
-  homepage:           string;
-  in_production:      boolean;
+  seasons: TmdbTvSeason[];
+  status: string;
+  tagline: string;
+  homepage: string;
+  in_production: boolean;
 }
 
 export interface TmdbMultiResult {
-  id:            number;
-  media_type:    'movie' | 'tv' | 'person';
-  title?:        string;
-  name?:         string;
-  overview?:     string;
-  poster_path:   string | null;
+  id: number;
+  media_type: 'movie' | 'tv' | 'person';
+  title?: string;
+  name?: string;
+  overview?: string;
+  poster_path: string | null;
   backdrop_path: string | null;
   vote_average?: number;
   release_date?: string;
   first_air_date?: string;
-  genre_ids?:    number[];
+  genre_ids?: number[];
 }
 
 export interface PageParams {
-  page?:     number;
+  page?: number;
   language?: string;
 }
 
@@ -70,24 +71,24 @@ export interface SearchParams extends PageParams {
 }
 
 export interface DiscoverMovieParams extends PageParams {
-  sort_by?:                    string;
-  with_genres?:                string;
-  primary_release_year?:       number;
+  sort_by?: string;
+  with_genres?: string;
+  primary_release_year?: number;
   'primary_release_date.gte'?: string;
   'primary_release_date.lte'?: string;
-  'vote_average.gte'?:         number;
-  'vote_average.lte'?:         number;
-  include_adult?:              boolean;
-  with_original_language?:     string;
+  'vote_average.gte'?: number;
+  'vote_average.lte'?: number;
+  include_adult?: boolean;
+  with_original_language?: string;
 }
 
 export interface DiscoverTvParams extends PageParams {
-  sort_by?:                string;
-  with_genres?:            string;
-  'first_air_date.gte'?:   string;
-  'first_air_date.lte'?:   string;
-  'vote_average.gte'?:     number;
-  'vote_average.lte'?:     number;
+  sort_by?: string;
+  with_genres?: string;
+  'first_air_date.gte'?: string;
+  'first_air_date.lte'?: string;
+  'vote_average.gte'?: number;
+  'vote_average.lte'?: number;
   with_original_language?: string;
 }
 
@@ -108,7 +109,7 @@ function sanitiseQuery(query: unknown): string {
 
 function buildPageParams(params: PageParams): Record<string, string | number> {
   const out: Record<string, string | number> = {};
-  if (params.page     !== undefined) out['page']     = params.page;
+  if (params.page !== undefined) out['page'] = params.page;
   if (params.language !== undefined) out['language'] = params.language;
   return out;
 }
@@ -153,15 +154,15 @@ export async function fetchTmdbMoviesDiscover(
   options?: { signal?: AbortSignal },
 ): Promise<TmdbPaginatedResponse<TmdbMovieListItem>> {
   const p: Record<string, string | number | boolean> = { ...buildPageParams(params) };
-  if (params.sort_by)                           p['sort_by']                     = params.sort_by;
-  if (params.with_genres)                       p['with_genres']                 = params.with_genres;
-  if (params.primary_release_year)              p['primary_release_year']        = params.primary_release_year;
-  if (params['primary_release_date.gte'])       p['primary_release_date.gte']    = params['primary_release_date.gte'];
-  if (params['primary_release_date.lte'])       p['primary_release_date.lte']    = params['primary_release_date.lte'];
-  if (params['vote_average.gte'] !== undefined) p['vote_average.gte']            = params['vote_average.gte']!;
-  if (params['vote_average.lte'] !== undefined) p['vote_average.lte']            = params['vote_average.lte']!;
-  if (params.include_adult       !== undefined) p['include_adult']               = params.include_adult;
-  if (params.with_original_language)            p['with_original_language']      = params.with_original_language;
+  if (params.sort_by) p['sort_by'] = params.sort_by;
+  if (params.with_genres) p['with_genres'] = params.with_genres;
+  if (params.primary_release_year) p['primary_release_year'] = params.primary_release_year;
+  if (params['primary_release_date.gte']) p['primary_release_date.gte'] = params['primary_release_date.gte'];
+  if (params['primary_release_date.lte']) p['primary_release_date.lte'] = params['primary_release_date.lte'];
+  if (params['vote_average.gte'] !== undefined) p['vote_average.gte'] = params['vote_average.gte']!;
+  if (params['vote_average.lte'] !== undefined) p['vote_average.lte'] = params['vote_average.lte']!;
+  if (params.include_adult !== undefined) p['include_adult'] = params.include_adult;
+  if (params.with_original_language) p['with_original_language'] = params.with_original_language;
   return apiGet(API_ROUTES.TMDB.MOVIES.DISCOVER, { params: p, signal: options?.signal });
 }
 
@@ -258,13 +259,13 @@ export async function fetchTmdbTvDiscover(
   options?: { signal?: AbortSignal },
 ): Promise<TmdbPaginatedResponse<TmdbTvListItem>> {
   const p: Record<string, string | number | boolean> = { ...buildPageParams(params) };
-  if (params.sort_by)                           p['sort_by']               = params.sort_by;
-  if (params.with_genres)                       p['with_genres']           = params.with_genres;
-  if (params['first_air_date.gte'])             p['first_air_date.gte']    = params['first_air_date.gte'];
-  if (params['first_air_date.lte'])             p['first_air_date.lte']    = params['first_air_date.lte'];
-  if (params['vote_average.gte'] !== undefined) p['vote_average.gte']      = params['vote_average.gte']!;
-  if (params['vote_average.lte'] !== undefined) p['vote_average.lte']      = params['vote_average.lte']!;
-  if (params.with_original_language)            p['with_original_language']= params.with_original_language;
+  if (params.sort_by) p['sort_by'] = params.sort_by;
+  if (params.with_genres) p['with_genres'] = params.with_genres;
+  if (params['first_air_date.gte']) p['first_air_date.gte'] = params['first_air_date.gte'];
+  if (params['first_air_date.lte']) p['first_air_date.lte'] = params['first_air_date.lte'];
+  if (params['vote_average.gte'] !== undefined) p['vote_average.gte'] = params['vote_average.gte']!;
+  if (params['vote_average.lte'] !== undefined) p['vote_average.lte'] = params['vote_average.lte']!;
+  if (params.with_original_language) p['with_original_language'] = params.with_original_language;
   return apiGet(API_ROUTES.TMDB.TV.DISCOVER, { params: p, signal: options?.signal });
 }
 
@@ -335,11 +336,25 @@ export async function fetchTmdbSearchMulti(
 export async function fetchTmdbGenresMovie(
   options?: { signal?: AbortSignal },
 ): Promise<{ genres: TmdbGenre[] }> {
-  return apiGet(API_ROUTES.TMDB.GENRES_MOVIE, { signal: options?.signal });
+  const store = useTmdbStore.getState();
+  if (store.movieGenres && store.movieGenres.length > 0) {
+    return { genres: store.movieGenres };
+  }
+
+  const res = await apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_MOVIE, { signal: options?.signal });
+  store.setMovieGenres(res.genres);
+  return res;
 }
 
 export async function fetchTmdbGenresTv(
   options?: { signal?: AbortSignal },
 ): Promise<{ genres: TmdbGenre[] }> {
-  return apiGet(API_ROUTES.TMDB.GENRES_TV, { signal: options?.signal });
+  const store = useTmdbStore.getState();
+  if (store.tvGenres && store.tvGenres.length > 0) {
+    return { genres: store.tvGenres };
+  }
+
+  const res = await apiGet<{ genres: TmdbGenre[] }>(API_ROUTES.TMDB.GENRES_TV, { signal: options?.signal });
+  store.setTvGenres(res.genres);
+  return res;
 }
