@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Typography, Alert, Result } from 'antd';
+import { Form, Input, Button, Typography, Alert, Result, Flex } from 'antd';
 import { MailOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useForgotPasswordMutation } from '../../../api/useAuthQuery';
@@ -26,10 +26,10 @@ const submitBtnStyle: React.CSSProperties = {
 
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError]         = useState('');
-  const [form]                    = Form.useForm<ForgotPasswordForm>();
-  const { colors }                = useTheme();
-  const forgotMutation            = useForgotPasswordMutation();
+  const [error, setError] = useState('');
+  const [form] = Form.useForm<ForgotPasswordForm>();
+  const { colors } = useTheme();
+  const forgotMutation = useForgotPasswordMutation();
 
   const handleSubmit = (values: ForgotPasswordForm) => {
     setError('');
@@ -101,22 +101,26 @@ export default function ForgotPassword() {
         />
       ) : (
         <>
-          <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
-            Forgot password?
-          </Title>
-          <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
-            Enter your email and we'll send you a reset link.
-          </Text>
+          <Flex vertical style={{ width: '100%' }} align='center'>
+            <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
+              Forgot password?
+            </Title>
 
-          {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
+            <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
+              Enter your email and we'll send you a reset link.
+            </Text>
 
-          <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+            {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
+          </Flex>
+
+          <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off" style={{ width: "100%" }}>
             <Form.Item
               name="email"
               rules={[
                 { required: true, message: 'Please enter your email' },
                 { type: 'email', message: 'Enter a valid email' },
               ]}
+              style={{ marginBottom: 24 }}
             >
               <Input
                 prefix={<MailOutlined style={{ color: colors.textMuted }} />}
@@ -131,7 +135,7 @@ export default function ForgotPassword() {
               <Button
                 type="primary"
                 htmlType="submit"
-                size="large"
+                size="small"
                 block
                 loading={forgotMutation.isPending}
                 style={submitBtnStyle}

@@ -35,10 +35,10 @@ const btnStyle: React.CSSProperties = {
 };
 
 export default function VerifyEmail() {
-  const { colors }        = useTheme();
-  const [searchParams]    = useSearchParams();
-  const verifyMutation    = useVerifyEmailMutation();
-  const hasVerified       = useRef(false);
+  const { colors } = useTheme();
+  const [searchParams] = useSearchParams();
+  const verifyMutation = useVerifyEmailMutation();
+  const hasVerified = useRef(false);
 
   const token = searchParams.get('token') ?? '';
 
@@ -48,7 +48,6 @@ export default function VerifyEmail() {
     verifyMutation.mutate(token);
   }, [token]);
 
-  // No token in URL
   if (!token) {
     return (
       <AuthLayout>
@@ -80,7 +79,6 @@ export default function VerifyEmail() {
     );
   }
 
-  // Verifying in progress
   if (verifyMutation.isPending) {
     return (
       <AuthLayout>
@@ -95,7 +93,6 @@ export default function VerifyEmail() {
     );
   }
 
-  // Success
   if (verifyMutation.isSuccess) {
     return (
       <AuthLayout>
@@ -127,7 +124,6 @@ export default function VerifyEmail() {
     );
   }
 
-  // Error
   const errorMsg =
     verifyMutation.error instanceof ApiError
       ? verifyMutation.error.message

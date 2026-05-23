@@ -11,7 +11,7 @@ const { Title, Text } = Typography;
 
 interface ResetPasswordForm {
   password: string;
-  confirm:  string;
+  confirm: string;
 }
 
 const ACCENT = '#e50914';
@@ -37,12 +37,12 @@ const iconWrapStyle: React.CSSProperties = {
 };
 
 export default function ResetPassword() {
-  const [done, setDone]    = useState(false);
-  const [error, setError]  = useState('');
-  const [form]             = Form.useForm<ResetPasswordForm>();
-  const { colors }         = useTheme();
-  const resetMutation      = useResetPasswordMutation();
-  const [searchParams]     = useSearchParams();
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
+  const [form] = Form.useForm<ResetPasswordForm>();
+  const { colors } = useTheme();
+  const resetMutation = useResetPasswordMutation();
+  const [searchParams] = useSearchParams();
 
   const token = searchParams.get('token') ?? '';
 
@@ -126,15 +126,17 @@ export default function ResetPassword() {
         Choose a strong password — at least 7 characters.
       </Text>
 
-      {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
+      {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20, fontSize: 12, width: "100%", paddingTop: 10, paddingBottom: 10 }} />}
 
-      <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off">
+      <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off" style={{ width: "100%" }}>
         <Form.Item
           name="password"
           rules={[
             { required: true, message: 'Please enter a new password' },
             { min: 7, message: 'Password must be at least 7 characters' },
           ]}
+          style={{ marginBottom: 24 }}
+
         >
           <Input.Password
             prefix={<LockOutlined style={{ color: colors.textMuted }} />}
@@ -159,6 +161,7 @@ export default function ResetPassword() {
               },
             }),
           ]}
+          style={{ marginBottom: 24 }}
         >
           <Input.Password
             prefix={<LockOutlined style={{ color: colors.textMuted }} />}

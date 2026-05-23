@@ -1,5 +1,5 @@
 .player-page {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -78,7 +78,7 @@
   aspect-ratio: 16 / 9;
   background: #000;
   flex-shrink: 0;
-  max-height: 72vh;
+  max-height: 72dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -263,7 +263,7 @@
 .player-page__video:fullscreen,
 .player-page__video:-webkit-full-screen {
   max-height: none !important;
-  height: 100vh !important;
+  height: 100dvh !important;
   aspect-ratio: unset !important;
   display: flex;
   flex-direction: column;

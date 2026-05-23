@@ -2,16 +2,16 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import AuthShowcase from './AuthShowcase';
-import AuthLogo from './AuthLogo';
 import './auth.css';
+import { Flex } from 'antd';
 
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 const FOOTER_LINKS = [
-  { label: 'About',            to: '/about' },
-  { label: 'Privacy Policy',   to: '/privacy-policy' },
+  { label: 'About', to: '/about' },
+  { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Terms of Service', to: '/terms-of-service' },
 ];
 
@@ -21,17 +21,13 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="auth-layout" style={{ background: colors.bgBase }}>
       <AuthShowcase />
+
       <div className="auth-panel" style={{ background: colors.bgBase }}>
-
-        {/* Logo — always visible at the top of the panel */}
-        <AuthLogo />
-
-        {/* Form content — vertically centred */}
-        <div className="auth-panel__inner">
+        <Flex className="auth-panel__inner" justify="center" align="center" vertical flex={1}>
+          <img src="/i99flix-logo.png" alt="i99flix logo" width={150} />
           {children}
-        </div>
+        </Flex>
 
-        {/* Footer — pinned to the bottom */}
         <footer className="auth-panel__footer">
           <div className="auth-panel__footer-links">
             {FOOTER_LINKS.map(({ label, to }) => (

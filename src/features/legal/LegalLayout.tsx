@@ -25,7 +25,7 @@ export default function LegalLayout({
   const { colors } = useTheme();
 
   return (
-    <Layout style={{ minHeight: '100vh', background: colors.bgBase }}>
+    <Layout style={{ minHeight: '100dvh', background: colors.bgBase }}>
       {/* Top bar */}
       <div
         style={{

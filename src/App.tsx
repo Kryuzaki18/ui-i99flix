@@ -161,7 +161,7 @@ function AppLayout() {
   }
 
   return (
-    <Layout style={{ minHeight: "100vh", background: colors.bgBase }}>
+    <Layout style={{ minHeight: "100dvh", background: colors.bgBase }}>
       <Nav onMenuOpen={openSidebar} />
       <Sidebar open={sidebarOpen} onClose={closeSidebar} />
       <Content

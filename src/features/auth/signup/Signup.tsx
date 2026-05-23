@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography, Space, Steps, Alert } from 'antd';
+import { Form, Input, Button, Typography, Steps, Alert, Flex } from 'antd';
 import {
   UserOutlined,
   LockOutlined,
   MailOutlined,
   CheckCircleOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSignupMutation } from '../../../api/useAuthQuery';
@@ -16,10 +18,10 @@ import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
 const { Title, Text } = Typography;
 
 interface SignupForm {
-  name:     string;
-  email:    string;
+  name: string;
+  email: string;
   password: string;
-  confirm:  string;
+  confirm: string;
 }
 
 const ACCENT = '#e50914';
@@ -34,13 +36,13 @@ const submitBtnStyle: React.CSSProperties = {
 };
 
 export default function Signup() {
-  const [step, setStep]   = useState(0);
-  const [done, setDone]   = useState(false);
+  const [step, setStep] = useState(0);
+  const [done, setDone] = useState(false);
   const [error, setError] = useState('');
-  const [form]            = Form.useForm<SignupForm>();
-  const { colors }        = useTheme();
-  const navigate          = useNavigate();
-  const signupMutation    = useSignupMutation();
+  const [form] = Form.useForm<SignupForm>();
+  const { colors } = useTheme();
+  const navigate = useNavigate();
+  const signupMutation = useSignupMutation();
 
   const handleNext = async () => {
     try {
@@ -73,31 +75,40 @@ export default function Signup() {
     <AuthLayout>
       {!done ? (
         <>
-          <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
-            Create account
-          </Title>
-          <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
-            Start watching in minutes
-          </Text>
+          <Flex vertical style={{ width: '100%' }} align='center'>
+            <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
+              Create account
+            </Title>
 
-          {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 16 }} />}
+            <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 20 }}>
+              Start watching in minutes
+            </Text>
 
-          <Steps
-            current={step}
-            size="small"
-            style={{ marginBottom: 24 }}
-            items={[
-              { title: <Text style={{ fontSize: 12 }}>Account</Text> },
-              { title: <Text style={{ fontSize: 12 }}>Security</Text> },
-            ]}
-          />
+            {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20, fontSize: 12, width: "100%", paddingTop: 10, paddingBottom: 10 }} />}
+            <Steps
+              current={step}
+              size="small"
+              style={{ marginBottom: 12 }}
+              items={[
+                { title: <Text style={{ fontSize: 12 }}>Account</Text> },
+                { title: <Text style={{ fontSize: 12 }}>Security</Text> },
+              ]}
+            />
+          </Flex>
 
-          <Form form={form} layout="vertical" autoComplete="off">
+          <Form form={form} layout="vertical" autoComplete="off" style={{ width: "100%" }}>
+
             {step === 0 && (
               <>
                 <Form.Item
                   name="name"
-                  rules={[{ required: true, message: 'Please enter your name' }]}
+                  rules={[
+                    { required: true, message: 'Please enter your name' },
+                    { min: 4, message: "Name must be at least 4 characters" },
+                    { max: 50, message: "Name must be at most 50 characters" },
+                  ]}
+                  style={{ marginBottom: 24 }}
+
                 >
                   <Input
                     prefix={<UserOutlined style={{ color: colors.textMuted }} />}
@@ -113,6 +124,7 @@ export default function Signup() {
                     { required: true, message: 'Please enter your email' },
                     { type: 'email', message: 'Enter a valid email' },
                   ]}
+                  style={{ marginBottom: 24 }}
                 >
                   <Input
                     prefix={<MailOutlined style={{ color: colors.textMuted }} />}
@@ -122,15 +134,17 @@ export default function Signup() {
                     autoComplete="new-password"
                   />
                 </Form.Item>
-                <Button
-                  type="primary"
-                  size="large"
-                  block
-                  onClick={handleNext}
-                  style={submitBtnStyle}
-                >
-                  Continue
-                </Button>
+                <Form.Item style={{ marginBottom: 5 }}>
+                  <Button
+                    type="primary"
+                    size="large"
+                    block
+                    onClick={handleNext}
+                    style={submitBtnStyle}
+                  >
+                    Continue
+                  </Button>
+                </Form.Item>
               </>
             )}
 
@@ -151,6 +165,7 @@ export default function Signup() {
                     autoComplete="new-password"
                   />
                 </Form.Item>
+
                 <Form.Item
                   name="confirm"
                   dependencies={['password']}
@@ -174,27 +189,43 @@ export default function Signup() {
                     autoComplete="new-password"
                   />
                 </Form.Item>
-                <Space style={{ width: '100%' }} size={12}>
+
+                <Flex gap={12} justify='space-between' style={{ width: '100%' }}>
                   <Button
                     size="large"
+                    type="link"
                     onClick={() => setStep(0)}
-                    style={{ borderRadius: 8, flex: 1 }}
+                    style={{ height: 48, padding: 0, color: colors.textMuted }}
+                    icon={<ArrowLeftOutlined />}
                   >
                     Back
                   </Button>
+
                   <Button
                     type="primary"
                     size="large"
                     onClick={handleSubmit}
                     loading={signupMutation.isPending}
-                    style={{ ...submitBtnStyle, flex: 2 }}
+                    style={{ ...submitBtnStyle, width: '50%' }}
+                    icon={<ArrowRightOutlined style={{ fontSize: 18 }} />}
+                    iconPlacement='end'
                   >
-                    Continue
+                    Sign up
                   </Button>
-                </Space>
+                </Flex>
               </>
             )}
           </Form>
+
+          <SocialLoginButtons mode="signup" />
+          <div style={{ textAlign: 'center', marginTop: 24 }}>
+            <Text style={{ color: colors.textMuted }}>
+              Already have an account?{' '}
+              <Link to="/login" style={{ color: ACCENT, fontWeight: 600 }}>
+                Sign in
+              </Link>
+            </Text>
+          </div>
         </>
       ) : (
         <div style={{ textAlign: 'center', padding: '24px 0' }}>
@@ -214,21 +245,8 @@ export default function Signup() {
             Sign In
           </Button>
         </div>
-      )}
-
-      {!done && (
-        <>
-          <SocialLoginButtons mode="signup" />
-          <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <Text style={{ color: colors.textMuted }}>
-              Already have an account?{' '}
-              <Link to="/login" style={{ color: ACCENT, fontWeight: 600 }}>
-                Sign in
-              </Link>
-            </Text>
-          </div>
-        </>
-      )}
-    </AuthLayout>
+      )
+      }
+    </AuthLayout >
   );
 }

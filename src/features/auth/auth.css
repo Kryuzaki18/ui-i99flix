@@ -1,5 +1,5 @@
 .auth-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
 }
 
@@ -32,12 +32,10 @@
 .auth-showcase__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    105deg,
-    rgba(0, 0, 0, 0.72) 0%,
-    rgba(0, 0, 0, 0.45) 55%,
-    rgba(0, 0, 0, 0.75) 100%
-  );
+  background: linear-gradient(105deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.45) 55%,
+      rgba(0, 0, 0, 0.75) 100%);
   z-index: 1;
 }
 
@@ -89,10 +87,21 @@
   outline: 2px solid #e50914;
 }
 
-.auth-showcase__movie-card:nth-child(2) { animation-delay: 0.8s; }
-.auth-showcase__movie-card:nth-child(3) { animation-delay: 1.6s; }
-.auth-showcase__movie-card:nth-child(4) { animation-delay: 2.4s; }
-.auth-showcase__movie-card:nth-child(5) { animation-delay: 3.2s; }
+.auth-showcase__movie-card:nth-child(2) {
+  animation-delay: 0.8s;
+}
+
+.auth-showcase__movie-card:nth-child(3) {
+  animation-delay: 1.6s;
+}
+
+.auth-showcase__movie-card:nth-child(4) {
+  animation-delay: 2.4s;
+}
+
+.auth-showcase__movie-card:nth-child(5) {
+  animation-delay: 3.2s;
+}
 
 .auth-showcase__movie-card:hover {
   transform: translateY(-6px) scale(1.04);
@@ -275,7 +284,7 @@
 .auth-panel {
   width: 100%;
   max-width: 480px;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -294,20 +303,7 @@
 
 .auth-panel__inner {
   width: 100%;
-  max-width: 380px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.auth-panel__logo {
-  width: 100%;
-  max-width: 380px;
-  text-align: center;
-  margin-bottom: 0;
-  padding-bottom: 0;
-  display: block;
+  max-width: 350px;
 }
 
 .auth-autofill-override input:-webkit-autofill,
@@ -329,22 +325,40 @@
 }
 
 @keyframes cardFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes orbDrift {
-  0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(30px, -20px) scale(1.05); }
-  66%  { transform: translate(-20px, 30px) scale(0.95); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 /* ── Auth panel footer ───────────────────────────────────────────────────── */
 
 .auth-panel__footer {
   width: 100%;
-  max-width: 380px;
+  max-width: 350px;
   padding: 24px 0 8px;
   margin-top: auto;
   text-align: center;

@@ -1,7 +1,7 @@
 .hero-banner {
   position: relative;
   width: 100%;
-  height: clamp(380px, 60vh, 620px);
+  height: clamp(380px, 60dvh, 620px);
   overflow: hidden;
   border-radius: 16px;
 }
@@ -28,12 +28,10 @@
 .hero-banner__gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.92) 0%,
-    rgba(0, 0, 0, 0.55) 55%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
+  background: linear-gradient(to right,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.55) 55%,
+      rgba(0, 0, 0, 0.05) 100%);
 }
 
 .hero-banner__content {
@@ -107,8 +105,13 @@
   z-index: 2;
 }
 
-.hero-banner__arrow--prev { left: 16px; }
-.hero-banner__arrow--next { right: 16px; }
+.hero-banner__arrow--prev {
+  left: 16px;
+}
+
+.hero-banner__arrow--next {
+  right: 16px;
+}
 
 .hero-banner__dots {
   position: absolute;
