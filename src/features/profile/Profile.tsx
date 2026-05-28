@@ -1,0 +1,401 @@
+import { useState } from "react";
+import {
+  Typography,
+  Menu,
+  Form,
+  Input,
+  Button,
+  Alert,
+  Divider,
+  Flex,
+  Row,
+  Col,
+  Avatar,
+  Space,
+  Tooltip,
+} from "antd";
+import {
+  LockOutlined,
+  WarningOutlined,
+  UserOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  CopyOutlined,
+} from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import type { MenuProps } from "antd";
+
+import { useAuthStore } from "../../store/authStore";
+import { useTheme } from "../../context/ThemeContext";
+import {
+  useChangePasswordMutation,
+  useDeleteAccountMutation,
+} from "../../api/useAuthQuery";
+import { ApiError } from "../../services/apiService";
+import messageService from "../../services/messageService";
+import "./Profile.css";
+
+const { Title, Text, Paragraph } = Typography;
+
+type ProfileSection = "security" | "danger";
+
+interface ChangePasswordForm {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+
+const DELETE_PHRASE = "delete my account";
+
+export default function Profile() {
+  const { colors } = useTheme();
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const isSocial = user?.isSocial ?? false;
+
+  const [section, setSection] = useState<ProfileSection>("security");
+  const [changeError, setChangeError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+  const [deleteInput, setDeleteInput]       = useState("");
+  const [deletePassword, setDeletePassword] = useState("");
+
+  const [changeForm] = Form.useForm<ChangePasswordForm>();
+
+  const changeMutation = useChangePasswordMutation();
+  const deleteMutation = useDeleteAccountMutation();
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((w) => w[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : undefined;
+
+  const menuItems: MenuProps["items"] = [
+    { key: "security", icon: <LockOutlined />, label: "Security" },
+    {
+      key: "danger",
+      icon: <WarningOutlined />,
+      label: "Danger Zone",
+      danger: true,
+    },
+  ];
+
+  const handleChangePassword = (values: ChangePasswordForm) => {
+    setChangeError("");
+    if (values.newPassword !== values.confirmPassword) {
+      setChangeError("New passwords do not match.");
+      return;
+    }
+    changeMutation.mutate(
+      { oldPassword: values.oldPassword, newPassword: values.newPassword },
+      {
+        onSuccess: () => {
+          messageService.success("Password updated successfully.");
+          changeForm.resetFields();
+        },
+        onError: (err) => {
+          setChangeError(
+            err instanceof ApiError
+              ? err.message
+              : "Failed to update password. Please try again.",
+          );
+        },
+      },
+    );
+  };
+
+  const handleDeleteAccount = () => {
+    setDeleteError("");
+    deleteMutation.mutate(isSocial ? "" : deletePassword, {
+      onSuccess: () => {
+        messageService.success("Your account has been deleted.");
+        navigate("/login");
+      },
+      onError: (err) => {
+        setDeleteError(
+          err instanceof ApiError
+            ? err.message
+            : "Failed to delete account. Please try again.",
+        );
+      },
+    });
+  };
+
+  const isDeleteConfirmed = deleteInput.toLowerCase() === DELETE_PHRASE;
+
+  const securityPanel = (
+    <div className="profile__panel">
+      <Title level={4} style={{ marginTop: 0, marginBottom: 4 }}>
+        Change Password
+      </Title>
+      <Text
+        style={{ color: colors.textMuted, display: "block", marginBottom: 24 }}
+      >
+        Update your password to keep your account secure.
+      </Text>
+
+      {isSocial ? (
+        <Alert
+          type="info"
+          showIcon
+          message="Password change not available"
+          description="Your account uses social sign-in (Google / X). Password management is handled by your provider."
+          style={{ marginBottom: 24, maxWidth: 440 }}
+        />
+      ) : (
+        <>
+          {changeError && (
+            <Alert
+              message={changeError}
+              type="error"
+              showIcon
+              closable
+              onClose={() => setChangeError("")}
+              style={{ marginBottom: 20 }}
+            />
+          )}
+
+          <Form
+            form={changeForm}
+            layout="vertical"
+            onFinish={handleChangePassword}
+            autoComplete="off"
+            style={{ maxWidth: 440 }}
+          >
+            <Form.Item
+              name="oldPassword"
+              label="Current password"
+              rules={[
+                { required: true, message: "Enter your current password" },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+                placeholder="Current password"
+                iconRender={(v) =>
+                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="newPassword"
+              label="New password"
+              rules={[
+                { required: true, message: "Enter a new password" },
+                { min: 7, message: "Password must be at least 7 characters" },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+                placeholder="New password"
+                iconRender={(v) =>
+                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="confirmPassword"
+              label="Confirm new password"
+              dependencies={["newPassword"]}
+              rules={[
+                { required: true, message: "Please confirm your new password" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("newPassword") === value)
+                      return Promise.resolve();
+                    return Promise.reject(new Error("Passwords do not match"));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+                placeholder="Confirm new password"
+                iconRender={(v) =>
+                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item style={{ marginBottom: 8 }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                loading={changeMutation.isPending}
+                style={{
+                  background: "#e50914",
+                  borderColor: "#e50914",
+                  fontWeight: 600,
+                }}
+              >
+                Update password
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <Divider />
+
+          <Text style={{ color: colors.textMuted }}>
+            Forgot your current password?{" "}
+            <Link to="/forgot-password" style={{ color: "#e50914" }}>
+              Reset it here
+            </Link>
+          </Text>
+        </>
+      )}
+    </div>
+  );
+
+  const dangerPanel = (
+    <div className="profile__panel">
+      <Title
+        level={4}
+        style={{ marginTop: 0, marginBottom: 4, color: "#ff4d4f" }}
+      >
+        Danger Zone
+      </Title>
+      <Text
+        style={{ color: colors.textMuted, display: "block", marginBottom: 24 }}
+      >
+        Irreversible actions. Proceed with caution.
+      </Text>
+
+      <div
+        className="profile__danger-card"
+        style={{ border: `1px solid #ff4d4f`, borderRadius: 10 }}
+      >
+        <div className="profile__danger-header">
+          <WarningOutlined style={{ color: "#ff4d4f", fontSize: 18 }} />
+          <Title level={5} style={{ margin: 0, color: "#ff4d4f" }}>
+            Delete account
+          </Title>
+        </div>
+        <Paragraph style={{ color: colors.textMuted, marginBottom: 20 }}>
+          This will permanently delete your account, watchlist, and all
+          associated data. This action{" "}
+          <strong style={{ color: colors.textPrimary }}>
+            cannot be undone
+          </strong>
+          .
+        </Paragraph>
+
+        {deleteError && (
+          <Alert
+            message={deleteError}
+            type="error"
+            showIcon
+            closable
+            onClose={() => setDeleteError("")}
+            style={{ marginBottom: 16 }}
+          />
+        )}
+
+        <Flex vertical gap={16}>
+          <div>
+            <Text style={{ color: colors.textMuted, display: "block", marginBottom: 6 }}>
+              Type{" "}
+              <Text code style={{ color: "#ff4d4f" }}>
+                {DELETE_PHRASE}
+              </Text>
+              <Tooltip title="Copy">
+                <CopyOutlined
+                  style={{ marginLeft: 6, cursor: "pointer", color: colors.textMuted }}
+                  onClick={() => {
+                    navigator.clipboard.writeText(DELETE_PHRASE);
+                    messageService.success("Copied to clipboard");
+                  }}
+                />
+              </Tooltip>
+              {" "}to confirm
+            </Text>
+            <Input
+              value={deleteInput}
+              onChange={(e) => setDeleteInput(e.target.value)}
+              placeholder={DELETE_PHRASE}
+              size="large"
+              status={deleteInput && !isDeleteConfirmed ? "error" : undefined}
+            />
+          </div>
+
+          {!isSocial && (
+            <div>
+              <Text style={{ color: colors.textMuted, display: "block", marginBottom: 6 }}>
+                Enter your password to confirm
+              </Text>
+              <Input.Password
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+                placeholder="Your password"
+                iconRender={(v) => v ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                size="large"
+              />
+            </div>
+          )}
+
+          <Button
+            danger
+            type="primary"
+            size="large"
+            disabled={!isDeleteConfirmed || (!isSocial && !deletePassword)}
+            loading={deleteMutation.isPending}
+            onClick={handleDeleteAccount}
+          >
+            Delete my account
+          </Button>
+        </Flex>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="profile">
+      <div
+        className="profile__hero"
+        style={{ borderBottom: `1px solid ${colors.border}` }}
+      >
+        <Avatar
+          src={user?.avatarUrl}
+          icon={!user?.avatarUrl && !initials ? <UserOutlined /> : undefined}
+          size={64}
+          className="profile__avatar"
+        >
+          {!user?.avatarUrl && initials}
+        </Avatar>
+        <Space direction="vertical" size={2}>
+          <Title level={3} style={{ margin: 0 }}>
+            {user?.name ?? "—"}
+          </Title>
+          <Text style={{ color: colors.textMuted }}>{user?.email ?? "—"}</Text>
+        </Space>
+      </div>
+
+      <Row className="profile__body" gutter={[0, 24]}>
+        <Col xs={24} sm={7} md={6} className="profile__sidebar">
+          <Menu
+            mode="inline"
+            selectedKeys={[section]}
+            items={menuItems}
+            onClick={({ key }) => setSection(key as ProfileSection)}
+            className="profile__menu"
+            style={{ background: "transparent", border: "none" }}
+          />
+        </Col>
+
+        <Col xs={24} sm={17} md={18} className="profile__content">
+          {section === "security" ? securityPanel : dangerPanel}
+        </Col>
+      </Row>
+    </div>
+  );
+}

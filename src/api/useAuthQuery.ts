@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { signin, signup, signout, socialSignin, getMe, forgotPassword, resetPassword, verifyEmail } from './authApi';
+import { signin, signup, signout, socialSignin, getMe, forgotPassword, resetPassword, verifyEmail, changePassword, deleteAccount } from './authApi';
 import { useAuthStore } from '../store/authStore';
-import type { SigninPayload, SignupPayload, ForgotPasswordPayload, ResetPasswordPayload, SocialSigninPayload } from './authApi';
+import type { SigninPayload, SignupPayload, ForgotPasswordPayload, ResetPasswordPayload, SocialSigninPayload, ChangePasswordPayload } from './authApi';
 
 export const authKeys = {
   session: ['auth', 'session'] as const,
@@ -93,5 +93,24 @@ export function useResetPasswordMutation() {
 export function useVerifyEmailMutation() {
   return useMutation({
     mutationFn: (token: string) => verifyEmail(token),
+  });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({
+    mutationFn: (payload: ChangePasswordPayload) => changePassword(payload),
+  });
+}
+
+export function useDeleteAccountMutation() {
+  const { logout }  = useAuthStore();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (password: string) => deleteAccount(password),
+    onSuccess: () => {
+      logout();
+      queryClient.clear();
+    },
   });
 }

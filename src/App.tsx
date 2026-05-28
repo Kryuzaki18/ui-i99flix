@@ -23,6 +23,7 @@ const ResetPassword = lazy(() => import("./features/auth/reset-password/ResetPas
 const VerifyEmail = lazy(() => import("./features/auth/verify-email/VerifyEmail"));
 const PlayerPage = lazy(() => import("./features/player/Player"));
 const Watchlist  = lazy(() => import("./features/watchlist/Watchlist"));
+const Profile    = lazy(() => import("./features/profile/Profile"));
 const About = lazy(() => import("./features/legal/About"));
 const PrivacyPolicy = lazy(() => import("./features/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./features/legal/TermsOfService"));
@@ -180,6 +181,7 @@ function AppLayout() {
             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
             <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
+            <Route path="/profile"   element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

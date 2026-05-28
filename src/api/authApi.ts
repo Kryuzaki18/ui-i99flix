@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from '../services/apiService';
+import { apiGet, apiPost, apiPut, apiDelete } from '../services/apiService';
 import { API_ROUTES } from './environments';
 
 export interface SigninPayload {
@@ -58,6 +58,7 @@ export interface UserProfile {
   name:      string;
   email:     string;
   avatarUrl?: string;
+  isSocial:  boolean;
 }
 
 export async function getMe(): Promise<UserProfile> {
@@ -80,3 +81,17 @@ export async function resetPassword(payload: ResetPasswordPayload): Promise<{ me
 export async function verifyEmail(token: string): Promise<{ message: string }> {
   return apiGet<{ message: string }>(`${API_ROUTES.AUTH.VERIFY_EMAIL}?token=${encodeURIComponent(token)}`);
 }
+
+export interface ChangePasswordPayload {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export async function changePassword(payload: ChangePasswordPayload): Promise<{ message: string }> {
+  return apiPut<{ message: string }>(API_ROUTES.USER.CHANGE_PASSWORD, payload);
+}
+
+export async function deleteAccount(password: string): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(API_ROUTES.USER.DELETE_ACCOUNT, { body: { password } });
+}
+

@@ -61,8 +61,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     },
     { key: "top-rated", icon: <StarOutlined />, label: "Top Rated" },
     { key: "/watchlist", icon: <HeartOutlined />, label: "My Watchlist" },
+    { key: "/profile",   icon: <UserOutlined />,  label: "My Profile" },
     { type: "divider" },
-    { key: "settings", icon: <SettingOutlined />, label: "Settings" },
     {
       key: "signout",
       icon: <LoginOutlined />,

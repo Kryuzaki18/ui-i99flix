@@ -1,0 +1,74 @@
+.profile {
+  padding-bottom: 48px;
+}
+
+.profile__hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.profile__avatar {
+  flex-shrink: 0;
+  background: rgba(229, 9, 20, 0.15);
+  color: #e50914;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.profile__body {
+  align-items: flex-start;
+}
+
+.profile__sidebar {
+  padding-right: 8px;
+}
+
+.profile__menu .ant-menu-item {
+  border-radius: 8px;
+}
+
+.profile__content {
+  padding-left: 24px;
+  border-left: 1px solid transparent;
+}
+
+.profile__panel {
+  max-width: 560px;
+}
+
+.profile__danger-card {
+  padding: 24px;
+}
+
+.profile__danger-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 575px) {
+  .profile__sidebar {
+    padding-right: 0;
+    margin-bottom: 8px;
+  }
+
+  .profile__content {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .profile__menu {
+    display: flex;
+    gap: 8px;
+  }
+
+  .profile__menu .ant-menu-item {
+    flex: 1;
+    text-align: center;
+  }
+}

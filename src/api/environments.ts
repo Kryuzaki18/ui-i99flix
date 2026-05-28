@@ -24,6 +24,11 @@ export const API_ROUTES = {
     ITEM:      (movieId: string | number) => `${API_BASE}/watchlist/${encodeURIComponent(String(movieId))}`,
   },
 
+  USER: {
+    CHANGE_PASSWORD: `${API_BASE}/change-password`,
+    DELETE_ACCOUNT:  `${API_BASE}/account`,
+  },
+
   TMDB: {
     SHOWCASE: `${API_BASE}/tmdb/showcase`,
     MOVIES: {

@@ -53,7 +53,7 @@ function NavInner({ onMenuOpen }: NavProps) {
   };
 
   const userMenuItems: MenuProps["items"] = [
-    { key: "profile", label: <Text>My Profile</Text>, icon: <UserOutlined /> },
+    { key: "profile", label: <Text>My Profile</Text>, icon: <UserOutlined />, onClick: () => navigate("/profile") },
     {
       key: "watchlist",
       label: <Text>My Watchlist</Text>,
