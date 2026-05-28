@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from '../services/internalApiClient';
+import { apiGet, apiPost } from '../services/apiService';
 import { API_ROUTES } from './environments';
 
 export interface SigninPayload {

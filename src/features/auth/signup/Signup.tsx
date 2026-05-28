@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useSignupMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/internalApiClient';
+import { ApiError } from '../../../services/apiService';
 import AuthLayout from '../AuthLayout';
 import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
 

@@ -4,7 +4,7 @@ import { Form, Input, Button, Typography, Alert, Result } from 'antd';
 import { LockOutlined, CheckCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useResetPasswordMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/internalApiClient';
+import { ApiError } from '../../../services/apiService';
 import AuthLayout from '../AuthLayout';
 
 const { Title, Text } = Typography;

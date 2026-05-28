@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { useTheme } from '../../../context/ThemeContext';
 import { useVerifyEmailMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/internalApiClient';
+import { ApiError } from '../../../services/apiService';
 import AuthLayout from '../AuthLayout';
 
 const { Title, Text } = Typography;

@@ -1,4 +1,4 @@
-import { apiGet } from '../services/internalApiClient';
+import { apiGet } from '../services/apiService';
 import { API_ROUTES } from './environments';
 import { useTmdbStore } from '../store/tmdbStore';
 import type {

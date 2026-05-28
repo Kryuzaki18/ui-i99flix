@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiDelete } from '../services/internalApiClient';
+import { apiGet, apiPost, apiDelete } from '../services/apiService';
 import { API_ROUTES } from './environments';
 import type { Movie } from '../models/movie';
 

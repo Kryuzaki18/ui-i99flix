@@ -10,7 +10,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../../config/firebase';
 import { useSocialSigninMutation } from '../../api/useAuthQuery';
-import { ApiError } from '../../services/internalApiClient';
+import { ApiError } from '../../services/apiService';
 
 const { Text } = Typography;
 
