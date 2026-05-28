@@ -26,7 +26,6 @@ export default function LegalLayout({
 
   return (
     <Layout style={{ minHeight: '100dvh', background: colors.bgBase }}>
-      {/* Top bar */}
       <div
         style={{
           borderBottom: `1px solid ${colors.border}`,
@@ -69,7 +68,6 @@ export default function LegalLayout({
           padding: 'clamp(32px, 5vw, 64px) clamp(20px, 5vw, 48px)',
         }}
       >
-        {/* Page header */}
         <div style={{ marginBottom: 40, paddingBottom: 32, borderBottom: `1px solid ${colors.border}` }}>
           <Title
             level={1}
@@ -89,7 +87,6 @@ export default function LegalLayout({
           )}
         </div>
 
-        {/* Page content */}
         <div
           style={{
             color: colors.textPrimary,
@@ -100,7 +97,6 @@ export default function LegalLayout({
           {children}
         </div>
 
-        {/* Footer nav */}
         <div
           style={{
             marginTop: 64,

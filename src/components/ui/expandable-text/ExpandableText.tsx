@@ -3,7 +3,6 @@ import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 interface ExpandableTextProps {
   text: string;
-  /** Max lines when collapsed. Default 3 */
   collapsedLines?: number;
   color?: string;
   fontSize?: number | string;
@@ -21,7 +20,6 @@ export default function ExpandableText({
   const [overflows, setOverflows] = useState(false);
   const measureRef = useRef<HTMLDivElement>(null);
 
-  // Detect whether the text actually overflows the collapsed height
   useEffect(() => {
     const el = measureRef.current;
     if (!el) return;
@@ -37,7 +35,6 @@ export default function ExpandableText({
 
   return (
     <div>
-      {/* Measure element — always clamped, used only to detect overflow */}
       <div
         ref={measureRef}
         aria-hidden
@@ -53,7 +50,6 @@ export default function ExpandableText({
         {text}
       </div>
 
-      {/* Visible text */}
       <div
         style={{
           fontSize,

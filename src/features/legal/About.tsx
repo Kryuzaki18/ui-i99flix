@@ -48,7 +48,6 @@ export default function About() {
       subtitle="Your personal streaming destination for movies and TV shows."
       breadcrumb="About"
     >
-      {/* Hero */}
       <div
         style={{
           background: `linear-gradient(135deg, rgba(229,9,20,0.12) 0%, rgba(99,0,255,0.08) 100%)`,
@@ -66,7 +65,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 48 }}>
         <StatCard icon={<PlayCircleOutlined />} value="10K+" label="Movies & Shows" />
         <StatCard icon={<TeamOutlined />} value="Free" label="Always" />
