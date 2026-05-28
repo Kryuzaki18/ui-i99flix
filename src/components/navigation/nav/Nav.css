@@ -52,8 +52,9 @@
 }
 
 @media (max-width: 768px) {
-  .nav-links    { display: none !important; }
+  .nav-links     { display: none !important; }
   .nav-hamburger { display: inline-flex !important; }
+  .nav-avatar    { display: none !important; }
 }
 
 .nav-hamburger {
