@@ -88,9 +88,9 @@ export default function Watchlist() {
         }}
       >
         <Row gutter={[12, 12]} align="middle">
-          <Col xs={24} sm={12} md={8} lg={8}>
+          <Col xs={24} sm={12} md={6} lg={7}>
             <Input
-              placeholder="Search watchlist…"
+              placeholder="Search..."
               prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -98,7 +98,7 @@ export default function Watchlist() {
               style={{ borderRadius: 8 }}
             />
           </Col>
-          <Col xs={24} sm={12} md={6} lg={6}>
+          <Col xs={24} sm={12} md={5} lg={5}>
             <Select
               value={sortBy}
               onChange={setSortBy}
@@ -111,7 +111,7 @@ export default function Watchlist() {
               ]}
             />
           </Col>
-          <Col xs={24} sm={12} md={6} lg={6}>
+          <Col xs={24} sm={24} md={10} lg={8}>
             <Segmented
               value={mediaFilter}
               onChange={(v) => setMediaFilter(v as "all" | "movie" | "tv")}
@@ -125,8 +125,8 @@ export default function Watchlist() {
           </Col>
           <Col
             xs={24}
-            sm={12}
-            md={4}
+            sm={24}
+            md={3}
             lg={4}
             className="watchlist__toolbar-layout"
           >

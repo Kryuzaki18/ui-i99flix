@@ -38,9 +38,3 @@
   font-size: 64px;
   color: rgba(229, 9, 20, 0.3);
 }
-
-@media (max-width: 576px) {
-  .watchlist__toolbar-layout {
-    justify-content: flex-start;
-  }
-}

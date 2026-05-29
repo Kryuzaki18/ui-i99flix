@@ -29,12 +29,7 @@
 .browse-filters__layout-col {
   display: flex;
   align-items: center;
-}
-
-@media (min-width: 768px) {
-  .browse-filters__layout-col {
-    justify-content: flex-end;
-  }
+  justify-content: flex-end;
 }
 
 .browse-genre-pills {
