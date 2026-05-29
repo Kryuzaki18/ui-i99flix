@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { Movie } from '../models/movie';
+import type { Movie } from '../models/movieModel';
 
 interface PlayerState {
   playingMovie: Movie | null;

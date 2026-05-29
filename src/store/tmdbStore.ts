@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { TmdbGenre } from '../models/tmdb';
+import type { TmdbGenre } from '../models/tmdbModel';
 
 interface TmdbStoreState {
   movieGenres: TmdbGenre[];

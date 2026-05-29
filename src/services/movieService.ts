@@ -1,6 +1,6 @@
-import { apiGet, apiPost, apiPut, apiDelete } from '../services/apiService';
-import { API_ROUTES } from './environments';
-import type { Movie } from '../models/movie';
+import { apiGet, apiPost, apiPut, apiDelete } from './apiService';
+import { API_ROUTES } from '../api/environments';
+import type { Movie } from '../models/movieModel';
 
 export interface ApiMovie {
   _id:         string;

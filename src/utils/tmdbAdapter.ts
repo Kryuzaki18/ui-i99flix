@@ -1,5 +1,5 @@
-import type { Movie } from '../models/movie';
-import type { TmdbMovieListItem, TmdbMovieDetail, TmdbGenre } from '../models/tmdb';
+import type { Movie } from '../models/movieModel';
+import type { TmdbMovieListItem, TmdbMovieDetail, TmdbGenre } from '../models/tmdbModel';
 import type { TmdbTvListItem, TmdbTvDetail } from '../api/tmdbApi';
 
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';

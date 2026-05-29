@@ -12,7 +12,7 @@ import {
   tmdbMovieDetailToMovie,
 } from '../utils/tmdbAdapter';
 import { useTmdbStore } from '../store/tmdbStore';
-import type { Movie } from '../models/movie';
+import type { Movie } from '../models/movieModel';
 
 const STALE_TIME = 5 * 60 * 1000;
 

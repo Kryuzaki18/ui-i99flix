@@ -1,0 +1,85 @@
+import { apiGet, apiPost, apiPut, apiDelete } from "./apiService";
+import { API_ROUTES } from "../api/environments";
+import type {
+  ChangePasswordPayload,
+  ForgotPasswordPayload,
+  ResetPasswordPayload,
+  SigninPayload,
+  SignupPayload,
+  SocialSigninPayload,
+  UserProfile,
+} from "../models/authModel";
+
+export async function signin(
+  payload: SigninPayload,
+): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.SIGNIN, {
+    email: payload.email.toLowerCase().trim(),
+    password: payload.password,
+    rememberMe: payload.rememberMe ?? false,
+  });
+}
+
+export async function signup(
+  payload: SignupPayload,
+): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.SIGNUP, {
+    name: payload.name.trim(),
+    email: payload.email.toLowerCase().trim(),
+    password: payload.password,
+  });
+}
+
+export async function signout(): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.SIGNOUT, {});
+}
+
+export async function socialSignin(
+  payload: SocialSigninPayload,
+): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.SOCIAL_SIGNIN, {
+    idToken: payload.idToken,
+    rememberMe: payload.rememberMe ?? false,
+  });
+}
+
+export async function getMe(): Promise<UserProfile> {
+  return apiGet<UserProfile>(API_ROUTES.AUTH.ME);
+}
+
+export async function forgotPassword(
+  payload: ForgotPasswordPayload,
+): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.FORGOT_PASSWORD, {
+    email: payload.email.toLowerCase().trim(),
+  });
+}
+
+export async function resetPassword(
+  payload: ResetPasswordPayload,
+): Promise<{ message: string }> {
+  return apiPost<{ message: string }>(API_ROUTES.AUTH.RESET_PASSWORD, {
+    token: payload.token,
+    password: payload.password,
+  });
+}
+
+export async function verifyEmail(token: string): Promise<{ message: string }> {
+  return apiGet<{ message: string }>(
+    `${API_ROUTES.AUTH.VERIFY_EMAIL}?token=${encodeURIComponent(token)}`,
+  );
+}
+
+export async function changePassword(
+  payload: ChangePasswordPayload,
+): Promise<{ message: string }> {
+  return apiPut<{ message: string }>(API_ROUTES.USER.CHANGE_PASSWORD, payload);
+}
+
+export async function deleteAccount(
+  password: string,
+): Promise<{ message: string }> {
+  return apiDelete<{ message: string }>(API_ROUTES.USER.DELETE_ACCOUNT, {
+    body: { password },
+  });
+}

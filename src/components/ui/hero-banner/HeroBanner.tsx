@@ -7,7 +7,7 @@ import {
   RightOutlined,
 } from "@ant-design/icons";
 
-import type { Movie } from "../../../models/movie";
+import type { Movie } from "../../../models/movieModel";
 import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import "./HeroBanner.css";

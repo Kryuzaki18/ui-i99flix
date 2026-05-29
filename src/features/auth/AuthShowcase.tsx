@@ -5,8 +5,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { GENRE_COLORS } from '../../constants/genres';
 import { API_ROUTES } from '../../api/environments';
 import { useTmdbStore } from '../../store/tmdbStore';
-import type { Movie } from '../../models/movie';
-import type { TmdbMovieListItem } from '../../models/tmdb';
+import type { Movie } from '../../models/movieModel';
+import type { TmdbMovieListItem } from '../../models/tmdbModel';
 import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../../api/tmdbApi';
 import { tmdbMovieListItemToMovie, buildGenreMap } from '../../utils/tmdbAdapter';
 

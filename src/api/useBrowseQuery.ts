@@ -11,7 +11,7 @@ import { useBrowseStore, selectActiveFilters } from '../store/browseStore';
 import { useDebounce } from '../hooks/useDebounce';
 import { YEAR_RANGES } from '../constants/yearRanges';
 import { useTmdbStore } from '../store/tmdbStore';
-import type { Movie } from '../models/movie';
+import type { Movie } from '../models/movieModel';
 
 export interface BrowseResult {
   movies: Movie[];

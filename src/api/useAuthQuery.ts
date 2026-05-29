@@ -1,10 +1,28 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { signin, signup, signout, socialSignin, getMe, forgotPassword, resetPassword, verifyEmail, changePassword, deleteAccount } from './authApi';
-import { useAuthStore } from '../store/authStore';
-import type { SigninPayload, SignupPayload, ForgotPasswordPayload, ResetPasswordPayload, SocialSigninPayload, ChangePasswordPayload } from './authApi';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  signin,
+  signup,
+  signout,
+  socialSignin,
+  getMe,
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
+  changePassword,
+  deleteAccount,
+} from "../services/authService";
+import { useAuthStore } from "../store/authStore";
+import type {
+  ChangePasswordPayload,
+  ForgotPasswordPayload,
+  ResetPasswordPayload,
+  SigninPayload,
+  SignupPayload,
+  SocialSigninPayload,
+} from "../models/authModel";
 
 export const authKeys = {
-  session: ['auth', 'session'] as const,
+  session: ["auth", "session"] as const,
 };
 
 export function useSessionQuery() {
@@ -12,7 +30,7 @@ export function useSessionQuery() {
 
   return useQuery({
     queryKey: authKeys.session,
-    queryFn:  async () => {
+    queryFn: async () => {
       try {
         const user = await getMe();
         setAuthenticated(true, user);
@@ -22,16 +40,16 @@ export function useSessionQuery() {
         return null;
       }
     },
-    staleTime:            5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: true,
-    retry:                2,
-    retryDelay:           (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    retry: 2,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
   });
 }
 
 export function useSigninMutation() {
   const { setAuthenticated } = useAuthStore();
-  const queryClient          = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payload: SigninPayload) => signin(payload),
@@ -49,7 +67,7 @@ export function useSignupMutation() {
 }
 
 export function useSignoutMutation() {
-  const { logout }  = useAuthStore();
+  const { logout } = useAuthStore();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -67,7 +85,7 @@ export function useSignoutMutation() {
 
 export function useSocialSigninMutation() {
   const { setAuthenticated } = useAuthStore();
-  const queryClient          = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (payload: SocialSigninPayload) => socialSignin(payload),
@@ -92,12 +110,12 @@ export function useResetPasswordMutation() {
 
 export function useVerifyEmailQuery(token: string) {
   return useQuery({
-    queryKey:  ['verify-email', token],
-    queryFn:   () => verifyEmail(token),
-    enabled:   !!token,
-    retry:     false,
+    queryKey: ["verify-email", token],
+    queryFn: () => verifyEmail(token),
+    enabled: !!token,
+    retry: false,
     staleTime: Infinity,
-    gcTime:    Infinity,
+    gcTime: Infinity,
   });
 }
 
@@ -108,7 +126,7 @@ export function useChangePasswordMutation() {
 }
 
 export function useDeleteAccountMutation() {
-  const { logout }  = useAuthStore();
+  const { logout } = useAuthStore();
   const queryClient = useQueryClient();
 
   return useMutation({

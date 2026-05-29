@@ -21,7 +21,7 @@ import {
   useNewReleasesQuery,
   useTopRatedMoviesQuery,
 } from "../../api/useMoviesQuery";
-import type { Movie } from "../../models/movie";
+import type { Movie } from "../../models/movieModel";
 import "./Home.css";
 
 const { Title } = Typography;

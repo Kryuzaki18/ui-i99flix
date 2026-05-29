@@ -21,7 +21,7 @@ import {
   HeartFilled,
 } from "@ant-design/icons";
 
-import type { Movie } from "../../../models/movie";
+import type { Movie } from "../../../models/movieModel";
 import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";

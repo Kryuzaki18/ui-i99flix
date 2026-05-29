@@ -7,7 +7,7 @@ import {
   deleteApiMovie,
   type MovieFiltersApi,
   type MoviePayload,
-} from './internalMovieApi';
+} from '../services/movieService';
 
 export const internalMovieKeys = {
   all:     ['internal-movies'] as const,

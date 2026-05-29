@@ -8,7 +8,7 @@ import type {
   TmdbVideosResponse,
   TmdbCreditsResponse,
   TmdbGenre,
-} from '../models/tmdb';
+} from '../models/tmdbModel';
 
 let movieGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;
 let tvGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;

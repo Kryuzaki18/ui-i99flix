@@ -3,7 +3,7 @@ import { getWatchlist, addToWatchlist, removeFromWatchlist } from './watchlistAp
 import { watchlistKeys } from './queryKeys';
 import { useAuthStore } from '../store/authStore';
 import messageService from '../services/messageService';
-import type { Movie } from '../models/movie';
+import type { Movie } from '../models/movieModel';
 
 export function useWatchlistQuery() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);

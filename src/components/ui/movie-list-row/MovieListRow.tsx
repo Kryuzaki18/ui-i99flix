@@ -2,7 +2,7 @@ import { Space, Tag, Typography, Button, Tooltip } from 'antd';
 import type { TooltipProps } from 'antd';
 import { memo } from 'react';
 import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
-import type { Movie } from '../../../models/movie';
+import type { Movie } from '../../../models/movieModel';
 import { useTheme } from '../../../context/ThemeContext';
 import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import { useWatchlistQuery, useAddToWatchlistMutation, useRemoveFromWatchlistMutation } from '../../../api/useWatchlistQuery';

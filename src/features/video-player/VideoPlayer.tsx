@@ -5,7 +5,7 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 import { useState, useEffect, useCallback } from "react";
-import type { Movie } from "../../models/movie";
+import type { Movie } from "../../models/movieModel";
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
