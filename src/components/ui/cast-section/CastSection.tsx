@@ -61,6 +61,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
               key={member.id}
               title={member.character ? `as ${member.character}` : undefined}
               placement="top"
+              getPopupContainer={(trigger) => trigger.parentElement ?? document.body}
             >
               <div className="cast-section__card">
                 <Avatar

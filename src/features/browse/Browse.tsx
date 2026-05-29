@@ -100,7 +100,9 @@ export default function Browse() {
     if (ps !== pageSize) setPageSize(ps);
     const el = resultsRef.current;
     if (el) {
-      const offset = 170;
+      const navbarHeight = 64;
+      const paginationHeight = paginationRef.current?.offsetHeight ?? 0;
+      const offset = navbarHeight + paginationHeight + 8;
       const top = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
     }
