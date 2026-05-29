@@ -77,7 +77,7 @@ function MovieSection({ id, title, icon, movies, isLoading, layout }: SectionPro
       {layout === 'grid' ? (
         <Row gutter={[16, 16]}>{gridContent}</Row>
       ) : (
-        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={12} style={{ width: '100%' }}>
           {listContent}
         </Space>
       )}

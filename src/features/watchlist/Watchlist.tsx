@@ -160,7 +160,7 @@ export default function Watchlist() {
           className="watchlist__empty"
           image={<HeartOutlined className="watchlist__empty-icon" />}
           description={
-            <Space direction="vertical" align="center" size={4}>
+            <Space orientation="vertical" align="center" size={4}>
               <Text strong style={{ fontSize: 16 }}>
                 Your watchlist is empty
               </Text>
@@ -209,7 +209,7 @@ export default function Watchlist() {
         </Row>
       ) : (
         <Space
-          direction="vertical"
+          orientation="vertical"
           size={12}
           style={{ width: "100%" }}
           className="watchlist__list"

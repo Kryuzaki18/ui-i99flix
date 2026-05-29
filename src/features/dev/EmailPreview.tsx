@@ -27,7 +27,7 @@ export default function EmailPreview() {
       }}
     >
       <Flex vertical justify="center" align="center" gap={10} style={{ marginBottom: 24 }}>
-        <Space direction="vertical" size={4}>
+        <Space orientation="vertical" size={4}>
           <Space align="center" size={10}>
             <MailOutlined style={{ fontSize: 22, color: colors.accent }} />
             <Title level={3} style={{ margin: 0 }}>

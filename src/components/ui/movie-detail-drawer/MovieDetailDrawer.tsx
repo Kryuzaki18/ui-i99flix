@@ -218,7 +218,7 @@ function MovieDetailDrawerInner({
               </>
             )}
 
-            <Space direction="vertical" size={10} style={{ width: "100%" }}>
+            <Space orientation="vertical" size={10} style={{ width: "100%" }}>
               <Button
                 type="primary"
                 size="large"
