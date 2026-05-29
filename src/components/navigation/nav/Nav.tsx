@@ -22,6 +22,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useTheme } from "../../../context/ThemeContext";
 import { useSignoutMutation } from "../../../api/useAuthQuery";
+import { useAuthStore } from "../../../store/authStore";
 import "./Nav.css";
 
 const { Header } = Layout;
@@ -45,6 +46,11 @@ function NavInner({ onMenuOpen }: NavProps) {
   const navigate = useNavigate();
   const { isDark, toggle, colors } = useTheme();
   const signoutMutation = useSignoutMutation();
+  const { user } = useAuthStore();
+
+  const initials = user?.name
+    ? user.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()
+    : undefined;
 
   const handleSignout = () => {
     signoutMutation.mutate(undefined, {
@@ -154,12 +160,15 @@ function NavInner({ onMenuOpen }: NavProps) {
         <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
           <Avatar
             className="nav-avatar"
-            icon={<UserOutlined aria-hidden="true" />}
+            src={user?.avatarUrl}
+            icon={!user?.avatarUrl && !initials ? <UserOutlined aria-hidden="true" /> : undefined}
             size={34}
             aria-label="User menu"
             aria-haspopup="true"
             style={{ cursor: "pointer" }}
-          />
+          >
+            {!user?.avatarUrl && initials}
+          </Avatar>
         </Dropdown>
       </Space>
     </Header>

@@ -59,7 +59,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       footer={null}
       width="min(900px, 95vw)"
       centered
-      maskClosable={false}
+      mask={{ closable: false }}
       style={{ padding: 0 }}
       styles={{
         body: { backgroundColor: colors.bgBase, padding: 0, overflow: "hidden" },

@@ -106,7 +106,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       open={open}
       onClose={onClose}
       placement="left"
-      width={260}
+      size={260}
       mask={{ blur: true }}
       closable={false}
       styles={{

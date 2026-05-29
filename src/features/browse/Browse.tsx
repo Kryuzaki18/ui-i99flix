@@ -237,7 +237,7 @@ export default function Browse() {
   ) : (
     <Space
       ref={resultsRef}
-      direction="vertical"
+      orientation="vertical"
       size={12}
       style={{ width: "100%" }}
     >

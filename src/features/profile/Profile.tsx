@@ -389,7 +389,7 @@ export default function Profile() {
         >
           {!user?.avatarUrl && initials}
         </Avatar>
-        <Space direction="vertical" size={2}>
+        <Space orientation="vertical" size={2}>
           <Title level={3} style={{ margin: 0 }}>
             {user?.name ?? "—"}
           </Title>
