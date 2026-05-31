@@ -23,6 +23,7 @@ import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
 import useResolvedGenres from '../../hooks/useResolvedGenres';
+import usePageTitle from '../../hooks/usePageTitle';
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
@@ -99,6 +100,8 @@ export default function Player() {
   const [playing, setPlaying] = useState(false);
 
   const handlePlay = useCallback(() => setPlaying(true), []);
+
+  usePageTitle(movie?.title, movie?.mediaType, isTv ? season : undefined, isTv ? episode : undefined);
 
   if (isLoading) {
     return (

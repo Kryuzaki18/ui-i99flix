@@ -12,6 +12,7 @@ import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import useResolvedGenres from '../../hooks/useResolvedGenres';
+import usePageTitle from '../../hooks/usePageTitle';
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./VideoPlayer.css";
 
@@ -47,6 +48,13 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       setEpisode(1);
     }
   }, [open, movie?.id]);
+
+  usePageTitle(
+    open ? movie?.title : null,
+    movie?.mediaType,
+    open && movie?.mediaType === "tv" ? season : undefined,
+    open && movie?.mediaType === "tv" ? episode : undefined
+  );
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
