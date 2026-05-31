@@ -9,6 +9,7 @@ import { useAuthStore } from "./store/authStore";
 import { useSessionQuery } from "./api/useAuthQuery";
 import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from "./api/tmdbApi";
 import { useTmdbStore } from "./store/tmdbStore";
+import { useRouteTitle } from "./hooks/usePageTitle";
 import Nav from "./components/navigation/nav/Nav";
 import Sidebar from "./components/navigation/sidebar/Sidebar";
 import VideoPlayer from "./features/video-player/VideoPlayer";
@@ -121,6 +122,7 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
 function AppLayout() {
   const location = useLocation();
   const { colors } = useTheme();
+  useRouteTitle();
   const { sidebarOpen, openSidebar, closeSidebar } = useHomeStore();
   const { playingMovie, closePlayer, detailMovie, closeDetail, playFromDetail } = usePlayerStore();
 
