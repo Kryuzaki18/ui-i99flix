@@ -3,12 +3,8 @@
 }
 
 .profile__hero {
-  display: flex;
-  align-items: center;
-  gap: 20px;
   padding-bottom: 24px;
   margin-bottom: 28px;
-  flex-wrap: wrap;
 }
 
 .profile__avatar {
@@ -45,9 +41,6 @@
 }
 
 .profile__danger-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 12px;
 }
 

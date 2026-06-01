@@ -19,17 +19,17 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const { colors } = useTheme();
 
   return (
-    <div className="auth-layout" style={{ background: colors.bgBase }}>
+    <Flex className="auth-layout" style={{ background: colors.bgBase }}>
       <AuthShowcase />
 
-      <div className="auth-panel" style={{ background: colors.bgBase }}>
+      <Flex vertical align="center" justify="space-between" className="auth-panel" style={{ background: colors.bgBase }}>
         <Flex className="auth-panel__inner" justify="center" align="center" vertical flex={1}>
           <img src="/i99flix-logo.png" alt="i99flix logo" width={150} />
           {children}
         </Flex>
 
         <footer className="auth-panel__footer">
-          <div className="auth-panel__footer-links">
+          <Flex justify="center" wrap="wrap" gap="6px 20px" className="auth-panel__footer-links">
             {FOOTER_LINKS.map(({ label, to }) => (
               <Link
                 key={to}
@@ -40,13 +40,13 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 {label}
               </Link>
             ))}
-          </div>
+          </Flex>
           <p className="auth-panel__footer-copy" style={{ color: colors.textMuted }}>
             © 2026 i99flix
           </p>
         </footer>
 
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 }

@@ -1,4 +1,4 @@
-import { Avatar, Skeleton, Tooltip, Typography } from "antd";
+import { Avatar, Skeleton, Tooltip, Typography, Flex } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useTmdbMovieCreditsQuery, useTmdbTvCreditsQuery } from "../../../api/useTmdbQuery";
 import { useTheme } from "../../../context/ThemeContext";
@@ -31,7 +31,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
   if (!tmdbId) return null;
 
   return (
-    <div className="cast-section">
+    <Flex vertical gap={4} className="cast-section">
       <Text
         strong
         className="cast-section__label"
@@ -41,9 +41,9 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
       </Text>
 
       {credits.isLoading ? (
-        <div className="cast-section__row">
+        <Flex gap={12} wrap="nowrap" className="cast-section__row">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="cast-section__card">
+            <Flex key={i} vertical align="center" gap={4} className="cast-section__card">
               <Skeleton.Avatar active size={64} shape="circle" />
               <Skeleton
                 active
@@ -51,11 +51,11 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
                 paragraph={false}
                 style={{ marginTop: 6 }}
               />
-            </div>
+            </Flex>
           ))}
-        </div>
+        </Flex>
       ) : cast.length > 0 ? (
-        <div className="cast-section__row">
+        <Flex gap={12} wrap="nowrap" className="cast-section__row">
           {cast.map((member) => (
             <Tooltip
               key={member.id}
@@ -63,7 +63,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
               placement="top"
               getPopupContainer={(trigger) => trigger.parentElement ?? document.body}
             >
-              <div className="cast-section__card">
+              <Flex vertical align="center" gap={4} className="cast-section__card">
                 <Avatar
                   size={64}
                   src={
@@ -91,15 +91,15 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
                     {member.character}
                   </Text>
                 )}
-              </div>
+              </Flex>
             </Tooltip>
           ))}
-        </div>
+        </Flex>
       ) : (
         <Text style={{ color: colors.textMuted, fontSize: 13 }}>
           No cast information available.
         </Text>
       )}
-    </div>
+    </Flex>
   );
 }

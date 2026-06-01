@@ -1,20 +1,8 @@
 .player-page {
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-.player-page--loading,
-.player-page--error {
-  align-items: center;
-  justify-content: center;
 }
 
 .player-page__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
   padding: 0 16px;
   height: 52px;
   position: sticky;
@@ -24,8 +12,6 @@
 }
 
 .player-page__header-logo-link {
-  display: flex;
-  align-items: center;
   flex-shrink: 0;
   position: absolute;
   left: 50%;
@@ -80,8 +66,6 @@
   flex-shrink: 0;
   max-height: 72dvh;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 600px) {
@@ -103,8 +87,6 @@
   flex: 1;
   overflow: hidden;
   background: #000;
-  display: flex;
-  flex-direction: column;
 }
 
 .player-page__iframe {
@@ -130,17 +112,7 @@
 .player-page__overlay {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1;
-}
-
-.player-page__play-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
 }
 
 .player-page__play-icon {
@@ -170,9 +142,6 @@
 }
 
 .player-page__title-genres {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
   margin-bottom: 4px;
 }
 
@@ -189,12 +158,6 @@
   overflow: hidden;
 }
 
-.player-page__title-meta {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px 12px;
-}
 
 .player-page__title-rate {
   font-size: clamp(10px, 1.8vw, 13px) !important;
@@ -237,19 +200,12 @@
 }
 
 .player-page__info-meta {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 16px 24px;
   margin-bottom: 16px;
   padding-bottom: 16px;
   border-bottom: 1px solid rgba(128, 128, 128, 0.15);
 }
 
 .player-page__meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   min-width: 48px;
 }
 
@@ -265,8 +221,8 @@
   max-height: none !important;
   height: 100dvh !important;
   aspect-ratio: unset !important;
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .player-page__video--fullscreen .player-page__video-clickzone {

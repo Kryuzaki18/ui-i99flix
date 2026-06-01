@@ -1,7 +1,4 @@
 .cast-section {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   min-width: 0;
   width: 100%;
 }
@@ -13,12 +10,9 @@
 }
 
 .cast-section__row {
-  display: flex;
-  gap: 12px;
   overflow-x: auto;
   overflow-y: visible;
   padding: 10px 0 8px;
-  flex-wrap: nowrap;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   -webkit-overflow-scrolling: touch;
@@ -38,10 +32,6 @@
 }
 
 .cast-section__card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
   flex: 0 0 72px;
   width: 72px;
   cursor: default;

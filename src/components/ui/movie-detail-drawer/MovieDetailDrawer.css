@@ -25,9 +25,6 @@
   position: absolute;
   bottom: 16px;
   left: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .detail-drawer__rating-value {
@@ -53,16 +50,7 @@
 }
 
 .detail-drawer__production {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   margin-bottom: 16px;
-}
-
-.detail-drawer__production-item {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
 }
 
 .detail-drawer__production-label {
@@ -107,8 +95,6 @@
 }
 
 .detail-drawer__cast-row {
-  display: flex;
-  gap: 12px;
   overflow-x: auto;
   padding: 12px 0 4px;
   scrollbar-width: thin;
@@ -130,10 +116,6 @@
 }
 
 .detail-drawer__cast-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
   min-width: 72px;
   max-width: 72px;
   cursor: default;

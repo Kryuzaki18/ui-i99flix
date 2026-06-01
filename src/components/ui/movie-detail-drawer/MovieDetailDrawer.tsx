@@ -11,6 +11,7 @@ import {
   Col,
   Skeleton,
   Tooltip,
+  Flex,
 } from "antd";
 import {
   PlayCircleOutlined,
@@ -132,7 +133,9 @@ function MovieDetailDrawerInner({
               }}
               aria-hidden="true"
             />
-            <div
+            <Flex
+              align="center"
+              gap={8}
               className="detail-drawer__rating-badge"
               aria-label={`Rating: ${movie.rating} out of 10`}
             >
@@ -146,7 +149,7 @@ function MovieDetailDrawerInner({
               <Text style={{ color: isDark ? "#aaa" : "#666", fontSize: 14 }}>
                 /10
               </Text>
-            </div>
+            </Flex>
           </>
         )}
       </div>
@@ -198,26 +201,26 @@ function MovieDetailDrawerInner({
             </Row>
 
             {(studio || country || language) && (
-              <div className="detail-drawer__production">
+              <Flex vertical gap={6} className="detail-drawer__production">
                 {studio && (
-                  <div className="detail-drawer__production-item">
+                  <Flex align="baseline" gap={8}>
                     <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Studio</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{studio}</Text>
-                  </div>
+                  </Flex>
                 )}
                 {country && (
-                  <div className="detail-drawer__production-item">
+                  <Flex align="baseline" gap={8}>
                     <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Country</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{country}</Text>
-                  </div>
+                  </Flex>
                 )}
                 {language && (
-                  <div className="detail-drawer__production-item">
+                  <Flex align="baseline" gap={8}>
                     <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Language</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{language}</Text>
-                  </div>
+                  </Flex>
                 )}
-              </div>
+              </Flex>
             )}
 
             <Rate

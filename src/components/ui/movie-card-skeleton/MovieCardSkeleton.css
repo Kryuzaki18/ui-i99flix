@@ -40,11 +40,6 @@
   display: block;
 }
 
-.mcs__row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
 
 .mcs__pill {
   border-radius: 9px;
@@ -59,8 +54,6 @@
 .mlrs {
   border-radius: 12px;
   overflow: hidden;
-  display: flex;
-  align-items: stretch;
 }
 
 .mlrs__thumb {
@@ -81,20 +74,11 @@
   flex: 1;
   min-width: 0;
   padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0;
 }
 
 .mlrs__actions {
   padding: 10px 12px;
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 6px;
 }
 
 .mcs__btn {

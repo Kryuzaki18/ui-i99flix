@@ -10,6 +10,7 @@ import {
   Segmented,
   Pagination,
   Tabs,
+  Flex,
 } from "antd";
 import {
   SearchOutlined,
@@ -164,28 +165,24 @@ export default function Browse() {
             }))}
           />
         </Col>
-        <Col
-          xs={24}
-          sm={12}
-          md={3}
-          lg={4}
-          className="browse-filters__layout-col"
-        >
-          <Segmented
-            value={layout}
-            onChange={(v) => setLayout(v as "grid" | "list")}
-            options={[
-              { value: "grid", icon: <AppstoreOutlined /> },
-              { value: "list", icon: <BarsOutlined /> },
-            ]}
-          />
+        <Col xs={24} sm={12} md={3} lg={4}>
+          <Flex justify="flex-end" align="center">
+            <Segmented
+              value={layout}
+              onChange={(v) => setLayout(v as "grid" | "list")}
+              options={[
+                { value: "grid", icon: <AppstoreOutlined /> },
+                { value: "list", icon: <BarsOutlined /> },
+              ]}
+            />
+          </Flex>
         </Col>
       </Row>
     </div>
   );
 
   const genrePills = (
-    <div className="browse-genre-pills">
+    <Flex wrap="wrap" gap={8} className="browse-genre-pills">
       {genres.map((g) => (
         <button
           key={g.value}
@@ -204,7 +201,7 @@ export default function Browse() {
           {g.label}
         </button>
       ))}
-    </div>
+    </Flex>
   );
 
   const resultContent = isLoading ? (
@@ -262,7 +259,7 @@ export default function Browse() {
   const pagination = (
     <>
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
-      <div ref={paginationRef} className="browse-pagination">
+      <Flex ref={paginationRef} vertical align="center" gap={8} className="browse-pagination">
         {cappedTotal > 0 && (
           <Text
             className="browse-pagination__total"
@@ -296,7 +293,7 @@ export default function Browse() {
           disabled={total === 0 || isFetching}
           responsive
         />
-      </div>
+      </Flex>
     </>
   );
 

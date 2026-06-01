@@ -35,7 +35,11 @@ const { Title, Text } = Typography;
 function PlayerHeader() {
   const { colors, isDark, toggle } = useTheme();
   return (
-    <header
+    <Flex
+      component="header"
+      align="center"
+      justify="space-between"
+      gap={12}
       className="player-page__header"
       style={{ background: colors.bgBase, borderBottom: `1px solid ${colors.border}` }}
     >
@@ -64,7 +68,7 @@ function PlayerHeader() {
           }
         />
       </Tooltip>
-    </header>
+    </Flex>
   );
 }
 
@@ -105,21 +109,15 @@ export default function Player() {
 
   if (isLoading) {
     return (
-      <div
-        className="player-page player-page--loading"
-        style={{ background: "#000" }}
-      >
+      <Flex vertical align="center" justify="center" className="player-page" style={{ background: "#000" }}>
         <Spin size="large" />
-      </div>
+      </Flex>
     );
   }
 
   if (isError || !movie) {
     return (
-      <div
-        className="player-page player-page--error"
-        style={{ background: colors.bgBase }}
-      >
+      <Flex vertical align="center" justify="center" className="player-page" style={{ background: colors.bgBase }}>
         <Result
           status="404"
           title="Movie not found"
@@ -130,18 +128,16 @@ export default function Player() {
             </Link>
           }
         />
-      </div>
+      </Flex>
     );
   }
 
   return (
-    <div className="player-page" style={{ background: colors.bgBase }}>
+    <Flex vertical className="player-page" style={{ background: colors.bgBase }}>
 
       <PlayerHeader />
 
-      <div
-        className="player-page__video"
-      >
+      <Flex vertical className="player-page__video">
         {!playing && (
           <div className="player-page__video-clickzone" onClick={handlePlay}>
             <img
@@ -151,15 +147,15 @@ export default function Player() {
             />
             <div className="player-page__vignette" />
 
-            <div className="player-page__overlay">
-              <div className="player-page__play-wrap">
+            <Flex align="center" justify="center" className="player-page__overlay">
+              <Flex vertical align="center" gap={10}>
                 <PlayCircleOutlined className="player-page__play-icon" />
                 <Text className="player-page__play-hint">Click to watch</Text>
-              </div>
-            </div>
+              </Flex>
+            </Flex>
 
             <div className="player-page__title-overlay">
-              <div className="player-page__title-genres">
+              <Flex wrap="wrap" gap={4} className="player-page__title-genres">
                 {resolvedGenres.slice(0, 3).map((rg) => (
                   <Tag
                     key={rg.key}
@@ -169,11 +165,11 @@ export default function Player() {
                     {rg.label}
                   </Tag>
                 ))}
-              </div>
+              </Flex>
               <Title level={2} className="player-page__title">
                 {movie.title}
               </Title>
-              <div className="player-page__title-meta">
+              <Flex align="center" wrap="wrap" gap="6px 12px">
                 <Rate
                   disabled
                   allowHalf
@@ -187,13 +183,13 @@ export default function Player() {
                 {movie.duration && movie.duration !== 'N/A' && (
                   <Text className="player-page__title-duration">{movie.duration}</Text>
                 )}
-              </div>
+              </Flex>
             </div>
           </div>
         )}
 
         {playing && (
-          <div className="player-page__iframe-wrap">
+          <Flex vertical className="player-page__iframe-wrap">
             <ServerIframe
               server={servers}
               mediaId={movie.id}
@@ -202,9 +198,9 @@ export default function Player() {
               episode={episode}
               className="player-page__iframe"
             />
-          </div>
+          </Flex>
         )}
-      </div>
+      </Flex>
 
       <Flex
         gap="small"
@@ -244,22 +240,22 @@ export default function Player() {
               {movie.title}
             </Title>
 
-            <div className="player-page__info-meta">
-              <div className="player-page__meta-item">
+            <Flex wrap="wrap" gap="16px 24px" className="player-page__info-meta">
+              <Flex vertical gap={2} className="player-page__meta-item">
                 <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Year</Text>
                 <Text strong style={{ color: colors.textPrimary }}>{movie.year}</Text>
-              </div>
+              </Flex>
               {movie.duration && movie.duration !== 'N/A' && (
-                <div className="player-page__meta-item">
+                <Flex vertical gap={2} className="player-page__meta-item">
                   <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Duration</Text>
                   <Text strong style={{ color: colors.textPrimary }}>{movie.duration}</Text>
-                </div>
+                </Flex>
               )}
-              <div className="player-page__meta-item">
+              <Flex vertical gap={2} className="player-page__meta-item">
                 <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
                 <Text strong style={{ color: colors.starRating }}>★ {movie.rating}</Text>
-              </div>
-            </div>
+              </Flex>
+            </Flex>
 
             <Space size={8} wrap style={{ marginBottom: 12 }}>
               {resolvedGenres.map((rg) => (
@@ -284,6 +280,6 @@ export default function Player() {
           </div>
         </div>
       </div>
-    </div>
+    </Flex>
   );
 }

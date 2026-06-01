@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, memo } from "react";
-import { Button, Typography, Space, Tag, Rate, Skeleton } from "antd";
+import { Button, Typography, Space, Tag, Rate, Skeleton, Flex } from "antd";
 import {
   PlayCircleOutlined,
   InfoCircleOutlined,
@@ -81,7 +81,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
       aria-roledescription="carousel"
     >
       {!imgLoaded && (
-        <div className="hero-banner__skeleton" aria-hidden="true">
+        <Flex vertical justify="center" gap={16} className="hero-banner__skeleton" aria-hidden="true">
           <Skeleton.Button
             active
             style={{ width: 160, height: 28, borderRadius: 20 }}
@@ -97,7 +97,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
             <Skeleton.Button active style={{ width: 120, height: 44 }} />
             <Skeleton.Button active style={{ width: 120, height: 44 }} />
           </Space>
-        </div>
+        </Flex>
       )}
 
       <img
@@ -115,7 +115,9 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
       )}
 
       {imgLoaded && (
-        <div
+        <Flex
+          vertical
+          justify="center"
           className="hero-banner__content"
           aria-live="polite"
           aria-atomic="true"
@@ -174,7 +176,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
               More Info
             </Button>
           </Space>
-        </div>
+        </Flex>
       )}
 
       <Button
@@ -192,7 +194,8 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         aria-label="Next movie"
       />
 
-      <div
+      <Flex
+        gap={8}
         className="hero-banner__dots"
         role="tablist"
         aria-label="Movie slides"
@@ -207,7 +210,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
             className={`hero-banner__dot ${i === current ? "hero-banner__dot--active" : "hero-banner__dot--inactive"}`}
           />
         ))}
-      </div>
+      </Flex>
     </section>
   );
 }

@@ -4,22 +4,12 @@
 
 .watchlist__header {
   margin-bottom: 24px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
 .watchlist__toolbar {
   padding: 16px;
   border-radius: 10px;
   margin-bottom: 24px;
-}
-
-.watchlist__toolbar-layout {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .watchlist__grid {

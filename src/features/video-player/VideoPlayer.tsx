@@ -77,7 +77,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           overflow: "hidden"
         },
       }}
-      closeIcon={<span style={{ backgroundColor: colors.accent, color: colors.playerText }} className="player__close-icon"><CloseOutlined /></span>}
+      closeIcon={<Flex component="span" align="center" justify="center" style={{ backgroundColor: colors.accent, color: colors.playerText }} className="player__close-icon"><CloseOutlined /></Flex>}
       destroyOnHidden
     >
       <div
@@ -93,11 +93,11 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                 className="player__backdrop"
               />
               <div className="player__vignette" />
-              <div className="player__overlay">
+              <Flex align="center" justify="center" className="player__overlay">
                 <PlayCircleOutlined className="player__play-icon" />
-              </div>
+              </Flex>
               <div className="player__title-overlay">
-                <div className="player__title-genres">
+                <Flex wrap="wrap" gap={4} className="player__title-genres">
                   {resolvedGenres.slice(0, 3).map((rg) => (
                     <Tag
                       key={rg.key}
@@ -107,9 +107,9 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                       {rg.label}
                     </Tag>
                   ))}
-                </div>
+                </Flex>
                 <Title level={4} className="player__title">{movie.title}</Title>
-                <div className="player__title-meta">
+                <Flex align="center" wrap="wrap" gap="4px 10px">
                   <Rate
                     disabled
                     allowHalf
@@ -121,7 +121,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                   {movie.duration && movie.duration !== 'N/A' && (
                     <Text className="player__title-duration">{movie.duration}</Text>
                   )}
-                </div>
+                </Flex>
               </div>
             </div>
           )}

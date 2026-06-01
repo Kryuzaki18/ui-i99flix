@@ -291,12 +291,12 @@ export default function Profile() {
         className="profile__danger-card"
         style={{ border: `1px solid ${colors.danger}`, borderRadius: 10 }}
       >
-        <div className="profile__danger-header">
+        <Flex align="center" gap={10} className="profile__danger-header">
           <WarningOutlined style={{ color: colors.danger, fontSize: 18 }} />
           <Title level={5} style={{ margin: 0, color: colors.danger }}>
             Delete account
           </Title>
-        </div>
+        </Flex>
         <Paragraph style={{ color: colors.textMuted, marginBottom: 20 }}>
           This will permanently delete your account, watchlist, and all
           associated data. This action{" "}
@@ -377,7 +377,10 @@ export default function Profile() {
 
   return (
     <div className="profile">
-      <div
+      <Flex
+        align="center"
+        gap={20}
+        wrap="wrap"
         className="profile__hero"
         style={{ borderBottom: `1px solid ${colors.border}` }}
       >
@@ -395,7 +398,7 @@ export default function Profile() {
           </Title>
           <Text style={{ color: colors.textMuted }}>{user?.email ?? "—"}</Text>
         </Space>
-      </div>
+      </Flex>
 
       <Row className="profile__body" gutter={[0, 24]}>
         <Col xs={24} sm={7} md={6} className="profile__sidebar">

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Space, Tag, Typography, Button, Tooltip } from "antd";
+import { Space, Tag, Typography, Button, Tooltip, Flex } from "antd";
 import type { TooltipProps } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
 
@@ -26,15 +26,16 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
   const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
 
   return (
-    <div
+    <Flex
+      align="stretch"
       className="movie-list-row"
       style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
     >
-      <div className="movie-list-row__media">
+      <Flex align="stretch" className="movie-list-row__media">
         <img src={movie.thumbnail || undefined} alt={movie.title} className="movie-list-row__thumb" />
 
-        <div className="movie-list-row__body">
-          <div className="movie-list-row__info">
+        <Flex align="center" className="movie-list-row__body">
+          <Flex vertical gap={3} className="movie-list-row__info">
             <Space size={6} wrap className="movie-list-row__meta">
               <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>
               {movie.duration && movie.duration !== "N/A" && (
@@ -57,11 +58,11 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
             <Text className="movie-list-row__desc" style={{ color: colors.textMuted }}>
               {movie.description}
             </Text>
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Flex>
+      </Flex>
 
-      <div className="movie-list-row__actions">
+      <Flex vertical align="center" justify="center" gap={6} className="movie-list-row__actions">
         <Text className="movie-list-row__rating">★ {movie.rating}</Text>
         <Space size={8}>
           <Tooltip title="Play" trigger={TOOLTIP_TRIGGER}>
@@ -103,8 +104,8 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
             />
           </Tooltip>
         </Space>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 }
 

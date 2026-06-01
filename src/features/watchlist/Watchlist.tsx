@@ -8,6 +8,7 @@ import {
   Button,
   Input,
   Select,
+  Flex,
 } from "antd";
 import {
   AppstoreOutlined,
@@ -67,7 +68,7 @@ export default function Watchlist() {
 
   return (
     <div className="watchlist">
-      <div className="watchlist__header">
+      <Flex align="flex-start" justify="space-between" wrap="wrap" gap={12} className="watchlist__header">
         <div>
           <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>
             My Watchlist
@@ -78,7 +79,7 @@ export default function Watchlist() {
               : `${watchlistItems.length} ${watchlistItems.length === 1 ? "title" : "titles"} saved`}
           </Text>
         </div>
-      </div>
+      </Flex>
 
       <div
         className="watchlist__toolbar"
@@ -123,21 +124,17 @@ export default function Watchlist() {
               ]}
             />
           </Col>
-          <Col
-            xs={24}
-            sm={24}
-            md={3}
-            lg={4}
-            className="watchlist__toolbar-layout"
-          >
-            <Segmented
-              value={layout}
-              onChange={(v) => setLayout(v as "grid" | "list")}
-              options={[
-                { value: "grid", icon: <AppstoreOutlined /> },
-                { value: "list", icon: <BarsOutlined /> },
-              ]}
-            />
+          <Col xs={24} sm={24} md={3} lg={4}>
+            <Flex justify="flex-end">
+              <Segmented
+                value={layout}
+                onChange={(v) => setLayout(v as "grid" | "list")}
+                options={[
+                  { value: "grid", icon: <AppstoreOutlined /> },
+                  { value: "list", icon: <BarsOutlined /> },
+                ]}
+              />
+            </Flex>
           </Col>
         </Row>
       </div>

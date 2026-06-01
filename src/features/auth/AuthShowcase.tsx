@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { StarFilled, FireFilled } from '@ant-design/icons';
-import { Tag } from 'antd';
+import { Tag, Flex } from 'antd';
 import { useTheme } from '../../context/ThemeContext';
 import { GENRE_COLORS } from '../../constants/genres';
 import { API_ROUTES } from '../../api/environments';
@@ -105,7 +105,7 @@ export default function AuthShowcase() {
       <div className="auth-showcase__orb auth-showcase__orb--3" />
 
       {movies.length > 0 && (
-        <div className="auth-showcase__cards">
+        <Flex gap={12} className="auth-showcase__cards">
           {movies.map((movie, i) => (
             <div
               key={movie.id}
@@ -120,11 +120,11 @@ export default function AuthShowcase() {
               <div className="auth-showcase__card-label">{movie.title}</div>
             </div>
           ))}
-        </div>
+        </Flex>
       )}
 
       {movies.length > 0 && (
-        <div className="auth-showcase__info">
+        <Flex vertical className="auth-showcase__info">
           {movies.map((movie, i) => (
             <div
               key={movie.id}
@@ -135,11 +135,11 @@ export default function AuthShowcase() {
                 Trending
               </div>
               <h2 className="auth-showcase__info-title">{movie.title}</h2>
-              <div className="auth-showcase__info-meta">
-                <span className="auth-showcase__info-rating">
+              <Flex align="center" gap={12} className="auth-showcase__info-meta">
+                <Flex component="span" align="center" gap={4} className="auth-showcase__info-rating">
                   <StarFilled />
                   {movie.rating.toFixed(1)}
-                </span>
+                </Flex>
                 <span className="auth-showcase__info-year">{movie.year}</span>
                 {movie.duration && movie.duration !== 'N/A' && (
                   <span className="auth-showcase__info-duration">{movie.duration}</span>
@@ -153,7 +153,7 @@ export default function AuthShowcase() {
                     {g}
                   </Tag>
                 ))}
-              </div>
+              </Flex>
               {movie.description && (
                 <p className="auth-showcase__info-description">{movie.description}</p>
               )}
@@ -161,7 +161,7 @@ export default function AuthShowcase() {
           ))}
 
           {movies.length > 1 && (
-            <div className="auth-showcase__dots">
+            <Flex gap={8} align="center" className="auth-showcase__dots">
               {movies.map((_, i) => (
                 <button
                   key={i}
@@ -170,9 +170,9 @@ export default function AuthShowcase() {
                   aria-label={`Go to slide ${i + 1}`}
                 />
               ))}
-            </div>
+            </Flex>
           )}
-        </div>
+        </Flex>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton } from "antd";
+import { Card, Tag, Rate, Typography, Space, Button, Tooltip, Skeleton, Flex } from "antd";
 import {
   PlayCircleOutlined,
   InfoCircleOutlined,
@@ -40,14 +40,17 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
 
           <img
             alt={movie.title}
-            src={movie.thumbnail}
+            src={movie.thumbnail || undefined}
             onLoad={() => setImgLoaded(true)}
             className="movie-card__img"
             style={{ display: imgLoaded ? "block" : "none" }}
           />
 
           {imgLoaded && (
-            <div
+            <Flex
+              align="flex-end"
+              justify="center"
+              gap={8}
               className="movie-card__overlay"
               role="group"
               aria-label={`Actions for ${movie.title}`}
@@ -90,17 +93,19 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
                   className="movie-card__overlay-btn-info"
                 />
               </Tooltip>
-            </div>
+            </Flex>
           )}
 
           {imgLoaded && (
-            <div
+            <Flex
+              align="center"
+              gap={4}
               className="movie-card__rating"
               aria-label={`Rating: ${movie.rating} out of 10`}
             >
               <StarFilled style={{ color: colors.starRating, fontSize: 12 }} aria-hidden="true" />
               <Text className="movie-card__rating-value">{movie.rating}</Text>
-            </div>
+            </Flex>
           )}
         </div>
       }

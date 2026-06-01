@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Typography, Row, Col, Space, Segmented } from "antd";
+import { Typography, Row, Col, Space, Segmented, Flex } from "antd";
 import {
   FireOutlined,
   ThunderboltOutlined,
@@ -65,14 +65,14 @@ function MovieSection({ id, title, icon, movies, isLoading, layout }: SectionPro
 
   return (
     <section id={id} className="home-section">
-      <div className="home-section__header">
+      <Flex align="center" justify="space-between" className="home-section__header">
         <Space align="center">
           <span className="home-section__icon">{icon}</span>
           <Title level={3} className="home-section__title">
             {title}
           </Title>
         </Space>
-      </div>
+      </Flex>
 
       {layout === 'grid' ? (
         <Row gutter={[16, 16]}>{gridContent}</Row>
@@ -119,7 +119,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="home-toolbar">
+      <Flex justify="flex-end" className="home-toolbar">
         <Segmented
           value={homeLayout}
           onChange={(v) => setHomeLayout(v as 'grid' | 'list')}
@@ -128,7 +128,7 @@ export default function Home() {
             { value: 'list', icon: <BarsOutlined /> },
           ]}
         />
-      </div>
+      </Flex>
 
       <MovieSection
         id="trending"

@@ -37,11 +37,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 60%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
   padding: 12px;
-  gap: 8px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -63,9 +59,6 @@
   background: rgba(0, 0, 0, 0.72);
   border-radius: 6px;
   padding: 2px 8px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
 }
 
 .movie-card__rating-value {

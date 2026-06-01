@@ -6,6 +6,7 @@ import {
   Dropdown,
   Typography,
   Tooltip,
+  Flex,
 } from "antd";
 import {
   UserOutlined,
@@ -85,6 +86,7 @@ function NavInner({ onMenuOpen }: NavProps) {
         boxShadow: isDark ? "none" : "0 1px 8px rgba(0,0,0,0.08)",
       }}
     >
+      <Flex align="center" justify="space-between" style={{ height: "100%" }}>
       <Space size={24} align="center">
         <Button
           type="text"
@@ -100,8 +102,8 @@ function NavInner({ onMenuOpen }: NavProps) {
           aria-haspopup="true"
         />
 
-        <Link to="/" className="nav-logo" aria-label="i99flix home">
-          <img src="/i99flix-logo.png" alt="i99flix logo" width={100} />
+        <Link to="/" aria-label="i99flix home">
+          <img src="/i99flix-logo.png" alt="i99flix logo" width={100} style={{ display: "block" }} />
         </Link>
 
         <nav aria-label="Main navigation">
@@ -133,9 +135,7 @@ function NavInner({ onMenuOpen }: NavProps) {
       </Space>
 
       <Space size={10} align="center">
-        <Tooltip
-          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
+        <Tooltip title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}>
           <Button
             type="text"
             onClick={toggle}
@@ -171,6 +171,7 @@ function NavInner({ onMenuOpen }: NavProps) {
           </Avatar>
         </Dropdown>
       </Space>
+      </Flex>
     </Header>
   );
 }
