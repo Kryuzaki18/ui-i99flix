@@ -18,7 +18,7 @@ import {
   MoonOutlined,
 } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/useMoviesQuery";
-import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
+import { useTmdbTvDetailQuery, useTmdbMovieDetailQuery } from "../../api/useTmdbQuery";
 import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
@@ -113,6 +113,14 @@ export default function Player() {
     isLoading: isTvLoading,
     isError: isTvError,
   } = useTmdbTvDetailQuery(isTv ? safeId : null);
+  const { data: movieTmdbDetail } = useTmdbMovieDetailQuery(!isTv ? safeId : null);
+
+  const tmdbDetail = isTv ? tvDetail : movieTmdbDetail;
+  const studio   = tmdbDetail?.production_companies?.[0]?.name ?? null;
+  const country  = isTv
+    ? (tvDetail?.production_countries?.[0]?.name ?? tvDetail?.origin_country?.[0] ?? null)
+    : (movieTmdbDetail?.production_countries?.[0]?.name ?? null);
+  const language = tmdbDetail?.spoken_languages?.[0]?.name ?? null;
 
   const movie = isTv
     ? tvDetail
@@ -351,6 +359,29 @@ export default function Player() {
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
+
+            {(studio || country || language) && (
+              <Flex vertical gap={6} className="player-page__production">
+                {studio && (
+                  <Flex align="baseline" gap={8}>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Studio</Text>
+                    <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{studio}</Text>
+                  </Flex>
+                )}
+                {country && (
+                  <Flex align="baseline" gap={8}>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Country</Text>
+                    <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{country}</Text>
+                  </Flex>
+                )}
+                {language && (
+                  <Flex align="baseline" gap={8}>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Language</Text>
+                    <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{language}</Text>
+                  </Flex>
+                )}
+              </Flex>
+            )}
 
             <ExpandableText
               text={movie.description || "No synopsis available."}

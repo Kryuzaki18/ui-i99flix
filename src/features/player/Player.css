@@ -209,6 +209,22 @@
   letter-spacing: 0.8px;
 }
 
+.player-page__production {
+  margin-bottom: 12px;
+}
+
+.player-page__production-label {
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  min-width: 62px;
+  flex-shrink: 0;
+}
+
+.player-page__production-value {
+  font-size: 13px !important;
+}
+
 .player-page__video--fullscreen,
 .player-page__video:fullscreen,
 .player-page__video:-webkit-full-screen {
