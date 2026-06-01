@@ -1,7 +1,9 @@
-import { lazy, Suspense, useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect, Component } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { darkColors } from "./constants/theme";
 import { Link, BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Layout, ConfigProvider, theme } from "antd";
+import { Layout, ConfigProvider, theme, Button, Typography } from "antd";
+import { WarningOutlined } from "@ant-design/icons";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { useHomeStore } from "./store/homeStore";
 import { usePlayerStore } from "./store/playerStore";
@@ -14,7 +16,6 @@ import Nav from "./components/navigation/nav/Nav";
 import Sidebar from "./components/navigation/sidebar/Sidebar";
 import VideoPlayer from "./features/video-player/VideoPlayer";
 import MovieDetailDrawer from "./components/ui/movie-detail-drawer/MovieDetailDrawer";
-import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const Home = lazy(() => import("./features/home/Home"));
 const Browse = lazy(() => import("./features/browse/Browse"));
@@ -223,6 +224,46 @@ function AppLayout() {
 }
 
 const AUTH_PATHS = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email'];
+
+const { Title, Text } = Typography;
+
+function ErrorFallback() {
+  return (
+    <div
+      role="alert"
+      style={{
+        minHeight: "60dvh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 16,
+        padding: 32,
+        textAlign: "center",
+      }}
+    >
+      <WarningOutlined style={{ fontSize: 48, color: darkColors.accent }} />
+      <Title level={3} style={{ margin: 0 }}>Something went wrong</Title>
+      <Text type="secondary" style={{ maxWidth: 400 }}>
+        An unexpected error occurred. Try refreshing the page.
+      </Text>
+      <Button type="primary" onClick={() => window.location.reload()}>
+        Try again
+      </Button>
+    </div>
+  );
+}
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("[ErrorBoundary]", error, info.componentStack);
+  }
+  render() {
+    return this.state.hasError ? <ErrorFallback /> : this.props.children;
+  }
+}
 
 function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth, isAuthenticated } = useAuthStore();
