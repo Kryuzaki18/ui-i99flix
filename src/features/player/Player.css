@@ -126,59 +126,6 @@
   transform: scale(1.08);
 }
 
-.player-page__title-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: clamp(12px, 3vw, 28px);
-  z-index: 2;
-}
-
-.player-page__title-genres {
-  margin-bottom: 4px;
-}
-
-.player-page__title {
-  color: #fff !important;
-  margin: 4px 0 6px !important;
-  font-size: clamp(14px, 3vw, 30px) !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-  line-height: 1.2 !important;
-  /* Clamp to 2 lines on small screens */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-
-.player-page__title-rate {
-  font-size: clamp(10px, 1.8vw, 13px) !important;
-  color: #fadb14 !important;
-  /* Hide stars on very small screens */
-}
-
-@media (max-width: 360px) {
-  .player-page__title-rate {
-    display: none !important;
-  }
-}
-
-.player-page__title-rating {
-  color: #fadb14 !important;
-  font-weight: 700;
-  font-size: clamp(11px, 1.8vw, 13px) !important;
-  white-space: nowrap;
-}
-
-.player-page__title-year,
-.player-page__title-duration {
-  color: rgba(255, 255, 255, 0.75) !important;
-  font-size: clamp(11px, 1.8vw, 13px) !important;
-  white-space: nowrap;
-}
-
 .player-page__info {
   flex: 1;
   padding: 20px clamp(12px, 4vw, 48px);

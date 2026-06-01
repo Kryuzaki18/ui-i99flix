@@ -5,7 +5,6 @@ import {
   Button,
   Tag,
   Space,
-  Rate,
   Spin,
   Result,
   Tooltip,
@@ -215,40 +214,6 @@ export default function Player() {
                 />
               </Flex>
             </Flex>
-
-            <div className="player-page__title-overlay">
-              <Flex wrap="wrap" gap={4} className="player-page__title-genres">
-                {resolvedGenres.slice(0, 3).map((rg) => (
-                  <Tag
-                    key={rg.key}
-                    color={rg.color || "default"}
-                    style={{ fontSize: 11, margin: 0 }}
-                  >
-                    {rg.label}
-                  </Tag>
-                ))}
-              </Flex>
-              <Title level={2} className="player-page__title">
-                {movie.title}
-              </Title>
-              <Flex align="center" wrap="wrap" gap="6px 12px">
-                <Rate
-                  disabled
-                  allowHalf
-                  defaultValue={movie.rating / 2}
-                  className="player-page__title-rate"
-                />
-                <Text className="player-page__title-rating">
-                  {movie.rating}/10
-                </Text>
-                <Text className="player-page__title-year">{movie.year}</Text>
-                {movie.duration && movie.duration !== "N/A" && (
-                  <Text className="player-page__title-duration">
-                    {movie.duration}
-                  </Text>
-                )}
-              </Flex>
-            </div>
           </div>
         )}
 
