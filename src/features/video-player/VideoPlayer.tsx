@@ -11,8 +11,8 @@ import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
-import useResolvedGenres from '../../hooks/useResolvedGenres';
-import usePageTitle from '../../hooks/usePageTitle';
+import useResolvedGenres from "../../hooks/useResolvedGenres";
+import usePageTitle from "../../hooks/usePageTitle";
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import "./VideoPlayer.css";
 
@@ -24,7 +24,11 @@ interface VideoPlayerProps {
   onClose: () => void;
 }
 
-export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) {
+export default function VideoPlayer({
+  movie,
+  open,
+  onClose,
+}: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [server, setServer] = useState(0);
   const [season, setSeason] = useState(1);
@@ -32,13 +36,14 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
   const { colors } = useTheme();
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
-    movie?.mediaType === "tv" ? Number(movie.id) : null
+    movie?.mediaType === "tv" ? Number(movie.id) : null,
   );
 
   const resolvedGenres = useResolvedGenres(movie?.genre);
 
   const totalEpisodesForSeason =
-    tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ?? 30;
+    tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ??
+    30;
 
   useEffect(() => {
     if (!open) {
@@ -53,7 +58,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
     open ? movie?.title : null,
     movie?.mediaType,
     open && movie?.mediaType === "tv" ? season : undefined,
-    open && movie?.mediaType === "tv" ? episode : undefined
+    open && movie?.mediaType === "tv" ? episode : undefined,
   );
 
   const handlePlay = useCallback(() => setPlaying(true), []);
@@ -70,32 +75,51 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
       mask={{ closable: false }}
       style={{ padding: 0 }}
       styles={{
-        body: { backgroundColor: colors.bgBase, padding: 0, overflow: "hidden" },
+        body: {
+          backgroundColor: colors.bgBase,
+          padding: 0,
+          overflow: "hidden",
+        },
         mask: { backdropFilter: "blur(1px)", background: "rgba(0,0,0,0.85)" },
         container: {
           padding: 0,
-          overflow: "hidden"
+          overflow: "hidden",
         },
       }}
-      closeIcon={<Flex component="span" align="center" justify="center" style={{ backgroundColor: colors.accent, color: colors.playerText }} className="player__close-icon"><CloseOutlined /></Flex>}
+      closeIcon={
+        <Flex
+          component="span"
+          align="center"
+          justify="center"
+          style={{ backgroundColor: colors.accent, color: colors.playerText }}
+          className="player__close-icon"
+        >
+          <CloseOutlined />
+        </Flex>
+      }
       destroyOnHidden
     >
-      <div
-      >
-        <div className="player__video-area"
+      <div>
+        <div
+          className="player__video-area"
           style={{ backgroundColor: colors.bgBase }}
         >
           {!playing && (
-            <div className="player__poster-gate" onClick={handlePlay}>
+            <div className="player__poster-gate">
               <img
                 src={movie.backdrop || movie.thumbnail}
                 alt={movie.title}
                 className="player__backdrop"
               />
               <div className="player__vignette" />
+
               <Flex align="center" justify="center" className="player__overlay">
-                <PlayCircleOutlined className="player__play-icon" />
+                <PlayCircleOutlined
+                  className="player__play-icon"
+                  onClick={handlePlay}
+                />
               </Flex>
+
               <div className="player__title-overlay">
                 <Flex wrap="wrap" gap={4} className="player__title-genres">
                   {resolvedGenres.slice(0, 3).map((rg) => (
@@ -108,7 +132,9 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                     </Tag>
                   ))}
                 </Flex>
-                <Title level={4} className="player__title">{movie.title}</Title>
+                <Title level={4} className="player__title">
+                  {movie.title}
+                </Title>
                 <Flex align="center" wrap="wrap" gap="4px 10px">
                   <Rate
                     disabled
@@ -116,10 +142,14 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
                     defaultValue={movie.rating / 2}
                     className="player__title-rate"
                   />
-                  <Text className="player__title-rating">{movie.rating}/10</Text>
+                  <Text className="player__title-rating">
+                    {movie.rating}/10
+                  </Text>
                   <Text className="player__title-year">{movie.year}</Text>
-                  {movie.duration && movie.duration !== 'N/A' && (
-                    <Text className="player__title-duration">{movie.duration}</Text>
+                  {movie.duration && movie.duration !== "N/A" && (
+                    <Text className="player__title-duration">
+                      {movie.duration}
+                    </Text>
                   )}
                 </Flex>
               </div>
@@ -138,10 +168,7 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
         </div>
       </div>
 
-      <Flex
-        vertical
-        style={{ padding: "0 1rem" }}
-      >
+      <Flex vertical style={{ padding: "0 1rem" }}>
         <Flex
           vertical
           gap="small"
@@ -156,9 +183,10 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
               size="small"
               icon={<LinkOutlined />}
               onClick={() => {
-                const url = movie.mediaType === "tv"
-                  ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
-                  : `/player/${movie.id}`;
+                const url =
+                  movie.mediaType === "tv"
+                    ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
+                    : `/player/${movie.id}`;
                 window.open(url, "_blank", "noopener,noreferrer");
               }}
               style={{ fontSize: 11 }}
@@ -183,7 +211,6 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
               )}
             </>
           )}
-
         </Flex>
 
         <ServerSelector activeServer={server} onServerChange={setServer} />
@@ -194,9 +221,11 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
             padding: "1rem 0",
           }}
         >
-          <Text strong style={{ color: colors.textMuted }}>Synopsis</Text>
+          <Text strong style={{ color: colors.textMuted }}>
+            Synopsis
+          </Text>
           <ExpandableText
-            text={movie.description || 'No synopsis available.'}
+            text={movie.description || "No synopsis available."}
             collapsedLines={3}
             lineHeight={1.7}
             fontSize={13}
@@ -204,7 +233,6 @@ export default function VideoPlayer({ movie, open, onClose }: VideoPlayerProps) 
           />
         </Flex>
       </Flex>
-
     </Modal>
   );
 }

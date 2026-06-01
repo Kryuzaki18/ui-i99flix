@@ -21,7 +21,6 @@
 .player__poster-gate {
   position: absolute;
   inset: 0;
-  cursor: pointer;
 }
 
 .player__iframe {
@@ -33,13 +32,12 @@
   inset: 0;
 }
 
-
 .player__vignette {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 45%),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, transparent 30%);
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 30%);
   pointer-events: none;
 }
 
@@ -98,16 +96,9 @@
   overflow: hidden;
 }
 
-
 .player__title-rate {
   font-size: clamp(10px, 1.5vw, 12px) !important;
   color: #fadb14 !important;
-}
-
-@media (max-width: 360px) {
-  .player__title-rate {
-    display: none !important;
-  }
 }
 
 .player__title-rating {
@@ -127,4 +118,10 @@
 .player__genre-tag {
   height: 22px;
   font-size: 11px;
+}
+
+@media (max-width: 360px) {
+  .player__title-rate {
+    display: none !important;
+  }
 }

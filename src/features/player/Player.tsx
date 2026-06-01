@@ -22,8 +22,8 @@ import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
 import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
 import CastSection from "../../components/ui/cast-section/CastSection";
-import useResolvedGenres from '../../hooks/useResolvedGenres';
-import usePageTitle from '../../hooks/usePageTitle';
+import useResolvedGenres from "../../hooks/useResolvedGenres";
+import usePageTitle from "../../hooks/usePageTitle";
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
@@ -41,19 +41,23 @@ function PlayerHeader() {
       justify="space-between"
       gap={12}
       className="player-page__header"
-      style={{ background: colors.bgBase, borderBottom: `1px solid ${colors.border}` }}
+      style={{
+        background: colors.bgBase,
+        borderBottom: `1px solid ${colors.border}`,
+      }}
     >
       <Link to="/" className="player-page__back-link">
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-        >
+        <Button type="text" icon={<ArrowLeftOutlined />}>
           <span className="player-page__back-label">Back</span>
         </Button>
       </Link>
 
       <Link to="/" className="player-page__header-logo-link">
-        <img src="/i99flix-logo.png" alt="i99flix" className="player-page__header-logo" />
+        <img
+          src="/i99flix-logo.png"
+          alt="i99flix"
+          className="player-page__header-logo"
+        />
       </Link>
 
       <Tooltip title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}>
@@ -62,9 +66,17 @@ function PlayerHeader() {
           onClick={toggle}
           aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           icon={
-            isDark
-              ? <SunOutlined style={{ fontSize: 18, color: colors.starRating }} aria-hidden="true" />
-              : <MoonOutlined style={{ fontSize: 18, color: colors.accent }} aria-hidden="true" />
+            isDark ? (
+              <SunOutlined
+                style={{ fontSize: 18, color: colors.starRating }}
+                aria-hidden="true"
+              />
+            ) : (
+              <MoonOutlined
+                style={{ fontSize: 18, color: colors.accent }}
+                aria-hidden="true"
+              />
+            )
           }
         />
       </Tooltip>
@@ -78,8 +90,12 @@ export default function Player() {
   const type = searchParams.get("type");
   const isTv = type === "tv";
 
-  const [season, setSeason] = useState(() => parseInt(searchParams.get("season") || "1", 10));
-  const [episode, setEpisode] = useState(() => parseInt(searchParams.get("episode") || "1", 10));
+  const [season, setSeason] = useState(() =>
+    parseInt(searchParams.get("season") || "1", 10),
+  );
+  const [episode, setEpisode] = useState(() =>
+    parseInt(searchParams.get("episode") || "1", 10),
+  );
 
   const { colors } = useTheme();
   const [servers, setServers] = useState(0);
@@ -87,17 +103,29 @@ export default function Player() {
   const movieId = id ? parseInt(id, 10) : null;
   const safeId = Number.isFinite(movieId) && movieId! > 0 ? movieId : null;
 
-  const { data: movieData, isLoading: isMovieLoading, isError: isMovieError } = useMovieDetailQuery(isTv ? null : safeId);
-  const { data: tvDetail, isLoading: isTvLoading, isError: isTvError } = useTmdbTvDetailQuery(isTv ? safeId : null);
+  const {
+    data: movieData,
+    isLoading: isMovieLoading,
+    isError: isMovieError,
+  } = useMovieDetailQuery(isTv ? null : safeId);
+  const {
+    data: tvDetail,
+    isLoading: isTvLoading,
+    isError: isTvError,
+  } = useTmdbTvDetailQuery(isTv ? safeId : null);
 
-  const movie = isTv ? (tvDetail ? tmdbTvDetailToMovie(tvDetail) : null) : movieData;
+  const movie = isTv
+    ? tvDetail
+      ? tmdbTvDetailToMovie(tvDetail)
+      : null
+    : movieData;
   const isLoading = isTv ? isTvLoading : isMovieLoading;
   const isError = isTv ? isTvError : isMovieError;
 
   const resolvedGenres = useResolvedGenres(movie?.genre);
 
   const selectedSeasonData = tvDetail?.seasons?.find(
-    (s) => s.season_number === season
+    (s) => s.season_number === season,
   );
   const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
 
@@ -105,11 +133,22 @@ export default function Player() {
 
   const handlePlay = useCallback(() => setPlaying(true), []);
 
-  usePageTitle(movie?.title, movie?.mediaType, isTv ? season : undefined, isTv ? episode : undefined);
+  usePageTitle(
+    movie?.title,
+    movie?.mediaType,
+    isTv ? season : undefined,
+    isTv ? episode : undefined,
+  );
 
   if (isLoading) {
     return (
-      <Flex vertical align="center" justify="center" className="player-page" style={{ background: "#000" }}>
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        className="player-page"
+        style={{ background: "#000" }}
+      >
         <Spin size="large" />
       </Flex>
     );
@@ -117,7 +156,13 @@ export default function Player() {
 
   if (isError || !movie) {
     return (
-      <Flex vertical align="center" justify="center" className="player-page" style={{ background: colors.bgBase }}>
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        className="player-page"
+        style={{ background: colors.bgBase }}
+      >
         <Result
           status="404"
           title="Movie not found"
@@ -133,13 +178,16 @@ export default function Player() {
   }
 
   return (
-    <Flex vertical className="player-page" style={{ background: colors.bgBase }}>
-
+    <Flex
+      vertical
+      className="player-page"
+      style={{ background: colors.bgBase }}
+    >
       <PlayerHeader />
 
       <Flex vertical className="player-page__video">
         {!playing && (
-          <div className="player-page__video-clickzone" onClick={handlePlay}>
+          <div className="player-page__video-clickzone">
             <img
               src={movie.backdrop || movie.thumbnail}
               alt={movie.title}
@@ -147,10 +195,16 @@ export default function Player() {
             />
             <div className="player-page__vignette" />
 
-            <Flex align="center" justify="center" className="player-page__overlay">
+            <Flex
+              align="center"
+              justify="center"
+              className="player-page__overlay"
+            >
               <Flex vertical align="center" gap={10}>
-                <PlayCircleOutlined className="player-page__play-icon" />
-                <Text className="player-page__play-hint">Click to watch</Text>
+                <PlayCircleOutlined
+                  className="player-page__play-icon"
+                  onClick={handlePlay}
+                />
               </Flex>
             </Flex>
 
@@ -180,8 +234,10 @@ export default function Player() {
                   {movie.rating}/10
                 </Text>
                 <Text className="player-page__title-year">{movie.year}</Text>
-                {movie.duration && movie.duration !== 'N/A' && (
-                  <Text className="player-page__title-duration">{movie.duration}</Text>
+                {movie.duration && movie.duration !== "N/A" && (
+                  <Text className="player-page__title-duration">
+                    {movie.duration}
+                  </Text>
                 )}
               </Flex>
             </div>
@@ -206,9 +262,13 @@ export default function Player() {
         gap="small"
         align="center"
         justify="space-between"
-        style={{ background: colors.bgBase, padding: "0.5rem", position: "relative" }}
+        style={{
+          background: colors.bgBase,
+          padding: "0.5rem",
+          position: "relative",
+        }}
       >
-        {isTv &&
+        {isTv && (
           <TvEpisodeSelector
             season={season}
             episode={episode}
@@ -217,7 +277,7 @@ export default function Player() {
             totalSeasons={tvDetail?.number_of_seasons || 20}
             totalEpisodes={totalEpisodesForSeason}
           />
-        }
+        )}
       </Flex>
 
       <div style={{ padding: "0.3rem 0.5rem" }}>
@@ -240,33 +300,60 @@ export default function Player() {
               {movie.title}
             </Title>
 
-            <Flex wrap="wrap" gap="16px 24px" className="player-page__info-meta">
+            <Flex
+              wrap="wrap"
+              gap="16px 24px"
+              className="player-page__info-meta"
+            >
               <Flex vertical gap={2} className="player-page__meta-item">
-                <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Year</Text>
-                <Text strong style={{ color: colors.textPrimary }}>{movie.year}</Text>
+                <Text
+                  className="player-page__meta-label"
+                  style={{ color: colors.textMuted }}
+                >
+                  Year
+                </Text>
+                <Text strong style={{ color: colors.textPrimary }}>
+                  {movie.year}
+                </Text>
               </Flex>
-              {movie.duration && movie.duration !== 'N/A' && (
+              {movie.duration && movie.duration !== "N/A" && (
                 <Flex vertical gap={2} className="player-page__meta-item">
-                  <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Duration</Text>
-                  <Text strong style={{ color: colors.textPrimary }}>{movie.duration}</Text>
+                  <Text
+                    className="player-page__meta-label"
+                    style={{ color: colors.textMuted }}
+                  >
+                    Duration
+                  </Text>
+                  <Text strong style={{ color: colors.textPrimary }}>
+                    {movie.duration}
+                  </Text>
                 </Flex>
               )}
               <Flex vertical gap={2} className="player-page__meta-item">
-                <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
-                <Text strong style={{ color: colors.starRating }}>★ {movie.rating}</Text>
+                <Text
+                  className="player-page__meta-label"
+                  style={{ color: colors.textMuted }}
+                >
+                  Rating
+                </Text>
+                <Text strong style={{ color: colors.starRating }}>
+                  ★ {movie.rating}
+                </Text>
               </Flex>
             </Flex>
 
             <Space size={8} wrap style={{ marginBottom: 12 }}>
               {resolvedGenres.map((rg) => (
-                <Tag key={rg.key} color={rg.color || "default"}>{rg.label}</Tag>
+                <Tag key={rg.key} color={rg.color || "default"}>
+                  {rg.label}
+                </Tag>
               ))}
               {movie.newRelease && <Tag color="gold">New Release</Tag>}
               {movie.trending && <Tag color="red">Trending</Tag>}
             </Space>
 
             <ExpandableText
-              text={movie.description || 'No synopsis available.'}
+              text={movie.description || "No synopsis available."}
               collapsedLines={3}
               color={colors.textSecondary}
               lineHeight={1.7}

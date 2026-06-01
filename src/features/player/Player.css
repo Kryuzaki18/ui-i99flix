@@ -126,12 +126,6 @@
   transform: scale(1.08);
 }
 
-.player-page__play-hint {
-  color: rgba(255, 255, 255, 0.55) !important;
-  font-size: 12px !important;
-  letter-spacing: 0.5px;
-}
-
 .player-page__title-overlay {
   position: absolute;
   bottom: 0;
