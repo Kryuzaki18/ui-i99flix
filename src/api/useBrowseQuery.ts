@@ -39,9 +39,12 @@ export function useBrowseQuery() {
   const foundGenre = activeGenres.find((g) => g.name === selectedGenre);
   const genreId = selectedGenre !== 'all' && foundGenre ? foundGenre.id : undefined;
 
+  const today = new Date().toISOString().slice(0, 10);
+
   const yearRange = YEAR_RANGES.find((r) => r.value === selectedYear);
   const dateGte = yearRange && yearRange.value !== 'all' ? `${yearRange.min}-01-01` : undefined;
-  const dateLte = yearRange && yearRange.value !== 'all' ? `${yearRange.max}-12-31` : undefined;
+  const rawDateLte = yearRange && yearRange.value !== 'all' ? `${yearRange.max}-12-31` : undefined;
+  const dateLte = rawDateLte && rawDateLte < today ? rawDateLte : today;
 
   const searchResult = useQuery<BrowseResult>({
     queryKey: isMovie
@@ -50,16 +53,18 @@ export function useBrowseQuery() {
     queryFn: async () => {
       if (isMovie) {
         const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page });
+        const filtered = res.results.filter((m) => m.release_date && m.release_date <= today);
         return {
-          movies: res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
+          movies: filtered.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
           totalPages: res.total_pages,
         };
       } else {
         const res = await fetchTmdbTvSearch({ query: debouncedSearch, page });
+        const filtered = res.results.filter((m) => m.first_air_date && m.first_air_date <= today);
         return {
-          movies: res.results.map((m) => tmdbTvListItemToMovie(m, genreMap)),
+          movies: filtered.map((m) => tmdbTvListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
           totalPages: res.total_pages,
