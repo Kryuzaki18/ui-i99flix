@@ -92,7 +92,7 @@ export default function Browse() {
 
   const displayItems =
     pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
-  const cappedTotal = Math.min(total, totalPages * TMDB_PAGE_SIZE);
+  const cappedTotal = Math.min(total, totalPages * pageSize);
   const skeletonCols = Array.from({ length: Math.min(pageSize, 8) });
   const isMovie = mediaType === "movie";
 
