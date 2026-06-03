@@ -35,6 +35,9 @@ export function useBrowseQuery() {
   const isSearching = debouncedSearch.trim().length > 0;
   const isMovie = mediaType === 'movie';
 
+  const TMDB_MAX_PAGE = 500;
+  const safePage = Math.max(1, Math.min(page, TMDB_MAX_PAGE));
+
   const activeGenres = isMovie ? movieGenres : tvGenres;
   const foundGenre = activeGenres.find((g) => g.name === selectedGenre);
   const genreId = selectedGenre !== 'all' && foundGenre ? foundGenre.id : undefined;
@@ -48,26 +51,26 @@ export function useBrowseQuery() {
 
   const searchResult = useQuery<BrowseResult>({
     queryKey: isMovie
-      ? tmdbKeys.movies.search({ query: debouncedSearch, page })
-      : tmdbKeys.tv.search({ query: debouncedSearch, page }),
+      ? tmdbKeys.movies.search({ query: debouncedSearch, page: safePage })
+      : tmdbKeys.tv.search({ query: debouncedSearch, page: safePage }),
     queryFn: async () => {
       if (isMovie) {
-        const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page });
+        const res = await fetchTmdbMoviesSearch({ query: debouncedSearch, page: safePage });
         const filtered = res.results.filter((m) => m.release_date && m.release_date <= today);
         return {
           movies: filtered.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
-          totalPages: res.total_pages,
+          totalPages: Math.min(res.total_pages, TMDB_MAX_PAGE),
         };
       } else {
-        const res = await fetchTmdbTvSearch({ query: debouncedSearch, page });
+        const res = await fetchTmdbTvSearch({ query: debouncedSearch, page: safePage });
         const filtered = res.results.filter((m) => m.first_air_date && m.first_air_date <= today);
         return {
           movies: filtered.map((m) => tmdbTvListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
-          totalPages: res.total_pages,
+          totalPages: Math.min(res.total_pages, TMDB_MAX_PAGE),
         };
       }
     },
@@ -77,7 +80,7 @@ export function useBrowseQuery() {
   });
 
   const movieDiscoverParams = {
-    page,
+    page: safePage,
     with_genres: genreId ? String(genreId) : undefined,
     'primary_release_date.gte': dateGte,
     'primary_release_date.lte': dateLte,
@@ -85,7 +88,7 @@ export function useBrowseQuery() {
   };
 
   const tvDiscoverParams = {
-    page,
+    page: safePage,
     with_genres: genreId ? String(genreId) : undefined,
     'first_air_date.gte': dateGte,
     'first_air_date.lte': dateLte,
@@ -103,7 +106,7 @@ export function useBrowseQuery() {
           movies: res.results.map((m) => tmdbMovieListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
-          totalPages: res.total_pages,
+          totalPages: Math.min(res.total_pages, TMDB_MAX_PAGE),
         };
       } else {
         const res = await fetchTmdbTvDiscover(tvDiscoverParams);
@@ -111,7 +114,7 @@ export function useBrowseQuery() {
           movies: res.results.map((m) => tmdbTvListItemToMovie(m, genreMap)),
           total: res.total_results,
           page: res.page,
-          totalPages: res.total_pages,
+          totalPages: Math.min(res.total_pages, TMDB_MAX_PAGE),
         };
       }
     },

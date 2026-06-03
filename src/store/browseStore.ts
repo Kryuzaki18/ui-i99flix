@@ -74,7 +74,7 @@ export const useBrowseStore = create<BrowseState>()(
           false, 'browse/setSearch'
         ),
         setPage: (page) => set(
-          (s) => ({ filters: updateActive(s.filters, s.mediaType, { page }) }),
+          (s) => ({ filters: updateActive(s.filters, s.mediaType, { page: Math.max(1, Math.min(page, 500)) }) }),
           false, 'browse/setPage'
         ),
         setPageSize: (size) => set(
