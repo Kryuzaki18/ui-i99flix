@@ -37,8 +37,12 @@ export function useTrendingMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.trending({}),
     queryFn:  async () => {
+      const today = new Date().toISOString().slice(0, 10);
       const res = await fetchTmdbMoviesTrending({ page: 1 });
-      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+      return res.results
+        .filter((m) => m.release_date && m.release_date <= today)
+        .slice(0, 8)
+        .map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
   });
@@ -51,8 +55,12 @@ export function useNewReleasesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
     queryFn:  async () => {
+      const today = new Date().toISOString().slice(0, 10);
       const res = await fetchTmdbMoviesNowPlaying({ page: 1 });
-      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+      return res.results
+        .filter((m) => m.release_date && m.release_date <= today)
+        .slice(0, 8)
+        .map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
   });
@@ -65,8 +73,12 @@ export function useTopRatedMoviesQuery() {
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),
     queryFn:  async () => {
+      const today = new Date().toISOString().slice(0, 10);
       const res = await fetchTmdbMoviesTopRated({ page: 1 });
-      return res.results.slice(0, 8).map((m) => tmdbMovieListItemToMovie(m, genreMap));
+      return res.results
+        .filter((m) => m.release_date && m.release_date <= today)
+        .slice(0, 8)
+        .map((m) => tmdbMovieListItemToMovie(m, genreMap));
     },
     staleTime: STALE_TIME,
   });
