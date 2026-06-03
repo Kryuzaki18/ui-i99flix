@@ -96,6 +96,7 @@ export default function Watchlist() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               allowClear
+              maxLength={35}
               style={{ borderRadius: 8 }}
             />
           </Col>

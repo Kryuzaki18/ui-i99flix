@@ -132,6 +132,7 @@ export default function Browse() {
               setPage(1);
             }}
             allowClear
+            maxLength={35}
             style={{ borderRadius: 8 }}
           />
         </Col>
