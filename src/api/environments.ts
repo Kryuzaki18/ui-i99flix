@@ -78,20 +78,24 @@ export interface EmbedServer {
 
 export const EMBED_SERVERS: EmbedServer[] = [
   {
+    label: "vidsrc.pm",
+    movie: (id) => `https://vidsrc.pm/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
+  },
+  {
     label: "player.videasy",
     movie: (id) => `https://player.videasy.net/movie/${id}`,
     tv: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}`,
   },
   {
-    label: "VidSrc.pm",
-    movie: (id) => `https://vidsrc.pm/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
+    label: "vsembed.su",
+    movie: (id) => `https://vsembed.su/embed/movie/${id}`,
+    tv: (id, s, e) => `https://vsembed.su/embed/tv/${id}/${s}/${e}`,
   },
   {
-    label: "ezvidapi",
-    movie: (id) => `https://ezvidapi.com/embed/movie/${id}?provider=vidsrc`,
-    tv: (id, s, e) =>
-      `https://ezvidapi.com/embed/tv/${id}/${s}/${e}?provider=vidsrc`,
+    label: "vidking.net",
+    movie: (id) => `https://www.vidking.net/embed/movie/${id}`,
+    tv: (id, s, e) => `https://www.vidking.net/embed/tv/${id}/${s}/${e}`,
   },
   {
     label: "VidSrc.to",
