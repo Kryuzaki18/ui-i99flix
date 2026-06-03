@@ -1,4 +1,5 @@
 import { EMBED_SERVERS } from '../../../api/environments';
+import './ServerIframe.css';
 
 interface ServerIframeProps {
   server: number;
@@ -23,12 +24,19 @@ export default function ServerIframe({
     : embedServer.movie(mediaId);
 
   return (
-    <iframe
-      key={`${server}-${mediaId}-${season}-${episode}`}
-      src={src}
-      className={className}
-      allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer"
-      allowFullScreen
-    />
+    <>
+      <iframe
+        key={`${server}-${mediaId}-${season}-${episode}`}
+        src={src+'?autoplay=1'}
+        className={className}
+        referrerPolicy="no-referrer"
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        allowFullScreen
+      />
+      <div className="ad-shield-top" />
+      <div className="ad-shield-corner ad-shield-corner--tl" />
+      <div className="ad-shield-corner ad-shield-corner--tr" />
+      <div className="ad-shield-side-right" />
+    </>
   );
 }

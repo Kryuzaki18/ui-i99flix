@@ -1,0 +1,38 @@
+.ad-shield-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10%;
+  min-height: 40px;
+  max-height: 70px;
+  z-index: 5;
+}
+
+.ad-shield-corner {
+  position: absolute;
+  top: 0;
+  width: 12%;
+  max-width: 100px;
+  height: 22%;
+  max-height: 110px;
+  z-index: 6;
+}
+
+.ad-shield-corner--tl {
+  left: 0;
+}
+
+.ad-shield-corner--tr {
+  right: 0;
+}
+
+.ad-shield-side-right {
+  position: absolute;
+  top: 10%;
+  right: 0;
+  width: 6%;
+  max-width: 52px;
+  bottom: 18%;
+  z-index: 5;
+}
