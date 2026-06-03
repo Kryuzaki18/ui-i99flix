@@ -127,9 +127,9 @@ export const EMBED_SERVERS: EmbedServer[] = [
     movie: (id) => `https://vidsrc.io/embed/movie/${id}`,
     tv: (id, s, e) => `https://vidsrc.io/embed/tv/${id}/${s}/${e}`,
   },
-  {
-    label: "VidSrc.cc",
-    movie: (id) => `https://vidsrc.cc/v2/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
-  },
+  // {
+  //   label: "VidSrc.cc",
+  //   movie: (id) => `https://vidsrc.cc/v2/embed/movie/${id}`,
+  //   tv: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
+  // },
 ];

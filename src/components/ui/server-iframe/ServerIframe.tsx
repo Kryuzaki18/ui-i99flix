@@ -1,10 +1,11 @@
-import { EMBED_SERVERS } from '../../../api/environments';
-import './ServerIframe.css';
+import { useEffect } from "react";
+import { EMBED_SERVERS } from "../../../api/environments";
+import "./ServerIframe.css";
 
 interface ServerIframeProps {
   server: number;
   mediaId: number | string;
-  mediaType?: 'movie' | 'tv';
+  mediaType?: "movie" | "tv";
   season?: number;
   episode?: number;
   className?: string;
@@ -13,21 +14,30 @@ interface ServerIframeProps {
 export default function ServerIframe({
   server,
   mediaId,
-  mediaType = 'movie',
+  mediaType = "movie",
   season = 1,
   episode = 1,
-  className = 'player__iframe',
+  className = "player__iframe",
 }: ServerIframeProps) {
   const embedServer = EMBED_SERVERS[server];
-  const src = mediaType === 'tv'
-    ? embedServer.tv(mediaId, season, episode)
-    : embedServer.movie(mediaId);
+  const src =
+    mediaType === "tv"
+      ? embedServer.tv(mediaId, season, episode)
+      : embedServer.movie(mediaId);
+
+  useEffect(() => {
+    const handleBlur = () => {
+      setTimeout(() => window.focus(), 50);
+    };
+    window.addEventListener("blur", handleBlur);
+    return () => window.removeEventListener("blur", handleBlur);
+  }, []);
 
   return (
     <>
       <iframe
         key={`${server}-${mediaId}-${season}-${episode}`}
-        src={src+'?autoplay=1'}
+        src={src + "?autoplay=1"}
         className={className}
         referrerPolicy="no-referrer"
         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
