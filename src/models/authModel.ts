@@ -3,7 +3,8 @@ export interface UserProfile {
   name: string;
   email: string;
   avatarUrl?: string;
-  isSocial: boolean;
+  social: string[];
+  hasPassword: boolean;
 }
 
 export interface SigninPayload {
@@ -33,6 +34,6 @@ export interface ResetPasswordPayload {
 }
 
 export interface ChangePasswordPayload {
-  oldPassword: string;
+  oldPassword?: string;
   newPassword: string;
 }

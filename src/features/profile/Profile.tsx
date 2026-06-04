@@ -13,6 +13,7 @@ import {
   Avatar,
   Space,
   Tooltip,
+  Tag,
 } from "antd";
 import {
   LockOutlined,
@@ -21,6 +22,7 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   CopyOutlined,
+  GoogleOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
@@ -41,7 +43,7 @@ const { Title, Text, Paragraph } = Typography;
 type ProfileSection = "security" | "danger";
 
 interface ChangePasswordForm {
-  oldPassword: string;
+  oldPassword?: string;
   newPassword: string;
   confirmPassword: string;
 }
@@ -53,7 +55,9 @@ export default function Profile() {
   const { colors } = useTheme();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const isSocial = user?.isSocial ?? false;
+  const isSocial = (user?.social?.length ?? 0) > 0;
+  const hasPassword = user?.hasPassword ?? true;
+  const settingFirstPassword = isSocial && !hasPassword;
 
   const [section, setSection] = useState<ProfileSection>("security");
   const [changeError, setChangeError] = useState("");
@@ -88,15 +92,14 @@ export default function Profile() {
 
   const handleChangePassword = (values: ChangePasswordForm) => {
     setChangeError("");
-    if (values.newPassword !== values.confirmPassword) {
-      setChangeError("New passwords do not match.");
-      return;
-    }
     changeMutation.mutate(
-      { oldPassword: values.oldPassword, newPassword: values.newPassword },
+      {
+        oldPassword: settingFirstPassword ? undefined : values.oldPassword,
+        newPassword: values.newPassword,
+      },
       {
         onSuccess: () => {
-          messageService.success("Password updated successfully.");
+          messageService.success(settingFirstPassword ? "Password set successfully." : "Password updated successfully.");
           changeForm.resetFields();
         },
         onError: (err) => {
@@ -112,7 +115,7 @@ export default function Profile() {
 
   const handleDeleteAccount = () => {
     setDeleteError("");
-    deleteMutation.mutate(isSocial ? "" : deletePassword, {
+    deleteMutation.mutate(hasPassword ? deletePassword : "", {
       onSuccess: () => {
         messageService.success("Your account has been deleted.");
         navigate("/login");
@@ -132,121 +135,123 @@ export default function Profile() {
   const securityPanel = (
     <div className="profile__panel">
       <Title level={4} style={{ marginTop: 0, marginBottom: 4 }}>
-        Change Password
+        {settingFirstPassword ? "Set Password" : "Change Password"}
       </Title>
       <Text
-        style={{ color: colors.textMuted, display: "block", marginBottom: 24 }}
+        style={{ color: colors.textMuted, display: "block", marginBottom: 16 }}
       >
-        Update your password to keep your account secure.
+        {settingFirstPassword
+          ? "Set a password to sign in with your email and password in addition to your social account."
+          : "Update your password to keep your account secure."}
       </Text>
 
-      {isSocial ? (
+      {isSocial && (
+        <Flex align="center" gap={8} style={{ marginBottom: 20 }}>
+          <Text style={{ color: colors.textMuted, fontSize: 13 }}>Connected via:</Text>
+          {user!.social.map((p) => (
+            <Tag
+              key={p}
+              icon={p === "google" ? <GoogleOutlined /> : <img src="/x-icon.svg" width={11} height={11} style={{ marginRight: 4, verticalAlign: "middle" }} />}
+              style={{ display: "inline-flex", alignItems: "center" }}
+            >
+              {p === "google" ? "Google" : "X"}
+            </Tag>
+          ))}
+        </Flex>
+      )}
+
+      {changeError && (
         <Alert
-          type="info"
+          message={changeError}
+          type="error"
           showIcon
-          message="Password change not available"
-          description="Your account uses social sign-in (Google / X). Password management is handled by your provider."
-          style={{ marginBottom: 24, maxWidth: 440 }}
+          closable
+          onClose={() => setChangeError("")}
+          style={{ marginBottom: 20 }}
         />
-      ) : (
-        <>
-          {changeError && (
-            <Alert
-              message={changeError}
-              type="error"
-              showIcon
-              closable
-              onClose={() => setChangeError("")}
-              style={{ marginBottom: 20 }}
-            />
-          )}
+      )}
 
-          <Form
-            form={changeForm}
-            layout="vertical"
-            onFinish={handleChangePassword}
-            autoComplete="off"
-            style={{ maxWidth: 440 }}
+      <Form
+        form={changeForm}
+        layout="vertical"
+        onFinish={handleChangePassword}
+        autoComplete="off"
+        style={{ maxWidth: 440 }}
+      >
+        {!settingFirstPassword && (
+          <Form.Item
+            name="oldPassword"
+            label="Current password"
+            rules={[{ required: true, message: "Enter your current password" }]}
           >
-            <Form.Item
-              name="oldPassword"
-              label="Current password"
-              rules={[
-                { required: true, message: "Enter your current password" },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-                placeholder="Current password"
-                iconRender={(v) =>
-                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-                size="large"
-              />
-            </Form.Item>
+            <Input.Password
+              prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+              placeholder="Current password"
+              iconRender={(v) => v ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+              size="large"
+            />
+          </Form.Item>
+        )}
 
-            <Form.Item
-              name="newPassword"
-              label="New password"
-              rules={[
-                { required: true, message: "Enter a new password" },
-                { min: 7, message: "Password must be at least 7 characters" },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-                placeholder="New password"
-                iconRender={(v) =>
-                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-                size="large"
-              />
-            </Form.Item>
+        <Form.Item
+          name="newPassword"
+          label="New password"
+          rules={[
+            { required: true, message: "Enter a new password" },
+            { min: 7, message: "Password must be at least 7 characters" },
+          ]}
+        >
+          <Input.Password
+            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+            placeholder="New password"
+            iconRender={(v) => v ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+            size="large"
+          />
+        </Form.Item>
 
-            <Form.Item
-              name="confirmPassword"
-              label="Confirm new password"
-              dependencies={["newPassword"]}
-              rules={[
-                { required: true, message: "Please confirm your new password" },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("newPassword") === value)
-                      return Promise.resolve();
-                    return Promise.reject(new Error("Passwords do not match"));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-                placeholder="Confirm new password"
-                iconRender={(v) =>
-                  v ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-                size="large"
-              />
-            </Form.Item>
+        <Form.Item
+          name="confirmPassword"
+          label="Confirm new password"
+          dependencies={["newPassword"]}
+          rules={[
+            { required: true, message: "Please confirm your new password" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("newPassword") === value)
+                  return Promise.resolve();
+                return Promise.reject(new Error("Passwords do not match"));
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+            placeholder="Confirm new password"
+            iconRender={(v) => v ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+            size="large"
+          />
+        </Form.Item>
 
-            <Form.Item style={{ marginBottom: 8 }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="large"
-                loading={changeMutation.isPending}
-                style={{
-                  background: colors.accent,
-                  borderColor: colors.accent,
-                  fontWeight: 600,
-                }}
-              >
-                Update password
-              </Button>
-            </Form.Item>
-          </Form>
+        <Form.Item style={{ marginBottom: 8 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            loading={changeMutation.isPending}
+            style={{
+              background: colors.accent,
+              borderColor: colors.accent,
+              fontWeight: 600,
+            }}
+          >
+            {settingFirstPassword ? "Set password" : "Update password"}
+          </Button>
+        </Form.Item>
+      </Form>
 
+      {!settingFirstPassword && (
+        <>
           <Divider />
-
           <Text style={{ color: colors.textMuted }}>
             Forgot your current password?{" "}
             <Button
@@ -344,7 +349,7 @@ export default function Profile() {
             />
           </div>
 
-          {!isSocial && (
+          {hasPassword && (
             <div>
               <Text style={{ color: colors.textMuted, display: "block", marginBottom: 6 }}>
                 Enter your password to confirm
@@ -364,7 +369,7 @@ export default function Profile() {
             danger
             type="primary"
             size="large"
-            disabled={!isDeleteConfirmed || (!isSocial && !deletePassword)}
+            disabled={!isDeleteConfirmed || (hasPassword && !deletePassword)}
             loading={deleteMutation.isPending}
             onClick={handleDeleteAccount}
           >
