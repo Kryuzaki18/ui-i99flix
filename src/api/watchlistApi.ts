@@ -9,6 +9,7 @@ export interface WatchlistItem {
   genre:       string[];
   rating:      number;
   year:        number;
+  releaseDate?: string;
   duration:    string;
   thumbnail:   string;
   backdrop:    string;
@@ -28,6 +29,7 @@ export function watchlistItemToMovie(item: WatchlistItem): Movie {
     genre:       item.genre,
     rating:      item.rating,
     year:        item.year,
+    releaseDate: item.releaseDate,
     duration:    item.duration,
     thumbnail:   item.thumbnail,
     backdrop:    item.backdrop,
@@ -46,6 +48,7 @@ export const addToWatchlist = (movie: Movie) =>
     genre:       movie.genre,
     rating:      movie.rating,
     year:        movie.year,
+    releaseDate: movie.releaseDate,
     duration:    movie.duration,
     thumbnail:   movie.thumbnail,
     backdrop:    movie.backdrop,
