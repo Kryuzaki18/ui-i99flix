@@ -52,7 +52,6 @@ export default function VideoPlayer({
 
   const wasWatched = !!watchEntry;
 
-  // Derive the best initial season/episode from watch history (no effect needed)
   const lastWatched = useMemo(() => {
     if (!open || movie?.mediaType !== 'tv' || !watchEntry?.episodes?.length) return null;
     return watchEntry.episodes.reduce((latest, ep) =>
