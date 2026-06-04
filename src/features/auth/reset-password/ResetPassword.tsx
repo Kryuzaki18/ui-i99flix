@@ -1,11 +1,15 @@
-import { useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Form, Input, Button, Typography, Alert, Result } from 'antd';
-import { LockOutlined, CheckCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { useResetPasswordMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/apiService';
-import AuthLayout from '../AuthLayout';
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Card, Form, Input, Button, Typography, Alert, Flex } from "antd";
+import {
+  LockOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
+import { useTheme } from "../../../context/ThemeContext";
+import { useResetPasswordMutation } from "../../../api/useAuthQuery";
+import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;
 
@@ -14,45 +18,59 @@ interface ResetPasswordForm {
   confirm: string;
 }
 
+function BackToSignIn({ color }: { color: string }) {
+  return (
+    <Flex justify="center" style={{ marginTop: 20 }}>
+      <Link to="/login" style={{ color, fontSize: 14, fontWeight: 500 }}>
+        <ArrowLeftOutlined style={{ marginRight: 6 }} />
+        Back to sign in
+      </Link>
+    </Flex>
+  );
+}
 
-const iconWrapStyle: React.CSSProperties = {
-  width: 72,
-  height: 72,
-  borderRadius: '50%',
-  background: 'rgba(229,9,20,0.12)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  margin: '0 auto 16px',
-};
+function IconBadge({ icon, bg }: { icon: React.ReactNode; bg: string }) {
+  return (
+    <Flex
+      align="center"
+      justify="center"
+      style={{ width: 80, height: 80, borderRadius: "50%", background: bg }}
+    >
+      {icon}
+    </Flex>
+  );
+}
 
 export default function ResetPassword() {
   const [done, setDone] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [form] = Form.useForm<ResetPasswordForm>();
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const resetMutation = useResetPasswordMutation();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") ?? "";
 
-  const submitBtnStyle: React.CSSProperties = {
+  const primaryBtn: React.CSSProperties = {
     background: colors.accent,
     borderColor: colors.accent,
-    fontWeight: 600,
-    height: 48,
-    borderRadius: 8,
-    fontSize: 15,
+    height: 50,
+    borderRadius: 10,
+    fontSize: 16,
+    fontWeight: 700,
   };
-  const [searchParams] = useSearchParams();
-
-  const token = searchParams.get('token') ?? '';
 
   const handleSubmit = (values: ResetPasswordForm) => {
-    setError('');
+    setError("");
     resetMutation.mutate(
       { token, password: values.password },
       {
         onSuccess: () => setDone(true),
         onError: (err) => {
-          setError(err instanceof ApiError ? err.message : 'Something went wrong. Please try again.');
+          setError(
+            err instanceof ApiError
+              ? err.message
+              : "Something went wrong. Please try again.",
+          );
         },
       },
     );
@@ -60,137 +78,199 @@ export default function ResetPassword() {
 
   if (!token) {
     return (
-      <AuthLayout>
-        <Result
-          status="error"
-          title={
+      <>
+        <Flex
+          vertical
+          align="center"
+          gap={16}
+          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+        >
+          <IconBadge
+            bg="rgba(229,9,20,0.12)"
+            icon={
+              <CloseCircleFilled
+                style={{ fontSize: 38, color: colors.accent }}
+              />
+            }
+          />
+          <Flex vertical gap={6} align="center">
             <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
               Invalid reset link
             </Title>
-          }
-          subTitle={
-            <Text style={{ color: colors.textMuted }}>
+            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
               This link is missing a reset token. Please request a new one.
             </Text>
-          }
-          extra={
-            <Link to="/forgot-password">
-              <Button type="primary" size="large" style={submitBtnStyle}>
-                Request new link
-              </Button>
-            </Link>
-          }
-        />
-      </AuthLayout>
+          </Flex>
+          <Link to="/forgot-password">
+            <Button
+              type="primary"
+              size="large"
+              style={{ ...primaryBtn, paddingInline: 32 }}
+            >
+              Request new link
+            </Button>
+          </Link>
+        </Flex>
+      </>
     );
   }
 
   if (done) {
     return (
-      <AuthLayout>
-        <Result
-          icon={
-            <div style={iconWrapStyle}>
-              <CheckCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
-            </div>
-          }
-          title={
+      <>
+        <Flex
+          vertical
+          align="center"
+          gap={16}
+          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+        >
+          <IconBadge
+            bg="rgba(82,196,26,0.12)"
+            icon={
+              <CheckCircleFilled style={{ fontSize: 38, color: "#52c41a" }} />
+            }
+          />
+          <Flex vertical gap={6} align="center">
             <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
               Password updated
             </Title>
-          }
-          subTitle={
-            <Text style={{ color: colors.textMuted }}>
-              Your password has been changed. You can now sign in with your new credentials.
+            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+              Your password has been changed. You can now sign in with your new
+              credentials.
             </Text>
-          }
-          extra={
-            <Link to="/login">
-              <Button type="primary" size="large" style={{ ...submitBtnStyle, width: '100%' }}>
-                Sign in
-              </Button>
-            </Link>
-          }
-        />
-      </AuthLayout>
+          </Flex>
+          <Link to="/login">
+            <Button
+              type="primary"
+              size="large"
+              style={{ ...primaryBtn, paddingInline: 40 }}
+            >
+              Sign in
+            </Button>
+          </Link>
+        </Flex>
+      </>
     );
   }
 
   return (
-    <AuthLayout>
-      <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
-        Set new password
-      </Title>
-      <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
-        Choose a strong password — at least 7 characters.
-      </Text>
-
-      {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20, fontSize: 12, width: "100%", paddingTop: 10, paddingBottom: 10 }} />}
-
-      <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off" style={{ width: "100%" }}>
-        <Form.Item
-          name="password"
-          rules={[
-            { required: true, message: 'Please enter a new password' },
-            { min: 7, message: 'Password must be at least 7 characters' },
-          ]}
-          style={{ marginBottom: 24 }}
-
+    <>
+      <Flex
+        vertical
+        align="center"
+        gap={6}
+        style={{ width: "100%", marginBottom: 28 }}
+      >
+        <Title
+          level={2}
+          style={{
+            color: colors.textPrimary,
+            margin: 0,
+            textAlign: "center",
+            fontWeight: 800,
+            letterSpacing: -0.5,
+          }}
         >
-          <Input.Password
-            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-            placeholder="New password"
-            size="large"
-            style={{ borderRadius: 8 }}
-            autoComplete="new-password"
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="confirm"
-          dependencies={['password']}
-          rules={[
-            { required: true, message: 'Please confirm your password' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('Passwords do not match'));
-              },
-            }),
-          ]}
-          style={{ marginBottom: 24 }}
+          Set new password
+        </Title>
+        <Text
+          style={{ color: colors.textMuted, textAlign: "center", fontSize: 14 }}
         >
-          <Input.Password
-            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-            placeholder="Confirm new password"
-            size="large"
-            style={{ borderRadius: 8 }}
-            autoComplete="new-password"
-          />
-        </Form.Item>
+          Choose a strong password — at least 7 characters.
+        </Text>
+      </Flex>
 
-        <Form.Item style={{ marginBottom: 12 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            block
-            loading={resetMutation.isPending}
-            style={submitBtnStyle}
+      {error && (
+        <Alert
+          message={error}
+          type="error"
+          showIcon
+          closable
+          onClose={() => setError("")}
+          style={{
+            marginBottom: 16,
+            borderRadius: 10,
+            width: "100%",
+            fontSize: 13,
+          }}
+        />
+      )}
+
+      <Card
+        style={{
+          width: "100%",
+          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 16,
+          boxShadow: isDark
+            ? "0 8px 32px rgba(0,0,0,0.45)"
+            : "0 2px 20px rgba(0,0,0,0.08)",
+        }}
+        styles={{ body: { padding: "28px 28px 20px" } }}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: "Please enter a new password" },
+              { min: 7, message: "Password must be at least 7 characters" },
+            ]}
+            style={{ marginBottom: 14 }}
           >
-            Update password
-          </Button>
-        </Form.Item>
-      </Form>
+            <Input.Password
+              prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+              placeholder="New password"
+              size="large"
+              style={{ borderRadius: 10 }}
+              autoComplete="new-password"
+            />
+          </Form.Item>
 
-      <div style={{ textAlign: 'center', marginTop: 8 }}>
-        <Link to="/login" style={{ color: colors.accent, fontSize: 14 }}>
-          <ArrowLeftOutlined style={{ marginRight: 6 }} />
-          Back to sign in
-        </Link>
-      </div>
-    </AuthLayout>
+          <Form.Item
+            name="confirm"
+            dependencies={["password"]}
+            rules={[
+              { required: true, message: "Please confirm your password" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value)
+                    return Promise.resolve();
+                  return Promise.reject(new Error("Passwords do not match"));
+                },
+              }),
+            ]}
+            style={{ marginBottom: 20 }}
+          >
+            <Input.Password
+              prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+              placeholder="Confirm new password"
+              size="large"
+              style={{ borderRadius: 10 }}
+              autoComplete="new-password"
+            />
+          </Form.Item>
+
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={resetMutation.isPending}
+              style={primaryBtn}
+            >
+              Update password
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+
+      <BackToSignIn color={colors.accent} />
+    </>
   );
 }

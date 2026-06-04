@@ -1,152 +1,239 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography, Checkbox, Alert, Tooltip, Flex } from 'antd';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  UserOutlined,
+  Card,
+  Form,
+  Input,
+  Button,
+  Typography,
+  Checkbox,
+  Alert,
+  Tooltip,
+  Flex,
+} from "antd";
+import {
+  MailOutlined,
   LockOutlined,
   InfoCircleOutlined,
-} from '@ant-design/icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { useSigninMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/apiService';
-import AuthLayout from '../AuthLayout';
-import SocialLoginButtons from '../../../components/auth/SocialLoginButtons';
+  ArrowRightOutlined,
+} from "@ant-design/icons";
+import { useTheme } from "../../../context/ThemeContext";
+import { useSigninMutation } from "../../../api/useAuthQuery";
+import { ApiError } from "../../../services/apiService";
+import SocialLoginButtons from "../../../components/auth/SocialLoginButtons";
 
 const { Title, Text } = Typography;
 
 interface LoginForm {
-  email:    string;
+  email: string;
   password: string;
   remember: boolean;
 }
 
 export default function Login() {
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [socialBusy, setSocialBusy] = useState(false);
   const [form] = Form.useForm<LoginForm>();
-  const { colors } = useTheme();
-
-  const submitBtnStyle: React.CSSProperties = {
-    background: colors.accent,
-    borderColor: colors.accent,
-    fontWeight: 600,
-    height: 48,
-    borderRadius: 8,
-    fontSize: 15,
-  };
+  const rememberMe = Form.useWatch("remember", form) as boolean;
+  const { colors, isDark } = useTheme();
   const navigate = useNavigate();
   const signinMutation = useSigninMutation();
 
   const isBusy = signinMutation.isPending || socialBusy;
 
   const handleSubmit = (values: LoginForm) => {
-    setError('');
+    setError("");
     signinMutation.mutate(
-      { email: values.email, password: values.password, rememberMe: values.remember },
       {
-        onSuccess: () => navigate('/'),
+        email: values.email,
+        password: values.password,
+        rememberMe: values.remember,
+      },
+      {
+        onSuccess: () => navigate("/"),
         onError: (err) => {
-          setError(err instanceof ApiError ? err.message : 'Something went wrong. Please try again.');
+          setError(
+            err instanceof ApiError
+              ? err.message
+              : "Something went wrong. Please try again.",
+          );
         },
       },
     );
   };
 
   return (
-    <AuthLayout>
-      <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
-        Welcome back
-      </Title>
-      <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 20 }}>
-        Sign in to continue watching
-      </Text>
-
-      {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20, fontSize: 12, width: "100%", paddingTop: 10, paddingBottom: 10 }} />}
-
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleSubmit}
-        initialValues={{ remember: true }}
-        autoComplete="off"
-        style={{ width: "100%" }}
+    <>
+      <Flex
+        vertical
+        align="center"
+        gap={6}
+        style={{ width: "100%", marginBottom: 28 }}
       >
-        <Form.Item
-          name="email"
-          rules={[
-            { required: true, message: 'Please enter your email' },
-            { type: 'email', message: 'Enter a valid email' },
-          ]}
-          style={{ marginBottom: 24 }}
+        <Title
+          level={2}
+          style={{
+            color: colors.textPrimary,
+            margin: 0,
+            textAlign: "center",
+            fontWeight: 800,
+            letterSpacing: -0.5,
+          }}
         >
-          <Input
-            prefix={<UserOutlined style={{ color: colors.textMuted }} />}
-            placeholder="Email address"
-            size="large"
-            style={{ borderRadius: 8 }}
-            autoComplete="new-password"
-            disabled={isBusy}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Please enter your password' }, { min: 7, message: 'Password must be at least 7 characters' }]}
-          style={{ marginBottom: 24 }}
+          Welcome back
+        </Title>
+        <Text
+          style={{ color: colors.textMuted, textAlign: "center", fontSize: 14 }}
         >
-          <Input.Password
-            prefix={<LockOutlined style={{ color: colors.textMuted }} />}
-            placeholder="Password"
-            size="large"
-            style={{ borderRadius: 8 }}
-            autoComplete="new-password"
-            disabled={isBusy}
-          />
-        </Form.Item>
+          Sign in to continue watching
+        </Text>
+      </Flex>
 
-        <Flex align="center" justify="space-between" style={{ marginBottom: 20 }}>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox disabled={isBusy}>
-              Remember me
-              <Tooltip title="Keeps you signed in for 30 days.">
-                <InfoCircleOutlined style={{ marginLeft: 6, color: colors.textMuted, fontSize: 13 }} />
-              </Tooltip>
-            </Checkbox>
-          </Form.Item>
-          <Link to="/forgot-password" style={{ color: colors.accent, fontSize: 13 }}>
-            Forgot password?
-          </Link>
-        </Flex>
+      {error && (
+        <Alert
+          message={error}
+          type="error"
+          showIcon
+          closable
+          onClose={() => setError("")}
+          style={{
+            marginBottom: 16,
+            borderRadius: 10,
+            width: "100%",
+            fontSize: 13,
+          }}
+        />
+      )}
 
-        <Form.Item style={{ marginBottom: 5 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="small"
-            block
-            loading={signinMutation.isPending}
-            disabled={isBusy}
-            style={submitBtnStyle}
+      <Card
+        style={{
+          width: "100%",
+          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 16,
+          boxShadow: isDark
+            ? "0 8px 32px rgba(0,0,0,0.45)"
+            : "0 2px 20px rgba(0,0,0,0.08)",
+        }}
+        styles={{ body: { padding: "28px 28px 20px" } }}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          initialValues={{ remember: true }}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email" },
+              { type: "email", message: "Enter a valid email" },
+            ]}
+            style={{ marginBottom: 14 }}
           >
-            Sign In
-          </Button>
-        </Form.Item>
-      </Form>
+            <Input
+              prefix={<MailOutlined style={{ color: colors.textMuted }} />}
+              placeholder="Email address"
+              size="large"
+              style={{ borderRadius: 10 }}
+              autoComplete="new-password"
+              disabled={isBusy}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: "Please enter your password" },
+              { min: 7, message: "Password must be at least 7 characters" },
+            ]}
+            style={{ marginBottom: 18 }}
+          >
+            <Input.Password
+              prefix={<LockOutlined style={{ color: colors.textMuted }} />}
+              placeholder="Password"
+              size="large"
+              style={{ borderRadius: 10 }}
+              autoComplete="new-password"
+              disabled={isBusy}
+            />
+          </Form.Item>
+
+          <Flex
+            align="center"
+            justify="space-between"
+            style={{ marginBottom: 22 }}
+          >
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox disabled={isBusy}>
+                <Text style={{ fontSize: 13, color: colors.textSecondary }}>
+                  Remember me
+                </Text>
+                <Tooltip
+                  title="Keeps you signed in for 30 days."
+                  placement="right"
+                >
+                  <InfoCircleOutlined
+                    style={{
+                      marginLeft: 5,
+                      color: colors.textMuted,
+                      fontSize: 12,
+                    }}
+                  />
+                </Tooltip>
+              </Checkbox>
+            </Form.Item>
+            <Link
+              to="/forgot-password"
+              style={{ color: colors.accent, fontSize: 13, fontWeight: 500 }}
+            >
+              Forgot password?
+            </Link>
+          </Flex>
+
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={signinMutation.isPending}
+              disabled={isBusy}
+              icon={
+                !signinMutation.isPending ? <ArrowRightOutlined /> : undefined
+              }
+              iconPlacement="end"
+              style={{
+                background: colors.accent,
+                borderColor: colors.accent,
+                height: 50,
+                borderRadius: 10,
+                fontSize: 16,
+                fontWeight: 700,
+                letterSpacing: 0.2,
+              }}
+            >
+              Sign In
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
 
       <SocialLoginButtons
         mode="signin"
-        rememberMe={form.getFieldValue('remember') as boolean}
+        rememberMe={rememberMe ?? true}
         onLoadingChange={setSocialBusy}
       />
 
-      <div style={{ textAlign: 'center', marginTop: 24 }}>
-        <Text style={{ color: colors.textMuted }}>
-          Don't have an account?{' '}
-          <Link to="/signup" style={{ color: colors.accent, fontWeight: 600 }}>
+      <Flex justify="center" style={{ marginTop: 20 }}>
+        <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+          Don't have an account?{" "}
+          <Link to="/signup" style={{ color: colors.accent, fontWeight: 700 }}>
             Sign up free
           </Link>
         </Text>
-      </div>
-    </AuthLayout>
+      </Flex>
+    </>
   );
 }

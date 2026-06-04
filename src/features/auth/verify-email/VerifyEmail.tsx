@@ -1,148 +1,195 @@
-import { Link, useSearchParams } from 'react-router-dom';
-import { Button, Typography, Spin, Result } from 'antd';
+import { Link, useSearchParams } from "react-router-dom";
+import { Button, Typography, Spin, Flex } from "antd";
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
   ArrowLeftOutlined,
-} from '@ant-design/icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { useVerifyEmailQuery } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/apiService';
-import AuthLayout from '../AuthLayout';
+  MailOutlined,
+} from "@ant-design/icons";
+import { useTheme } from "../../../context/ThemeContext";
+import { useVerifyEmailQuery } from "../../../api/useAuthQuery";
+import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;
 
-const iconWrapStyle: React.CSSProperties = {
-  width: 72,
-  height: 72,
-  borderRadius: '50%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  margin: '0 auto 16px',
-};
+function IconBadge({ icon, bg }: { icon: React.ReactNode; bg: string }) {
+  return (
+    <Flex
+      align="center"
+      justify="center"
+      style={{ width: 80, height: 80, borderRadius: "50%", background: bg }}
+    >
+      {icon}
+    </Flex>
+  );
+}
 
 export default function VerifyEmail() {
   const { colors } = useTheme();
-
-  const btnStyle: React.CSSProperties = {
-    background: colors.accent,
-    borderColor: colors.accent,
-    fontWeight: 600,
-    height: 48,
-    borderRadius: 8,
-    fontSize: 15,
-  };
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token') ?? '';
+  const token = searchParams.get("token") ?? "";
 
   const { isPending, isSuccess, error } = useVerifyEmailQuery(token);
 
+  const primaryBtn: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    height: 50,
+    borderRadius: 10,
+    fontSize: 16,
+    fontWeight: 700,
+  };
+
   if (!token) {
     return (
-      <AuthLayout>
-        <Result
-          icon={
-            <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-              <CloseCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
-            </div>
-          }
-          title={
+      <>
+        <Flex
+          vertical
+          align="center"
+          gap={16}
+          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+        >
+          <IconBadge
+            bg="rgba(229,9,20,0.12)"
+            icon={
+              <CloseCircleFilled
+                style={{ fontSize: 38, color: colors.accent }}
+              />
+            }
+          />
+          <Flex vertical gap={6} align="center">
             <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
               Invalid verification link
             </Title>
-          }
-          subTitle={
-            <Text style={{ color: colors.textMuted }}>
-              This link is missing a verification token. Please use the link from your email.
+            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+              This link is missing a verification token. Please use the link
+              from your email.
             </Text>
-          }
-          extra={
-            <Link to="/login">
-              <Button type="primary" size="large" style={btnStyle}>
-                <ArrowLeftOutlined /> Back to sign in
-              </Button>
-            </Link>
-          }
-        />
-      </AuthLayout>
+          </Flex>
+          <Link to="/login">
+            <Button
+              type="primary"
+              size="large"
+              style={{ ...primaryBtn, paddingInline: 32 }}
+            >
+              <ArrowLeftOutlined /> Back to sign in
+            </Button>
+          </Link>
+        </Flex>
+      </>
     );
   }
 
   if (isPending) {
     return (
-      <AuthLayout>
-        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+      <>
+        <Flex
+          vertical
+          align="center"
+          justify="center"
+          gap={20}
+          style={{ padding: "40px 0" }}
+        >
+          <Flex
+            align="center"
+            justify="center"
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              background: "rgba(229,9,20,0.08)",
+            }}
+          >
+            <MailOutlined style={{ fontSize: 36, color: colors.accent }} />
+          </Flex>
           <Spin size="large" />
-          <Title level={4} style={{ color: colors.textPrimary, marginTop: 24 }}>
-            Verifying your email…
-          </Title>
-          <Text style={{ color: colors.textMuted }}>Just a moment, please.</Text>
-        </div>
-      </AuthLayout>
+          <Flex vertical align="center" gap={4}>
+            <Title level={4} style={{ color: colors.textPrimary, margin: 0 }}>
+              Verifying your email…
+            </Title>
+            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+              Just a moment, please.
+            </Text>
+          </Flex>
+        </Flex>
+      </>
     );
   }
 
   if (isSuccess) {
     return (
-      <AuthLayout>
-        <Result
-          icon={
-            <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-              <CheckCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
-            </div>
-          }
-          title={
+      <>
+        <Flex
+          vertical
+          align="center"
+          gap={16}
+          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+        >
+          <IconBadge
+            bg="rgba(82,196,26,0.12)"
+            icon={
+              <CheckCircleFilled style={{ fontSize: 38, color: "#52c41a" }} />
+            }
+          />
+          <Flex vertical gap={6} align="center">
             <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
               Email verified
             </Title>
-          }
-          subTitle={
-            <Text style={{ color: colors.textMuted }}>
+            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
               Your account is now active. Sign in to start watching.
             </Text>
-          }
-          extra={
-            <Link to="/login">
-              <Button type="primary" size="large" style={{ ...btnStyle, minWidth: 180 }}>
-                Sign in
-              </Button>
-            </Link>
-          }
-        />
-      </AuthLayout>
+          </Flex>
+          <Link to="/login">
+            <Button
+              type="primary"
+              size="large"
+              style={{ ...primaryBtn, paddingInline: 40 }}
+            >
+              Sign in
+            </Button>
+          </Link>
+        </Flex>
+      </>
     );
   }
 
   const errorMsg =
     error instanceof ApiError
       ? error.message
-      : 'Something went wrong. Please try again.';
+      : "Something went wrong. Please try again.";
 
   return (
-    <AuthLayout>
-      <Result
-        icon={
-          <div style={{ ...iconWrapStyle, background: 'rgba(229,9,20,0.12)' }}>
-            <CloseCircleOutlined style={{ fontSize: 32, color: colors.accent }} />
-          </div>
-        }
-        title={
+    <>
+      <Flex
+        vertical
+        align="center"
+        gap={16}
+        style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+      >
+        <IconBadge
+          bg="rgba(229,9,20,0.12)"
+          icon={
+            <CloseCircleFilled style={{ fontSize: 38, color: colors.accent }} />
+          }
+        />
+        <Flex vertical gap={6} align="center">
           <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
             Verification failed
           </Title>
-        }
-        subTitle={
-          <Text style={{ color: colors.textMuted }}>{errorMsg}</Text>
-        }
-        extra={
-          <Link to="/login">
-            <Button type="primary" size="large" style={{ ...btnStyle, minWidth: 180 }}>
-              <ArrowLeftOutlined /> Back to sign in
-            </Button>
-          </Link>
-        }
-      />
-    </AuthLayout>
+          <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+            {errorMsg}
+          </Text>
+        </Flex>
+        <Link to="/login">
+          <Button
+            type="primary"
+            size="large"
+            style={{ ...primaryBtn, paddingInline: 32 }}
+          >
+            <ArrowLeftOutlined /> Back to sign in
+          </Button>
+        </Link>
+      </Flex>
+    </>
   );
 }

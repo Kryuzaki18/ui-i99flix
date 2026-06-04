@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Form, Input, Button, Typography, Alert, Result, Flex } from 'antd';
-import { MailOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { useTheme } from '../../../context/ThemeContext';
-import { useForgotPasswordMutation } from '../../../api/useAuthQuery';
-import { ApiError } from '../../../services/apiService';
-import AuthLayout from '../AuthLayout';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Card, Form, Input, Button, Typography, Alert, Flex } from "antd";
+import {
+  MailOutlined,
+  ArrowLeftOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
+import { useTheme } from "../../../context/ThemeContext";
+import { useForgotPasswordMutation } from "../../../api/useAuthQuery";
+import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;
 
@@ -13,139 +16,201 @@ interface ForgotPasswordForm {
   email: string;
 }
 
+function BackToSignIn({ color }: { color: string }) {
+  return (
+    <Flex justify="center" style={{ marginTop: 20 }}>
+      <Link to="/login" style={{ color, fontSize: 14, fontWeight: 500 }}>
+        <ArrowLeftOutlined style={{ marginRight: 6 }} />
+        Back to sign in
+      </Link>
+    </Flex>
+  );
+}
+
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [form] = Form.useForm<ForgotPasswordForm>();
-  const { colors } = useTheme();
-
-  const submitBtnStyle: React.CSSProperties = {
-    background: colors.accent,
-    borderColor: colors.accent,
-    fontWeight: 600,
-    height: 48,
-    borderRadius: 8,
-    fontSize: 15,
-  };
+  const { colors, isDark } = useTheme();
   const forgotMutation = useForgotPasswordMutation();
 
+  const primaryBtn: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    height: 50,
+    borderRadius: 10,
+    fontSize: 16,
+    fontWeight: 700,
+  };
+
   const handleSubmit = (values: ForgotPasswordForm) => {
-    setError('');
+    setError("");
     forgotMutation.mutate(
       { email: values.email },
       {
         onSuccess: () => setSubmitted(true),
         onError: (err) => {
-          setError(err instanceof ApiError ? err.message : 'Something went wrong. Please try again.');
+          setError(
+            err instanceof ApiError
+              ? err.message
+              : "Something went wrong. Please try again.",
+          );
         },
       },
     );
   };
 
-  const backToSignIn = (
-    <Link to="/login" style={{ color: colors.accent, fontSize: 14 }}>
-      <ArrowLeftOutlined style={{ marginRight: 6 }} />
-      Back to sign in
-    </Link>
-  );
+  if (submitted) {
+    return (
+      <>
+        <Flex
+          vertical
+          align="center"
+          gap={16}
+          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
+        >
+          <Flex
+            align="center"
+            justify="center"
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              background: "rgba(229,9,20,0.12)",
+            }}
+          >
+            <MailOutlined style={{ fontSize: 36, color: colors.accent }} />
+          </Flex>
 
-  return (
-    <AuthLayout>
-      {submitted ? (
-        <Result
-          icon={
-            <div
-              style={{
-                width: 72,
-                height: 72,
-                borderRadius: '50%',
-                background: 'rgba(229,9,20,0.12)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-              }}
-            >
-              <MailOutlined style={{ fontSize: 32, color: colors.accent }} />
-            </div>
-          }
-          title={
+          <Flex vertical gap={6} align="center">
             <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
               Check your inbox
             </Title>
-          }
-          subTitle={
-            <Text style={{ color: colors.textMuted }}>
-              If an account exists for{' '}
-              <strong style={{ color: colors.textSecondary }}>
-                {form.getFieldValue('email')}
-              </strong>
-              , you'll receive a reset link shortly. Check your spam folder if it doesn't arrive.
+            <Text
+              style={{ color: colors.textMuted, fontSize: 14, maxWidth: 320 }}
+            >
+              If an account exists for{" "}
+              <Text strong style={{ color: colors.textSecondary }}>
+                {form.getFieldValue("email")}
+              </Text>
+              , you'll receive a reset link shortly. Check your spam folder too.
             </Text>
-          }
-          extra={
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-              <Button
-                type="primary"
-                size="large"
-                style={{ ...submitBtnStyle, width: '100%' }}
-                onClick={() => { setSubmitted(false); form.resetFields(); }}
-              >
-                Try a different email
-              </Button>
-              <div style={{ textAlign: 'center', marginTop: 8 }}>{backToSignIn}</div>
-            </div>
-          }
-        />
-      ) : (
-        <>
-          <Flex vertical style={{ width: '100%' }} align='center'>
-            <Title level={2} style={{ color: colors.textPrimary, marginBottom: 6 }}>
-              Forgot password?
-            </Title>
-
-            <Text style={{ color: colors.textMuted, display: 'block', marginBottom: 28 }}>
-              Enter your email and we'll send you a reset link.
-            </Text>
-
-            {error && <Alert description={error} type="error" showIcon style={{ marginBottom: 20 }} />}
           </Flex>
 
-          <Form form={form} layout="vertical" onFinish={handleSubmit} autoComplete="off" style={{ width: "100%" }}>
-            <Form.Item
-              name="email"
-              rules={[
-                { required: true, message: 'Please enter your email' },
-                { type: 'email', message: 'Enter a valid email' },
-              ]}
-              style={{ marginBottom: 24 }}
-            >
-              <Input
-                prefix={<MailOutlined style={{ color: colors.textMuted }} />}
-                placeholder="Email address"
-                size="large"
-                style={{ borderRadius: 8 }}
-                autoComplete="new-password"
-              />
-            </Form.Item>
+          <Button
+            type="primary"
+            size="large"
+            style={{ ...primaryBtn, width: "100%" }}
+            onClick={() => {
+              setSubmitted(false);
+              form.resetFields();
+            }}
+          >
+            Try a different email
+          </Button>
 
-            <Form.Item style={{ marginBottom: 12 }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="small"
-                block
-                loading={forgotMutation.isPending}
-                style={submitBtnStyle}
-              >
-                Send reset link
-              </Button>
-            </Form.Item>
-          </Form>
+          <BackToSignIn color={colors.accent} />
+        </Flex>
+      </>
+    );
+  }
 
-          <div style={{ textAlign: 'center', marginTop: 8 }}>{backToSignIn}</div>
-        </>
+  return (
+    <>
+      <Flex
+        vertical
+        align="center"
+        gap={6}
+        style={{ width: "100%", marginBottom: 28 }}
+      >
+        <Title
+          level={2}
+          style={{
+            color: colors.textPrimary,
+            margin: 0,
+            textAlign: "center",
+            fontWeight: 800,
+            letterSpacing: -0.5,
+          }}
+        >
+          Forgot password?
+        </Title>
+        <Text
+          style={{ color: colors.textMuted, textAlign: "center", fontSize: 14 }}
+        >
+          Enter your email and we'll send you a reset link.
+        </Text>
+      </Flex>
+
+      {error && (
+        <Alert
+          message={error}
+          type="error"
+          showIcon
+          closable
+          onClose={() => setError("")}
+          style={{
+            marginBottom: 16,
+            borderRadius: 10,
+            width: "100%",
+            fontSize: 13,
+          }}
+        />
       )}
-    </AuthLayout>
+
+      <Card
+        style={{
+          width: "100%",
+          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 16,
+          boxShadow: isDark
+            ? "0 8px 32px rgba(0,0,0,0.45)"
+            : "0 2px 20px rgba(0,0,0,0.08)",
+        }}
+        styles={{ body: { padding: "28px 28px 20px" } }}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email" },
+              { type: "email", message: "Enter a valid email" },
+            ]}
+            style={{ marginBottom: 20 }}
+          >
+            <Input
+              prefix={<MailOutlined style={{ color: colors.textMuted }} />}
+              placeholder="Email address"
+              size="large"
+              style={{ borderRadius: 10 }}
+              autoComplete="new-password"
+            />
+          </Form.Item>
+
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={forgotMutation.isPending}
+              icon={<SendOutlined />}
+              iconPlacement="end"
+              style={primaryBtn}
+            >
+              Send reset link
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+
+      <BackToSignIn color={colors.accent} />
+    </>
   );
 }

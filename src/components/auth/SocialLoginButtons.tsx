@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Space, Alert, Divider, Typography } from 'antd';
+import { Button, Alert, Divider, Typography, Flex } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import {
   GoogleAuthProvider,
@@ -129,7 +129,7 @@ export default function SocialLoginButtons({
         />
       )}
 
-      <Space style={{ width: '100%', justifyContent: 'center' }} size={12}>
+      <Flex justify="center" gap={12} wrap="wrap">
         {PROVIDER_CONFIGS.map(({ id, label, icon, getProvider }) => (
           <Button
             key={id}
@@ -139,12 +139,12 @@ export default function SocialLoginButtons({
             disabled={loadingId !== null && loadingId !== id}
             onClick={() => handleSocialLogin(id, getProvider)}
             aria-label={`Continue with ${label}`}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, paddingInline: 16 }}
+            style={{ paddingInline: 20 }}
           >
             {label}
           </Button>
         ))}
-      </Space>
+      </Flex>
     </>
   );
 }

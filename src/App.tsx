@@ -1,6 +1,14 @@
 import { lazy, Suspense, useState, useEffect } from "react";
 import { darkColors } from "./constants/theme";
-import { Link, BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import AuthLayout from "./features/auth/AuthLayout";
 import { Layout, ConfigProvider, theme } from "antd";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
@@ -20,12 +28,18 @@ const Home = lazy(() => import("./features/home/Home"));
 const Browse = lazy(() => import("./features/browse/Browse"));
 const Login = lazy(() => import("./features/auth/login/Login"));
 const Signup = lazy(() => import("./features/auth/signup/Signup"));
-const ForgotPassword = lazy(() => import("./features/auth/forgot-password/ForgotPassword"));
-const ResetPassword = lazy(() => import("./features/auth/reset-password/ResetPassword"));
-const VerifyEmail = lazy(() => import("./features/auth/verify-email/VerifyEmail"));
+const ForgotPassword = lazy(
+  () => import("./features/auth/forgot-password/ForgotPassword"),
+);
+const ResetPassword = lazy(
+  () => import("./features/auth/reset-password/ResetPassword"),
+);
+const VerifyEmail = lazy(
+  () => import("./features/auth/verify-email/VerifyEmail"),
+);
 const PlayerPage = lazy(() => import("./features/player/Player"));
-const Watchlist  = lazy(() => import("./features/watchlist/Watchlist"));
-const Profile    = lazy(() => import("./features/profile/Profile"));
+const Watchlist = lazy(() => import("./features/watchlist/Watchlist"));
+const Profile = lazy(() => import("./features/profile/Profile"));
 const About = lazy(() => import("./features/legal/About"));
 const PrivacyPolicy = lazy(() => import("./features/legal/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./features/legal/TermsOfService"));
@@ -37,7 +51,13 @@ const { Content, Footer } = Layout;
 
 const FADE_DURATION = 350;
 
-function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart?: boolean }) {
+function AppSplash({
+  visible,
+  slowStart = false,
+}: {
+  visible: boolean;
+  slowStart?: boolean;
+}) {
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
@@ -97,7 +117,14 @@ function AppSplash({ visible, slowStart = false }: { visible: boolean; slowStart
         }
       `}</style>
       {slowStart && (
-        <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, marginTop: 8, textAlign: 'center' }}>
+        <div
+          style={{
+            color: "rgba(255,255,255,0.45)",
+            fontSize: 13,
+            marginTop: 8,
+            textAlign: "center",
+          }}
+        >
           Server is waking up, please wait…
         </div>
       )}
@@ -124,38 +151,22 @@ function AppLayout() {
   const { colors } = useTheme();
   useRouteTitle();
   const { sidebarOpen, openSidebar, closeSidebar } = useHomeStore();
-  const { playingMovie, closePlayer, detailMovie, closeDetail, playFromDetail } = usePlayerStore();
+  const {
+    playingMovie,
+    closePlayer,
+    detailMovie,
+    closeDetail,
+    playFromDetail,
+  } = usePlayerStore();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
-
-  const isAuthPage =
-    location.pathname === "/login" ||
-    location.pathname === "/signup" ||
-    location.pathname === "/forgot-password" ||
-    location.pathname === "/reset-password" ||
-    location.pathname === "/verify-email";
 
   const isLegalPage =
     location.pathname === "/about" ||
     location.pathname === "/privacy-policy" ||
     location.pathname === "/terms-of-service";
-
-  if (isAuthPage) {
-    return (
-      <Suspense fallback={<AppSplash visible />}>
-        <Routes>
-          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
-          <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
-          <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
-          <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </Suspense>
-    );
-  }
 
   if (isLegalPage) {
     return (
@@ -184,10 +195,38 @@ function AppLayout() {
       >
         <Suspense fallback={<AppSplash visible />}>
           <Routes>
-            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
-            <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
-            <Route path="/profile"   element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/browse"
+              element={
+                <ProtectedRoute>
+                  <Browse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/watchlist"
+              element={
+                <ProtectedRoute>
+                  <Watchlist />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
@@ -201,13 +240,29 @@ function AppLayout() {
           color: colors.textMuted,
         }}
       >
-        <div style={{ marginBottom: 12, display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
+        <div
+          style={{
+            marginBottom: 12,
+            display: "flex",
+            justifyContent: "center",
+            gap: 24,
+            flexWrap: "wrap",
+          }}
+        >
           {[
             { label: "About", to: "/about" },
             { label: "Privacy Policy", to: "/privacy-policy" },
             { label: "Terms of Service", to: "/terms-of-service" },
           ].map(({ label, to }) => (
-            <Link key={to} to={to} style={{ color: colors.textMuted, fontSize: 13, textDecoration: "none" }}>
+            <Link
+              key={to}
+              to={to}
+              style={{
+                color: colors.textMuted,
+                fontSize: 13,
+                textDecoration: "none",
+              }}
+            >
               {label}
             </Link>
           ))}
@@ -216,13 +271,28 @@ function AppLayout() {
           © 2026 i99flix — Stream unlimited movies, anytime.
         </div>
       </Footer>
-      <VideoPlayer movie={playingMovie} open={!!playingMovie} onClose={closePlayer} />
-      <MovieDetailDrawer movie={detailMovie} open={!!detailMovie} onClose={closeDetail} onPlay={playFromDetail} />
+      <VideoPlayer
+        movie={playingMovie}
+        open={!!playingMovie}
+        onClose={closePlayer}
+      />
+      <MovieDetailDrawer
+        movie={detailMovie}
+        open={!!detailMovie}
+        onClose={closeDetail}
+        onPlay={playFromDetail}
+      />
     </Layout>
   );
 }
 
-const AUTH_PATHS = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email'];
+const AUTH_PATHS = [
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+];
 
 function AppBootstrap({ children }: { children: React.ReactNode }) {
   const { isCheckingAuth, isAuthenticated } = useAuthStore();
@@ -243,7 +313,10 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (!isCheckingAuth) { setSlowStart(false); return; }
+    if (!isCheckingAuth) {
+      setSlowStart(false);
+      return;
+    }
     const t = setTimeout(() => setSlowStart(true), 8000);
     return () => clearTimeout(t);
   }, [isCheckingAuth]);
@@ -251,7 +324,10 @@ function AppBootstrap({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ErrorBoundary>{children}</ErrorBoundary>
-      <AppSplash visible={isCheckingAuth && !isAuthPage} slowStart={slowStart} />
+      <AppSplash
+        visible={isCheckingAuth && !isAuthPage}
+        slowStart={slowStart}
+      />
     </>
   );
 }
@@ -268,7 +344,8 @@ function ThemedApp() {
           colorBgBase: colors.bgBase,
           colorTextBase: colors.textPrimary,
           borderRadius: 8,
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          fontFamily:
+            "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
         components: {
           Layout: {
@@ -278,15 +355,15 @@ function ThemedApp() {
           },
           Menu: isDark
             ? {
-              darkItemBg: "transparent",
-              darkSubMenuItemBg: "transparent",
-              darkItemSelectedBg: "rgba(229,9,20,0.15)",  // accent at 15% opacity
-              darkItemSelectedColor: "#fff",
-            }
+                darkItemBg: "transparent",
+                darkSubMenuItemBg: "transparent",
+                darkItemSelectedBg: "rgba(229,9,20,0.15)",
+                darkItemSelectedColor: "#fff",
+              }
             : {
-              itemSelectedBg: "rgba(229,9,20,0.08)",  // accent at 8% opacity
-              itemSelectedColor: colors.accent,
-            },
+                itemSelectedBg: "rgba(229,9,20,0.08)",
+                itemSelectedColor: colors.accent,
+              },
           Input: {
             colorBgContainer: colors.inputBg,
             colorBorder: colors.border,
@@ -301,7 +378,10 @@ function ThemedApp() {
           Drawer: { colorBgElevated: colors.bgBase },
           Modal: { contentBg: colors.bgBase, headerBg: colors.bgBase },
           Card: { colorBgContainer: colors.bgCard },
-          Slider: { colorPrimaryBorder: colors.accent, colorPrimary: colors.accent },
+          Slider: {
+            colorPrimaryBorder: colors.accent,
+            colorPrimary: colors.accent,
+          },
         },
       }}
     >
@@ -316,6 +396,43 @@ function ThemedApp() {
                 </Suspense>
               }
             />
+
+            <Route element={<AuthLayout />}>
+              <Route
+                path="/login"
+                element={
+                  <GuestRoute>
+                    <Login />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <GuestRoute>
+                    <Signup />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/forgot-password"
+                element={
+                  <GuestRoute>
+                    <ForgotPassword />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/reset-password"
+                element={
+                  <GuestRoute>
+                    <ResetPassword />
+                  </GuestRoute>
+                }
+              />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+            </Route>
+
             {import.meta.env.DEV && EmailPreview && (
               <Route
                 path="/dev/email-preview"
