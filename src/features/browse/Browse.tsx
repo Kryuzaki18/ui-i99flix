@@ -3,20 +3,13 @@ import {
   Typography,
   Row,
   Col,
-  Input,
-  Select,
   Space,
   Empty,
-  Segmented,
   Pagination,
   Tabs,
   Flex,
 } from "antd";
 import {
-  SearchOutlined,
-  AppstoreOutlined,
-  BarsOutlined,
-  CalendarOutlined,
   VideoCameraOutlined,
   PlaySquareOutlined,
 } from "@ant-design/icons";
@@ -26,9 +19,9 @@ import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/mov
 import { useBrowseStore, selectActiveFilters } from "../../store/browseStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useBrowseQuery } from "../../api/useBrowseQuery";
-import { useTmdbStore } from "../../store/tmdbStore";
-import { YEAR_RANGES, PAGE_SIZE_OPTIONS } from "../../constants";
+import { PAGE_SIZE_OPTIONS } from "../../constants";
 import { useTheme } from "../../context/ThemeContext";
+import BrowseFilters from "./BrowseFilters";
 import type { MediaType } from "../../store/browseStore";
 import "./Browse.css";
 
@@ -39,50 +32,31 @@ const TMDB_PAGE_SIZE = 20;
 export default function Browse() {
   const { colors } = useTheme();
 
-  const {
-    mediaType,
-    setMediaType,
-    setGenre,
-    setYear,
-    setSearch,
-    setPage,
-    setPageSize,
-    setLayout,
-  } = useBrowseStore();
-  const { selectedGenre, selectedYear, searchQuery, page, pageSize, layout } =
-    useBrowseStore(selectActiveFilters);
+  const mediaType   = useBrowseStore((s) => s.mediaType);
+  const setMediaType = useBrowseStore((s) => s.setMediaType);
+  const setPage      = useBrowseStore((s) => s.setPage);
+  const setPageSize  = useBrowseStore((s) => s.setPageSize);
+  const { searchQuery, page, pageSize, layout } = useBrowseStore(selectActiveFilters);
 
   const { playMovie, openDetail } = usePlayerStore();
 
-  const result = useBrowseQuery();
-  const items = result.data?.movies ?? [];
-  const total = result.data?.total ?? 0;
+  const result    = useBrowseQuery();
+  const items     = result.data?.movies ?? [];
+  const total     = result.data?.total ?? 0;
   const totalPages = result.data?.totalPages ?? 1;
-  const isLoading = result.isLoading;
+  const isLoading  = result.isLoading;
   const isFetching = result.isFetching;
 
-  const movieGenres = useTmdbStore((s) => s.movieGenres);
-  const tvGenres = useTmdbStore((s) => s.tvGenres);
-  const activeGenres = mediaType === "movie" ? movieGenres : tvGenres;
-
-  const genres = [
-    { label: "All", value: "all" },
-    ...activeGenres.map((g) => ({ label: g.name, value: g.name })),
-  ];
-
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const sentinelRef   = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
-  const resultsRef = useRef<HTMLDivElement>(null);
+  const resultsRef    = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        paginationRef.current?.classList.toggle(
-          "is-stuck",
-          !entry.isIntersecting,
-        );
+        paginationRef.current?.classList.toggle("is-stuck", !entry.isIntersecting);
       },
       { threshold: 0, rootMargin: "-65px 0px 0px 0px" },
     );
@@ -90,135 +64,36 @@ export default function Browse() {
     return () => observer.disconnect();
   }, []);
 
-  const displayItems =
-    pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
-  const cappedTotal = Math.min(total, totalPages * pageSize);
-  const skeletonCols = Array.from({ length: Math.min(pageSize, 8) });
-  const isMovie = mediaType === "movie";
+  const displayItems  = pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
+  const cappedTotal   = Math.min(total, totalPages * pageSize);
+  const skeletonCount = Math.min(pageSize, 8);
+  const skeletonKeys  = Array.from({ length: skeletonCount }, (_, n) => `sk-${n}`);
+  const isMovie       = mediaType === "movie";
 
   const handlePageChange = (p: number, ps: number) => {
     setPage(p);
     if (ps !== pageSize) setPageSize(ps);
     const el = resultsRef.current;
     if (el) {
-      const navbarHeight = 64;
       const paginationHeight = paginationRef.current?.offsetHeight ?? 0;
-      const offset = navbarHeight + paginationHeight + 8;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      const top = el.getBoundingClientRect().top + window.scrollY - 64 - paginationHeight - 8;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
-  const handleTabChange = (key: string) => {
-    setMediaType(key as MediaType);
-  };
-
-  const filterBar = (
-    <div
-      className="browse-filters"
-      style={{
-        background: colors.bgCard,
-        border: `1px solid ${colors.border}`,
-      }}
-    >
-      <Row gutter={[16, 16]} align="middle">
-        <Col xs={24} sm={12} md={8} lg={8}>
-          <Input
-            placeholder={isMovie ? "Search movies…" : "Search TV series…"}
-            prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
-            value={searchQuery}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            allowClear
-            maxLength={35}
-            style={{ borderRadius: 8 }}
-          />
-        </Col>
-        <Col xs={24} sm={12} md={7} lg={7}>
-          <Select
-            value={selectedGenre}
-            onChange={(v) => {
-              setGenre(v);
-              setPage(1);
-            }}
-            style={{ width: "100%" }}
-            options={genres}
-            placeholder="Select genre"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6} lg={5}>
-          <Select
-            value={selectedYear}
-            onChange={(v) => {
-              setYear(v);
-              setPage(1);
-            }}
-            style={{ width: "100%" }}
-            placeholder={isMovie ? "Release year" : "Air year"}
-            suffixIcon={
-              <CalendarOutlined style={{ color: colors.textMuted }} />
-            }
-            options={YEAR_RANGES.map((r) => ({
-              label: r.label,
-              value: r.value,
-            }))}
-          />
-        </Col>
-        <Col xs={24} sm={12} md={3} lg={4}>
-          <Flex justify="flex-end" align="center">
-            <Segmented
-              value={layout}
-              onChange={(v) => setLayout(v as "grid" | "list")}
-              options={[
-                { value: "grid", icon: <AppstoreOutlined /> },
-                { value: "list", icon: <BarsOutlined /> },
-              ]}
-            />
-          </Flex>
-        </Col>
-      </Row>
-    </div>
-  );
-
-  const genrePills = (
-    <Flex wrap="wrap" gap={8} className="browse-genre-pills">
-      {genres.map((g) => (
-        <button
-          key={g.value}
-          className="browse-genre-pill"
-          onClick={() => {
-            setGenre(g.value);
-            setPage(1);
-          }}
-          style={{
-            border: `1px solid ${selectedGenre === g.value ? colors.accent : colors.border}`,
-            background: selectedGenre === g.value ? colors.accent : "transparent",
-            color: selectedGenre === g.value ? "#fff" : colors.textMuted,
-            fontWeight: selectedGenre === g.value ? 600 : 400,
-            flexShrink: 0,
-          }}
-        >
-          {g.label}
-        </button>
-      ))}
-    </Flex>
-  );
-
   const resultContent = isLoading ? (
     layout === "grid" ? (
       <Row gutter={[16, 20]}>
-        {skeletonCols.map((_, i) => (
-          <Col key={i} xs={24} sm={12} md={8} lg={6}>
+        {skeletonKeys.map((key) => (
+          <Col key={key} xs={24} sm={12} md={8} lg={6}>
             <MovieCardSkeleton />
           </Col>
         ))}
       </Row>
     ) : (
       <Space orientation="vertical" size={12} style={{ width: "100%" }}>
-        {skeletonCols.map((_, i) => (
-          <MovieListRowSkeleton key={i} />
+        {skeletonKeys.map((key) => (
+          <MovieListRowSkeleton key={key} />
         ))}
       </Space>
     )
@@ -226,8 +101,7 @@ export default function Browse() {
     <Empty
       description={
         <Text style={{ color: colors.textMuted }}>
-          No {isMovie ? "movies" : "TV series"} found. Try a different search or
-          filter.
+          No {isMovie ? "movies" : "TV series"} found. Try a different search or filter.
         </Text>
       }
       style={{ padding: "60px 0" }}
@@ -241,43 +115,27 @@ export default function Browse() {
       ))}
     </Row>
   ) : (
-    <Space
-      ref={resultsRef}
-      orientation="vertical"
-      size={12}
-      style={{ width: "100%" }}
-    >
+    <Space ref={resultsRef} orientation="vertical" size={12} style={{ width: "100%" }}>
       {displayItems.map((item) => (
-        <MovieListRow
-          key={item.id}
-          movie={item}
-          onPlay={playMovie}
-          onDetail={openDetail}
-        />
+        <MovieListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
       ))}
     </Space>
   );
 
-  const pagination = (
+  const tabContent = (
     <>
+      <BrowseFilters />
       <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
       <Flex ref={paginationRef} vertical align="center" gap={8} className="browse-pagination">
         {cappedTotal > 0 && (
-          <Text
-            className="browse-pagination__total"
-            style={{ color: colors.textMuted }}
-          >
-            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, cappedTotal)}{" "}
-            of{" "}
+          <Text className="browse-pagination__total" style={{ color: colors.textMuted }}>
+            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, cappedTotal)} of{" "}
             <Text strong style={{ color: colors.textPrimary }}>
               {cappedTotal.toLocaleString()}
             </Text>{" "}
             {isMovie ? "movies" : "series"}
             {searchQuery && (
-              <>
-                {" "}
-                for "<Text style={{ color: colors.accent }}>{searchQuery}</Text>"
-              </>
+              <> for "<Text style={{ color: colors.accent }}>{searchQuery}</Text>"</>
             )}
           </Text>
         )}
@@ -286,25 +144,21 @@ export default function Browse() {
           pageSize={pageSize}
           total={cappedTotal}
           onChange={handlePageChange}
-          onShowSizeChange={(_, ps) => {
-            setPageSize(ps);
-            setPage(1);
-          }}
+          onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
           showSizeChanger
           pageSizeOptions={PAGE_SIZE_OPTIONS}
           disabled={total === 0 || isFetching}
           responsive
         />
       </Flex>
+      {resultContent}
     </>
   );
 
   return (
     <div>
       <div className="browse-header">
-        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>
-          Browse
-        </Title>
+        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>Browse</Title>
         <Text style={{ color: colors.textMuted }}>
           Discover movies and TV series — search, filter by genre or year.
         </Text>
@@ -312,42 +166,18 @@ export default function Browse() {
 
       <Tabs
         activeKey={mediaType}
-        onChange={handleTabChange}
+        onChange={(key) => setMediaType(key as MediaType)}
         className="browse-tabs"
         items={[
           {
             key: "movie",
-            label: (
-              <Space size={6}>
-                <VideoCameraOutlined />
-                Movies
-              </Space>
-            ),
-            children: (
-              <>
-                {filterBar}
-                {genrePills}
-                {pagination}
-                {resultContent}
-              </>
-            ),
+            label: <Space size={6}><VideoCameraOutlined />Movies</Space>,
+            children: tabContent,
           },
           {
             key: "tv",
-            label: (
-              <Space size={6}>
-                <PlaySquareOutlined />
-                TV Series
-              </Space>
-            ),
-            children: (
-              <>
-                {filterBar}
-                {genrePills}
-                {pagination}
-                {resultContent}
-              </>
-            ),
+            label: <Space size={6}><PlaySquareOutlined />TV Series</Space>,
+            children: tabContent,
           },
         ]}
       />

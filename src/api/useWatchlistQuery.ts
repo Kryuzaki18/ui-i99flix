@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWatchlist, addToWatchlist, removeFromWatchlist } from './watchlistApi';
+import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../services/watchlistService';
 import { watchlistKeys } from './queryKeys';
 import { useAuthStore } from '../store/authStore';
 import messageService from '../services/messageService';

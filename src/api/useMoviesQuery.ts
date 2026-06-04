@@ -7,18 +7,14 @@ import {
   fetchTmdbMoviesTopRated,
   fetchTmdbMovieDetail,
 } from './tmdbApi';
-import {
-  tmdbMovieListItemToMovie,
-  tmdbMovieDetailToMovie,
-} from '../utils/tmdbAdapter';
-import { useTmdbStore } from '../store/tmdbStore';
+import { tmdbMovieListItemToMovie, tmdbMovieDetailToMovie } from '../utils/tmdbAdapter';
+import { useMovieGenreMap } from '../hooks/useGenreMap';
 import type { Movie } from '../models/movieModel';
 
 const STALE_TIME = 5 * 60 * 1000;
 
 export function useFeaturedMoviesQuery() {
-  const movieGenres = useTmdbStore((s) => s.movieGenres);
-  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
+  const genreMap = useMovieGenreMap();
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.popular({}),
@@ -31,8 +27,7 @@ export function useFeaturedMoviesQuery() {
 }
 
 export function useTrendingMoviesQuery() {
-  const movieGenres = useTmdbStore((s) => s.movieGenres);
-  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
+  const genreMap = useMovieGenreMap();
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.trending({}),
@@ -49,8 +44,7 @@ export function useTrendingMoviesQuery() {
 }
 
 export function useNewReleasesQuery() {
-  const movieGenres = useTmdbStore((s) => s.movieGenres);
-  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
+  const genreMap = useMovieGenreMap();
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.nowPlaying({}),
@@ -67,8 +61,7 @@ export function useNewReleasesQuery() {
 }
 
 export function useTopRatedMoviesQuery() {
-  const movieGenres = useTmdbStore((s) => s.movieGenres);
-  const genreMap = new Map((movieGenres ?? []).map((g) => [g.id, g.name]));
+  const genreMap = useMovieGenreMap();
 
   return useQuery<Movie[]>({
     queryKey: tmdbKeys.movies.topRated({}),

@@ -5,7 +5,7 @@ import {
   CloseOutlined,
   CheckCircleFilled,
 } from "@ant-design/icons";
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo } from "react";
 import type { Movie } from "../../models/movieModel";
 import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/useWatchQuery";
 import { useTheme } from "../../context/ThemeContext";
@@ -33,8 +33,8 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [server, setServer] = useState(0);
-  const [season, setSeason] = useState(1);
-  const [episode, setEpisode] = useState(1);
+  const [manualSeason, setManualSeason]   = useState<number | null>(null);
+  const [manualEpisode, setManualEpisode] = useState<number | null>(null);
   const { colors } = useTheme();
   const recordWatch = useRecordWatchMutation();
 
@@ -42,15 +42,26 @@ export default function VideoPlayer({
 
   const watchEntry = useMemo(
     () => watchHistory?.find((e) => movie && e.movieId === String(movie.id)),
-    [watchHistory, movie?.id],
+    [watchHistory, movie],
   );
 
   const watchedEpisodes = useMemo(() => {
     if (!watchEntry?.episodes?.length) return new Set<string>();
     return new Set(watchEntry.episodes.map((ep) => `${ep.season}-${ep.episode}`));
-  }, [watchEntry?.episodes]);
+  }, [watchEntry]);
 
   const wasWatched = !!watchEntry;
+
+  // Derive the best initial season/episode from watch history (no effect needed)
+  const lastWatched = useMemo(() => {
+    if (!open || movie?.mediaType !== 'tv' || !watchEntry?.episodes?.length) return null;
+    return watchEntry.episodes.reduce((latest, ep) =>
+      ep.watchedAt > latest.watchedAt ? ep : latest
+    );
+  }, [open, movie?.mediaType, watchEntry]);
+
+  const season  = manualSeason  ?? lastWatched?.season  ?? 1;
+  const episode = manualEpisode ?? lastWatched?.episode ?? 1;
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null,
@@ -61,35 +72,6 @@ export default function VideoPlayer({
   const totalEpisodesForSeason =
     tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ??
     30;
-
-  // Tracks whether we've already applied the last-watched episode for this session
-  const didInitEpisodeRef = useRef(false);
-
-  // Reset everything when the modal closes or the movie changes
-  useEffect(() => {
-    if (!open) {
-      setPlaying(false);
-      setServer(0);
-      setSeason(1);
-      setEpisode(1);
-      didInitEpisodeRef.current = false;
-    }
-  }, [open, movie?.id]);
-
-  // Pre-select the last-watched season/episode when watch history is available
-  useEffect(() => {
-    if (!open || !movie || movie.mediaType !== "tv") return;
-    if (didInitEpisodeRef.current) return;
-    if (!watchEntry?.episodes?.length) return;
-
-    const last = [...watchEntry.episodes].sort((a, b) =>
-      b.watchedAt.localeCompare(a.watchedAt),
-    )[0];
-
-    setSeason(last.season);
-    setEpisode(last.episode);
-    didInitEpisodeRef.current = true;
-  }, [open, movie?.id, movie?.mediaType, watchEntry?.episodes]);
 
   usePageTitle(
     open ? movie?.title : null,
@@ -112,7 +94,7 @@ export default function VideoPlayer({
   }, [movie, season, episode, recordWatch]);
 
   const handleSeasonChange = useCallback((s: number) => {
-    setSeason(s);
+    setManualSeason(s);
     if (playing && movie?.mediaType === "tv") {
       recordWatch.mutate({
         movieId:   String(movie.id),
@@ -126,7 +108,7 @@ export default function VideoPlayer({
   }, [playing, movie, episode, recordWatch]);
 
   const handleEpisodeChange = useCallback((ep: number) => {
-    setEpisode(ep);
+    setManualEpisode(ep);
     if (playing && movie?.mediaType === "tv") {
       recordWatch.mutate({
         movieId:   String(movie.id),

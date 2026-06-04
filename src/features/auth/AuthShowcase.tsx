@@ -163,9 +163,9 @@ export default function AuthShowcase() {
 
           {movies.length > 1 && (
             <Flex gap={8} align="center" className="auth-showcase__dots">
-              {movies.map((_, i) => (
+              {movies.map((movie, i) => (
                 <button
-                  key={i}
+                  key={movie.id}
                   className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
                   onClick={() => goToSlide(i)}
                   aria-label={`Go to slide ${i + 1}`}
