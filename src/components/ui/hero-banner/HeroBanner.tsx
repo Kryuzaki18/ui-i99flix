@@ -24,13 +24,16 @@ interface HeroBannerProps {
 
 function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
   const [current, setCurrent] = useState(0);
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(!movies[0]?.backdrop);
+  const [imgError, setImgError]   = useState(!movies[0]?.backdrop);
   const { colors } = useTheme();
     const resolvedGenres = useResolvedGenres(movies[current]?.genre);
 
   useEffect(() => {
-    setImgLoaded(false);
-  }, [current]);
+    const hasBackdrop = !!movies[current]?.backdrop;
+    setImgLoaded(!hasBackdrop);
+    setImgError(!hasBackdrop);
+  }, [current, movies]);
 
   const prev = useCallback(
     () => setCurrent((c) => (c - 1 + movies.length) % movies.length),
@@ -106,8 +109,9 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         alt=""
         aria-hidden="true"
         onLoad={() => setImgLoaded(true)}
+        onError={() => { setImgLoaded(true); setImgError(true); }}
         className="hero-banner__img"
-        style={{ opacity: imgLoaded ? 1 : 0 }}
+        style={{ opacity: imgLoaded && !imgError ? 1 : 0 }}
       />
 
       {imgLoaded && (

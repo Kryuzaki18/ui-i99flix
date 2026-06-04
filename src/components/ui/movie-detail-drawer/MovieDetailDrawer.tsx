@@ -204,19 +204,19 @@ function MovieDetailDrawerInner({
               <Flex vertical gap={6} className="detail-drawer__production">
                 {studio && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Studio</Text>
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Studio</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{studio}</Text>
                   </Flex>
                 )}
                 {country && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Country</Text>
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Country</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{country}</Text>
                   </Flex>
                 )}
                 {language && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted }}>Language</Text>
+                    <Text className="detail-drawer__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Language</Text>
                     <Text className="detail-drawer__production-value" style={{ color: colors.textSecondary }}>{language}</Text>
                   </Flex>
                 )}

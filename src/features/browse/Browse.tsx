@@ -197,6 +197,7 @@ export default function Browse() {
             background: selectedGenre === g.value ? colors.accent : "transparent",
             color: selectedGenre === g.value ? "#fff" : colors.textMuted,
             fontWeight: selectedGenre === g.value ? 600 : 400,
+            flexShrink: 0,
           }}
         >
           {g.label}

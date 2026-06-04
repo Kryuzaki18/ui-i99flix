@@ -87,7 +87,7 @@ export default function AuthShowcase() {
   return (
     <div
       className="auth-showcase"
-      style={{ '--auth-edge-color': isDark ? '#0d0d1a' : '#f0f2f5' } as React.CSSProperties}
+      style={{ '--auth-edge-color': isDark ? '#0d0d1a' : '#f0f2f5', flex: 1 } as React.CSSProperties}
     >
       {movies.map((movie, i) => (
         <div
@@ -115,6 +115,7 @@ export default function AuthShowcase() {
               tabIndex={0}
               aria-label={`View ${movie.title}`}
               onKeyDown={(e) => e.key === 'Enter' && goToSlide(i)}
+              style={{ flexShrink: 0 }}
             >
               <img src={movie.thumbnail} alt={movie.title} loading="lazy" />
               <div className="auth-showcase__card-label">{movie.title}</div>
@@ -130,12 +131,12 @@ export default function AuthShowcase() {
               key={movie.id}
               className={`auth-showcase__info-content ${i === activeIdx ? 'is-active' : ''}`}
             >
-              <div className="auth-showcase__info-badge">
+              <Flex component="div" align="center" gap={6} className="auth-showcase__info-badge">
                 <FireFilled />
                 Trending
-              </div>
+              </Flex>
               <h2 className="auth-showcase__info-title">{movie.title}</h2>
-              <Flex align="center" gap={12} className="auth-showcase__info-meta">
+              <Flex align="center" gap={12} wrap="wrap" className="auth-showcase__info-meta">
                 <Flex component="span" align="center" gap={4} className="auth-showcase__info-rating">
                   <StarFilled />
                   {movie.rating.toFixed(1)}
@@ -168,6 +169,7 @@ export default function AuthShowcase() {
                   className={`auth-showcase__dot ${i === activeIdx ? 'is-active' : ''}`}
                   onClick={() => goToSlide(i)}
                   aria-label={`Go to slide ${i + 1}`}
+                  style={{ flexShrink: 0 }}
                 />
               ))}
             </Flex>

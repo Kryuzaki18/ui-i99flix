@@ -38,7 +38,6 @@
   transition: all 0.2s ease;
   background: transparent;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .browse-genre-pill:hover {

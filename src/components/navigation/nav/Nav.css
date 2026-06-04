@@ -39,7 +39,6 @@
 .nav-avatar {
   background: #e50914 !important;
   cursor: pointer;
-  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

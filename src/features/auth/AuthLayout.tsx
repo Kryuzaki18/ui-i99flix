@@ -22,7 +22,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     <Flex className="auth-layout" style={{ background: colors.bgBase }}>
       <AuthShowcase />
 
-      <Flex vertical align="center" justify="space-between" className="auth-panel" style={{ background: colors.bgBase }}>
+      <Flex vertical align="center" justify="space-between" className="auth-panel" style={{ background: colors.bgBase, flexShrink: 0 }}>
         <Flex className="auth-panel__inner" justify="center" align="center" vertical flex={1}>
           <img src="/i99flix-logo.png" alt="i99flix logo" width={150} />
           {children}

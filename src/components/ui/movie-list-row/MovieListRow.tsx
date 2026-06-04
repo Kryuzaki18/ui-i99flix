@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Space, Tag, Typography, Button, Tooltip, Flex } from "antd";
 import type { TooltipProps } from "antd";
-import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled, PictureOutlined } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movieModel";
 import { useTheme } from "../../../context/ThemeContext";
@@ -21,6 +21,7 @@ interface MovieListRowProps {
 }
 
 function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
+  const [imgError, setImgError] = useState(!movie.thumbnail);
   const { colors } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
   const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
@@ -31,10 +32,28 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
       className="movie-list-row"
       style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
     >
-      <Flex align="stretch" className="movie-list-row__media">
-        <img src={movie.thumbnail || undefined} alt={movie.title} className="movie-list-row__thumb" />
+      <Flex align="stretch" flex="1" style={{ minWidth: 0 }} className="movie-list-row__media">
+        {imgError ? (
+          <Flex
+            align="center"
+            justify="center"
+            style={{ flexShrink: 0 }}
+            className="movie-list-row__thumb-placeholder"
+            aria-hidden="true"
+          >
+            <PictureOutlined style={{ fontSize: 22, color: "rgba(255,255,255,0.2)" }} />
+          </Flex>
+        ) : (
+          <img
+            src={movie.thumbnail}
+            alt={movie.title}
+            className="movie-list-row__thumb"
+            style={{ flexShrink: 0 }}
+            onError={() => setImgError(true)}
+          />
+        )}
 
-        <Flex align="center" className="movie-list-row__body">
+        <Flex align="center" flex="1" style={{ minWidth: 0 }} className="movie-list-row__body">
           <Flex vertical gap={3} className="movie-list-row__info">
             <Space size={6} wrap className="movie-list-row__meta">
               <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>
@@ -62,7 +81,14 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
         </Flex>
       </Flex>
 
-      <Flex vertical align="center" justify="center" gap={6} className="movie-list-row__actions">
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        gap={6}
+        style={{ flexShrink: 0 }}
+        className="movie-list-row__actions"
+      >
         <Text className="movie-list-row__rating">★ {movie.rating}</Text>
         <Space size={8}>
           <Tooltip title="Play" trigger={TOOLTIP_TRIGGER}>

@@ -6,6 +6,7 @@ import {
   StarFilled,
   HeartOutlined,
   HeartFilled,
+  PictureOutlined,
 } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movieModel";
@@ -23,7 +24,9 @@ interface MovieCardProps {
 }
 
 function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const noImage = !movie.thumbnail;
+  const [imgLoaded, setImgLoaded] = useState(noImage);
+  const [imgError, setImgError]   = useState(noImage);
   const { colors, isDark } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
   const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
@@ -38,13 +41,20 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
         <div className="movie-card__cover">
           {!imgLoaded && <Skeleton.Image active className="movie-card__skeleton-img" />}
 
-          <img
-            alt={movie.title}
-            src={movie.thumbnail || undefined}
-            onLoad={() => setImgLoaded(true)}
-            className="movie-card__img"
-            style={{ display: imgLoaded ? "block" : "none" }}
-          />
+          {imgError ? (
+            <div className="movie-card__img-placeholder" aria-hidden="true">
+              <PictureOutlined style={{ fontSize: 32, color: "rgba(255,255,255,0.2)" }} />
+            </div>
+          ) : (
+            <img
+              alt={movie.title}
+              src={movie.thumbnail}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => { setImgLoaded(true); setImgError(true); }}
+              className="movie-card__img"
+              style={{ display: imgLoaded ? "block" : "none" }}
+            />
+          )}
 
           {imgLoaded && (
             <Flex

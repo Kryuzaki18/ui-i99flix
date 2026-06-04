@@ -123,6 +123,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             src={user?.avatarUrl}
             icon={!user?.avatarUrl && !initials ? <UserOutlined /> : undefined}
             size={40}
+            style={{ flexShrink: 0 }}
           >
             {!user?.avatarUrl && initials}
           </Avatar>

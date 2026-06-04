@@ -43,15 +43,16 @@ function PlayerHeader() {
       style={{
         background: colors.bgBase,
         borderBottom: `1px solid ${colors.border}`,
+        flexShrink: 0,
       }}
     >
-      <Link to="/" className="player-page__back-link">
+      <Link to="/" className="player-page__back-link" style={{ flexShrink: 0 }}>
         <Button type="text" icon={<ArrowLeftOutlined />}>
           <span className="player-page__back-label">Back</span>
         </Button>
       </Link>
 
-      <Link to="/" className="player-page__header-logo-link">
+      <Link to="/" className="player-page__header-logo-link" style={{ flexShrink: 0 }}>
         <img
           src="/i99flix-logo.png"
           alt="i99flix"
@@ -192,7 +193,7 @@ export default function Player() {
     >
       <PlayerHeader />
 
-      <Flex vertical className="player-page__video">
+      <Flex vertical className="player-page__video" style={{ flexShrink: 0 }}>
         {!playing && (
           <div className="player-page__video-clickzone">
             <img
@@ -218,7 +219,7 @@ export default function Player() {
         )}
 
         {playing && (
-          <Flex vertical className="player-page__iframe-wrap">
+          <Flex vertical flex="1" className="player-page__iframe-wrap">
             <ServerIframe
               server={servers}
               mediaId={movie.id}
@@ -262,6 +263,7 @@ export default function Player() {
         style={{
           background: colors.bgBase,
           borderTop: `1px solid ${colors.border}`,
+          flex: 1,
         }}
       >
         <div className="player-page__info-inner">
@@ -329,19 +331,19 @@ export default function Player() {
               <Flex vertical gap={6} className="player-page__production">
                 {studio && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Studio</Text>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Studio</Text>
                     <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{studio}</Text>
                   </Flex>
                 )}
                 {country && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Country</Text>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Country</Text>
                     <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{country}</Text>
                   </Flex>
                 )}
                 {language && (
                   <Flex align="baseline" gap={8}>
-                    <Text className="player-page__production-label" style={{ color: colors.textMuted }}>Language</Text>
+                    <Text className="player-page__production-label" style={{ color: colors.textMuted, flexShrink: 0 }}>Language</Text>
                     <Text className="player-page__production-value" style={{ color: colors.textSecondary }}>{language}</Text>
                   </Flex>
                 )}

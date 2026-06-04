@@ -389,6 +389,7 @@ export default function Profile() {
           icon={!user?.avatarUrl && !initials ? <UserOutlined /> : undefined}
           size={64}
           className="profile__avatar"
+          style={{ flexShrink: 0 }}
         >
           {!user?.avatarUrl && initials}
         </Avatar>

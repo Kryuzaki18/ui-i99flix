@@ -43,7 +43,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
       {credits.isLoading ? (
         <Flex gap={12} wrap="nowrap" className="cast-section__row">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Flex key={i} vertical align="center" gap={4} className="cast-section__card">
+            <Flex key={i} vertical align="center" gap={4} flex="0 0 72px" className="cast-section__card">
               <Skeleton.Avatar active size={64} shape="circle" />
               <Skeleton
                 active
@@ -63,7 +63,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
               placement="top"
               getPopupContainer={(trigger) => trigger.parentElement ?? document.body}
             >
-              <Flex vertical align="center" gap={4} className="cast-section__card">
+              <Flex vertical align="center" gap={4} flex="0 0 72px" className="cast-section__card">
                 <Avatar
                   size={64}
                   src={

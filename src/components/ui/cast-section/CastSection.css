@@ -32,7 +32,6 @@
 }
 
 .cast-section__card {
-  flex: 0 0 72px;
   width: 72px;
   cursor: default;
 }

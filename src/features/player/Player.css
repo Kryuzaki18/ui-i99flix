@@ -8,11 +8,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  flex-shrink: 0;
 }
 
 .player-page__header-logo-link {
-  flex-shrink: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -49,7 +47,6 @@
 
 .player-page__back-link {
   text-decoration: none;
-  flex-shrink: 0;
 }
 
 @media (max-width: 360px) {
@@ -63,7 +60,6 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000;
-  flex-shrink: 0;
   max-height: 72dvh;
   overflow: hidden;
 }
@@ -84,7 +80,6 @@
 
 .player-page__iframe-wrap {
   position: relative;
-  flex: 1;
   overflow: hidden;
   background: #000;
 }
@@ -127,7 +122,6 @@
 }
 
 .player-page__info {
-  flex: 1;
   padding: 20px clamp(12px, 4vw, 48px);
 }
 
@@ -165,7 +159,6 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   min-width: 62px;
-  flex-shrink: 0;
 }
 
 .player-page__production-value {

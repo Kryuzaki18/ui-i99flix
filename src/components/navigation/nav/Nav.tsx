@@ -165,7 +165,7 @@ function NavInner({ onMenuOpen }: NavProps) {
             size={34}
             aria-label="User menu"
             aria-haspopup="true"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", flexShrink: 0 }}
           >
             {!user?.avatarUrl && initials}
           </Avatar>

@@ -58,7 +58,6 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   min-width: 62px;
-  flex-shrink: 0;
 }
 
 .detail-drawer__production-value {

@@ -22,7 +22,6 @@
 
 .sidebar__avatar {
   background: #e50914 !important;
-  flex-shrink: 0;
 }
 
 .sidebar__user-name {
