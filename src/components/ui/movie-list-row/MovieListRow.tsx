@@ -1,22 +1,32 @@
 import { memo, useState } from "react";
-import { Space, Tag, Typography, Button, Tooltip, Flex } from "antd";
+import { Badge, Space, Tag, Typography, Button, Tooltip, Flex } from "antd";
 import type { TooltipProps } from "antd";
-import { PlayCircleOutlined, InfoCircleOutlined, HeartOutlined, HeartFilled, PictureOutlined } from "@ant-design/icons";
+import {
+  PlayCircleOutlined,
+  InfoCircleOutlined,
+  HeartOutlined,
+  HeartFilled,
+  PictureOutlined,
+} from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movieModel";
 import { useTheme } from "../../../context/ThemeContext";
 import useResolvedGenres from "../../../hooks/useResolvedGenres";
 import useWatchlistStatus from "../../../hooks/useWatchlistStatus";
+import useWatchedStatus from "../../../hooks/useWatchedStatus";
 import "./MovieListRow.css";
 
 const { Text } = Typography;
 
-const TOOLTIP_TRIGGER: TooltipProps["trigger"] =
-  window.matchMedia("(hover: none) and (pointer: coarse)").matches ? [] : ["hover"];
+const TOOLTIP_TRIGGER: TooltipProps["trigger"] = window.matchMedia(
+  "(hover: none) and (pointer: coarse)",
+).matches
+  ? []
+  : ["hover"];
 
 interface MovieListRowProps {
-  movie:    Movie;
-  onPlay:   (movie: Movie) => void;
+  movie: Movie;
+  onPlay: (movie: Movie) => void;
   onDetail: (movie: Movie) => void;
 }
 
@@ -25,46 +35,88 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
   const { colors } = useTheme();
   const resolvedGenres = useResolvedGenres(movie.genre);
   const { inWatchlist, isPending, toggle } = useWatchlistStatus(movie);
+  const { isWatched, lastSeason, lastEpisode } = useWatchedStatus(movie);
+
+  const watchedLabel =
+    movie.mediaType === "tv" && lastSeason && lastEpisode
+      ? `S${lastSeason}-${lastEpisode}ep watched`
+      : "Watched";
+
+  const thumbEl = (
+    <div className="movie-list-row__thumb-wrap">
+      {imgError ? (
+        <Flex
+          align="center"
+          justify="center"
+          className="movie-list-row__thumb-placeholder"
+          aria-hidden="true"
+        >
+          <PictureOutlined
+            style={{ fontSize: 22, color: "rgba(255,255,255,0.2)" }}
+          />
+        </Flex>
+      ) : (
+        <img
+          src={movie.thumbnail}
+          alt={movie.title}
+          className="movie-list-row__thumb"
+          onError={() => setImgError(true)}
+        />
+      )}
+    </div>
+  );
 
   return (
     <Flex
       align="stretch"
       className="movie-list-row"
-      style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
+      style={{
+        background: colors.bgCard,
+        border: `1px solid ${colors.border}`,
+      }}
     >
-      <Flex align="stretch" flex="1" style={{ minWidth: 0 }} className="movie-list-row__media">
-        {imgError ? (
-          <Flex
-            align="center"
-            justify="center"
-            style={{ flexShrink: 0 }}
-            className="movie-list-row__thumb-placeholder"
-            aria-hidden="true"
+      <Flex
+        align="stretch"
+        flex="1"
+        style={{ minWidth: 0 }}
+        className="movie-list-row__media"
+      >
+        {isWatched ? (
+          <Badge.Ribbon
+            text={watchedLabel}
+            style={{ fontSize: 11, marginLeft: 4, opacity: 0.8, zIndex: 2 }}
+            color="green"
+            placement="start"
           >
-            <PictureOutlined style={{ fontSize: 22, color: "rgba(255,255,255,0.2)" }} />
-          </Flex>
+            {thumbEl}
+          </Badge.Ribbon>
         ) : (
-          <img
-            src={movie.thumbnail}
-            alt={movie.title}
-            className="movie-list-row__thumb"
-            style={{ flexShrink: 0 }}
-            onError={() => setImgError(true)}
-          />
+          thumbEl
         )}
 
-        <Flex align="center" flex="1" style={{ minWidth: 0 }} className="movie-list-row__body">
+        <Flex
+          align="center"
+          flex="1"
+          style={{ minWidth: 0 }}
+          className="movie-list-row__body"
+        >
           <Flex vertical gap={3} className="movie-list-row__info">
             <Space size={6} wrap className="movie-list-row__meta">
-              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.year}</Text>
+              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
+                {movie.year}
+              </Text>
               {movie.duration && movie.duration !== "N/A" && (
-                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{movie.duration}</Text>
+                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
+                  {movie.duration}
+                </Text>
               )}
               {resolvedGenres.map((rg, i) => (
                 <Tag
                   key={rg.key}
                   color={rg.color ?? "default"}
-                  className={i >= 3 ? "movie-list-row__tag--hide-mobile" : undefined}
+                  className={
+                    i >= 3 ? "movie-list-row__tag--hide-mobile" : undefined
+                  }
                   style={{ margin: 0, fontSize: 11 }}
                 >
                   {rg.label}
@@ -72,9 +124,14 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
               ))}
             </Space>
 
-            <Text strong className="movie-list-row__title">{movie.title}</Text>
+            <Text strong className="movie-list-row__title">
+              {movie.title}
+            </Text>
 
-            <Text className="movie-list-row__desc" style={{ color: colors.textMuted }}>
+            <Text
+              className="movie-list-row__desc"
+              style={{ color: colors.textMuted }}
+            >
               {movie.description}
             </Text>
           </Flex>
@@ -117,14 +174,18 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
             <Button
               size="middle"
               loading={isPending}
-              icon={inWatchlist
-                ? <HeartFilled style={{ color: colors.accent }} />
-                : <HeartOutlined />
+              icon={
+                inWatchlist ? (
+                  <HeartFilled style={{ color: colors.accent }} />
+                ) : (
+                  <HeartOutlined />
+                )
               }
               onClick={toggle}
-              aria-label={inWatchlist
-                ? `Remove ${movie.title} from watchlist`
-                : `Add ${movie.title} to watchlist`
+              aria-label={
+                inWatchlist
+                  ? `Remove ${movie.title} from watchlist`
+                  : `Add ${movie.title} to watchlist`
               }
               className="movie-list-row__btn-gray"
             />

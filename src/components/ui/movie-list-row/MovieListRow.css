@@ -12,14 +12,29 @@
   border-color: #e50914 !important;
 }
 
-.movie-list-row__thumb {
+/* Wrapper is the flex child — controls sizing; thumb/placeholder fill it */
+.movie-list-row__thumb-wrap {
+  flex-shrink: 0;
+  overflow: hidden;   /* clips the Badge.Ribbon to the thumbnail area */
+  position: relative;
   width: 100px;
+}
+
+/* When Badge.Ribbon renders, it inserts ant-ribbon-wrapper as a flex child */
+.movie-list-row__media > .ant-ribbon-wrapper {
+  flex-shrink: 0;
+}
+
+.movie-list-row__thumb {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
 }
 
 .movie-list-row__thumb-placeholder {
-  width: 100px;
+  width: 100%;
+  height: 100%;
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -79,6 +94,14 @@
   border-color: rgba(128, 128, 128, 0.4) !important;
 }
 
+@media (min-width: 521px) {
+  /* Wrapper drives the fixed dimensions; thumb/placeholder fill it via 100% */
+  .movie-list-row__thumb-wrap {
+    width: 140px;
+    height: 90px;
+  }
+}
+
 @media (max-width: 520px) {
   .movie-list-row__tag--hide-mobile {
     display: none !important;
@@ -93,17 +116,19 @@
     min-height: 90px;
   }
 
-  .movie-list-row__thumb {
-    position: absolute;
+  /* Both the plain wrapper and the ribbon-wrapper (when watched) fill the media area */
+  .movie-list-row__thumb-wrap,
+  .movie-list-row__media > .ant-ribbon-wrapper {
+    position: absolute !important;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    overflow: hidden;
   }
 
-  .movie-list-row__thumb-placeholder {
-    position: absolute;
-    inset: 0;
+  /* When the ribbon-wrapper is absolute, its inner wrap fills it too */
+  .movie-list-row__media > .ant-ribbon-wrapper > .movie-list-row__thumb-wrap {
+    position: static;
     width: 100%;
     height: 100%;
   }
@@ -134,13 +159,5 @@
   .movie-list-row__body .ant-typography,
   .movie-list-row__body .ant-space-item {
     color: rgba(255, 255, 255, 0.75) !important;
-  }
-}
-
-@media (min-width: 521px) {
-  .movie-list-row__thumb,
-  .movie-list-row__thumb-placeholder {
-    width: 140px;
-    height: 90px;
   }
 }
