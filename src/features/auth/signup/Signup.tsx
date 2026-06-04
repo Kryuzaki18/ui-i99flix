@@ -25,6 +25,40 @@ import SocialLoginButtons from "../../../components/auth/SocialLoginButtons";
 
 const { Title, Text } = Typography;
 
+function SignupSuccess({ onSignIn }: { onSignIn: () => void }) {
+  const { colors } = useTheme();
+  const primaryBtn: React.CSSProperties = {
+    background: colors.accent,
+    borderColor: colors.accent,
+    height: 50,
+    borderRadius: 10,
+    fontSize: 16,
+    fontWeight: 700,
+  };
+  return (
+    <Flex vertical align="center" gap={16} style={{ width: "100%", textAlign: "center", padding: "8px 0" }}>
+      <Flex
+        align="center"
+        justify="center"
+        style={{ width: 80, height: 80, borderRadius: "50%", background: "rgba(82,196,26,0.12)" }}
+      >
+        <CheckCircleFilled style={{ fontSize: 38, color: "#52c41a" }} />
+      </Flex>
+      <Flex vertical gap={6} align="center">
+        <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
+          Welcome to i99flix!
+        </Title>
+        <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+          Your account is ready. Sign in to start watching.
+        </Text>
+      </Flex>
+      <Button type="primary" size="large" style={{ ...primaryBtn, paddingInline: 40 }} onClick={onSignIn}>
+        Sign In
+      </Button>
+    </Flex>
+  );
+}
+
 interface SignupForm {
   name: string;
   email: string;
@@ -84,47 +118,7 @@ export default function Signup() {
   };
 
   if (done) {
-    return (
-      <>
-        <Flex
-          vertical
-          align="center"
-          gap={16}
-          style={{ width: "100%", textAlign: "center", padding: "8px 0" }}
-        >
-          <Flex
-            align="center"
-            justify="center"
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: "50%",
-              background: "rgba(82,196,26,0.12)",
-            }}
-          >
-            <CheckCircleFilled style={{ fontSize: 38, color: "#52c41a" }} />
-          </Flex>
-
-          <Flex vertical gap={6} align="center">
-            <Title level={3} style={{ color: colors.textPrimary, margin: 0 }}>
-              Welcome to i99flix!
-            </Title>
-            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
-              Your account is ready. Sign in to start watching.
-            </Text>
-          </Flex>
-
-          <Button
-            type="primary"
-            size="large"
-            style={{ ...primaryBtn, paddingInline: 40 }}
-            onClick={() => navigate("/login")}
-          >
-            Sign In
-          </Button>
-        </Flex>
-      </>
-    );
+    return <SignupSuccess onSignIn={() => navigate("/login")} />;
   }
 
   return (

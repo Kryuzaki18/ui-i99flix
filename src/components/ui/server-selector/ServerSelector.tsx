@@ -27,9 +27,9 @@ export default function ServerSelector({
           paddingBottom: "0.3rem",
         }}
       >
-        {EMBED_SERVERS.map((_, i) => (
+        {EMBED_SERVERS.map((server, i) => (
           <Button
-            key={i}
+            key={server.label}
             size="small"
             type={activeServer === i ? "primary" : "default"}
             onClick={() => onServerChange(i)}

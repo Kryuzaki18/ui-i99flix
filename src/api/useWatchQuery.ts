@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWatchHistory, recordWatch } from './watchApi';
-import type { RecordWatchPayload } from './watchApi';
+import { getWatchHistory, recordWatch } from '../services/watchService';
+import type { RecordWatchPayload } from '../services/watchService';
 import { watchKeys } from './queryKeys';
 import { useAuthStore } from '../store/authStore';
 

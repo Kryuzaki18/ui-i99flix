@@ -32,14 +32,14 @@ export function P({ children }: PProps) {
   );
 }
 
-interface UlProps { items: ReactNode[] }
+interface UlProps { items: string[] }
 
 export function Ul({ items }: UlProps) {
   const { colors } = useTheme();
   return (
     <ul style={{ paddingLeft: 20, marginBottom: 12 }}>
-      {items.map((item, i) => (
-        <li key={i} style={{ marginBottom: 6 }}>
+      {items.map((item) => (
+        <li key={item} style={{ marginBottom: 6 }}>
           <Text style={{ color: colors.textSecondary, lineHeight: 1.8 }}>{item}</Text>
         </li>
       ))}

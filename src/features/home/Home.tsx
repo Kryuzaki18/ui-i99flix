@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Typography, Row, Col, Space, Segmented, Flex } from "antd";
+import { Flex, Segmented } from "antd";
 import {
   FireOutlined,
   ThunderboltOutlined,
@@ -10,9 +10,7 @@ import {
 } from "@ant-design/icons";
 
 import HeroBanner from "../../components/ui/hero-banner/HeroBanner";
-import MovieCard from "../../components/ui/movie-card/MovieCard";
-import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
-import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
+import MovieSection from "../../components/ui/movie-section/MovieSection";
 import { usePlayerStore } from "../../store/playerStore";
 import { useHomeStore } from "../../store/homeStore";
 import {
@@ -21,69 +19,7 @@ import {
   useNewReleasesQuery,
   useTopRatedMoviesQuery,
 } from "../../api/useMoviesQuery";
-import type { Movie } from "../../models/movieModel";
 import "./Home.css";
-
-const { Title } = Typography;
-
-interface SectionProps {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
-  movies: Movie[];
-  isLoading: boolean;
-  layout: 'grid' | 'list';
-}
-
-function MovieSection({ id, title, icon, movies, isLoading, layout }: SectionProps) {
-  const { playMovie, openDetail } = usePlayerStore();
-
-  const gridContent = isLoading
-    ? Array.from({ length: 8 }).map((_, i) => (
-      <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
-        <MovieCardSkeleton />
-      </Col>
-    ))
-    : movies.map((movie) => (
-      <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-        <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
-      </Col>
-    ));
-
-  const listContent = isLoading
-    ? Array.from({ length: 6 }).map((_, i) => (
-      <MovieListRowSkeleton key={i} />
-    ))
-    : movies.map((movie) => (
-      <MovieListRow
-        key={movie.id}
-        movie={movie}
-        onPlay={playMovie}
-        onDetail={openDetail}
-      />
-    ));
-
-  return (
-    <section id={id} className="home-section">
-      <Flex align="center" justify="space-between" className="home-section__header">
-        <Space align="center">
-          <span className="home-section__icon">{icon}</span>
-          <Title level={3} className="home-section__title">
-            {title}
-          </Title>
-        </Space>
-      </Flex>
-
-      {layout === 'grid' ? (
-        <Row gutter={[16, 16]}>{gridContent}</Row>
-      ) : (
-        <Space orientation="vertical" size={12} style={{ width: '100%' }}>
-          {listContent}
-        </Space>
-      )}
-    </section>
-  );
-}
 
 export default function Home() {
   const location = useLocation();
@@ -107,16 +43,12 @@ export default function Home() {
       const top = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
-  }, [location.state]);
+  }, [location]);
 
   return (
     <div>
       <div className="home-hero-wrap">
-        <HeroBanner
-          movies={featured}
-          onPlay={playMovie}
-          onDetail={openDetail}
-        />
+        <HeroBanner movies={featured} onPlay={playMovie} onDetail={openDetail} />
       </div>
 
       <Flex justify="flex-end" className="home-toolbar">

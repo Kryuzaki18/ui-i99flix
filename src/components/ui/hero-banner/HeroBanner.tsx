@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useCallback, memo, useEffect } from "react";
 import { Button, Typography, Space, Tag, Rate, Skeleton, Flex } from "antd";
 import {
   PlayCircleOutlined,
@@ -24,16 +24,10 @@ interface HeroBannerProps {
 
 function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
   const [current, setCurrent] = useState(0);
-  const [imgLoaded, setImgLoaded] = useState(!movies[0]?.backdrop);
-  const [imgError, setImgError]   = useState(!movies[0]?.backdrop);
+  const [loadedImageId, setLoadedImageId] = useState<number | string | null>(null);
+  const [errorImageId, setErrorImageId]   = useState<number | string | null>(null);
   const { colors } = useTheme();
-    const resolvedGenres = useResolvedGenres(movies[current]?.genre);
-
-  useEffect(() => {
-    const hasBackdrop = !!movies[current]?.backdrop;
-    setImgLoaded(!hasBackdrop);
-    setImgError(!hasBackdrop);
-  }, [current, movies]);
+  const resolvedGenres = useResolvedGenres(movies[current]?.genre);
 
   const prev = useCallback(
     () => setCurrent((c) => (c - 1 + movies.length) % movies.length),
@@ -60,7 +54,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
     };
 
     const handleVisibility = () => {
-      document.hidden ? stop() : start();
+      if (document.hidden) stop(); else start();
     };
 
     start();
@@ -75,6 +69,9 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
   if (!movies.length) return null;
 
   const movie = movies[current];
+  const hasBackdrop = !!movie?.backdrop;
+  const imgLoaded   = !hasBackdrop || loadedImageId === movie?.id;
+  const imgError    = errorImageId === movie?.id;
 
   return (
     <section
@@ -108,8 +105,8 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
         src={movie.backdrop}
         alt=""
         aria-hidden="true"
-        onLoad={() => setImgLoaded(true)}
-        onError={() => { setImgLoaded(true); setImgError(true); }}
+        onLoad={() => setLoadedImageId(movie.id)}
+        onError={() => { setLoadedImageId(movie.id); setErrorImageId(movie.id); }}
         className="hero-banner__img"
         style={{ opacity: imgLoaded && !imgError ? 1 : 0 }}
       />

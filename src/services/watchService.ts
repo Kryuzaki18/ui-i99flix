@@ -1,5 +1,5 @@
-import { apiGet, apiPost } from '../services/apiService';
-import { API_ROUTES } from './environments';
+import { apiGet, apiPost } from './apiService';
+import { API_ROUTES } from '../api/environments';
 
 export interface WatchEpisode {
   _id:       string;
@@ -26,12 +26,12 @@ export interface RecordWatchResponse {
 }
 
 export interface RecordWatchPayload {
-  movieId:   string;
-  title:     string;
-  mediaType: 'movie' | 'tv';
+  movieId:    string;
+  title:      string;
+  mediaType:  'movie' | 'tv';
   thumbnail?: string;
-  season?:   number;
-  episode?:  number;
+  season?:    number;
+  episode?:   number;
 }
 
 export const getWatchHistory = () =>

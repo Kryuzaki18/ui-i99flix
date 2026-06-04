@@ -27,3 +27,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# AI generated files
+.agents
+.claude
+.github
+.kiro

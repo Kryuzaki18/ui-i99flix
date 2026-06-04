@@ -22,7 +22,7 @@ import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
 import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { useWatchlistQuery } from "../../api/useWatchlistQuery";
-import { watchlistItemToMovie } from "../../api/watchlistApi";
+import { watchlistItemToMovie } from "../../services/watchlistService";
 import { useWatchlistStore } from "../../store/watchlistStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useTheme } from "../../context/ThemeContext";
@@ -64,7 +64,7 @@ export default function Watchlist() {
       return 0;
     });
 
-  const skeletonCols = Array.from({ length: 8 });
+  const skeletonKeys = Array.from({ length: 8 }, (_, n) => `sk-${n}`);
 
   return (
     <div className="watchlist">
@@ -143,16 +143,16 @@ export default function Watchlist() {
       {isLoading ? (
         layout === "grid" ? (
           <Row gutter={[16, 20]} className="watchlist__grid">
-            {skeletonCols.map((_, i) => (
-              <Col key={i} xs={24} sm={12} md={8} lg={6}>
+            {skeletonKeys.map((key) => (
+              <Col key={key} xs={24} sm={12} md={8} lg={6}>
                 <MovieCardSkeleton />
               </Col>
             ))}
           </Row>
         ) : (
           <Space orientation="vertical" size={12} style={{ width: "100%" }} className="watchlist__list">
-            {skeletonCols.map((_, i) => (
-              <MovieListRowSkeleton key={i} />
+            {skeletonKeys.map((key) => (
+              <MovieListRowSkeleton key={key} />
             ))}
           </Space>
         )

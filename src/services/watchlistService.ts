@@ -1,20 +1,20 @@
-import { apiGet, apiPost, apiDelete } from '../services/apiService';
-import { API_ROUTES } from './environments';
+import { apiGet, apiPost, apiDelete } from './apiService';
+import { API_ROUTES } from '../api/environments';
 import type { Movie } from '../models/movieModel';
 
 export interface WatchlistItem {
-  movieId:     string;
-  title:       string;
-  description: string;
-  genre:       string[];
-  rating:      number;
-  year:        number;
+  movieId:      string;
+  title:        string;
+  description:  string;
+  genre:        string[];
+  rating:       number;
+  year:         number;
   releaseDate?: string;
-  duration:    string;
-  thumbnail:   string;
-  backdrop:    string;
-  mediaType?:  'movie' | 'tv';
-  addedAt:     string;
+  duration:     string;
+  thumbnail:    string;
+  backdrop:     string;
+  mediaType?:   'movie' | 'tv';
+  addedAt:      string;
 }
 
 export interface WatchlistResponse {

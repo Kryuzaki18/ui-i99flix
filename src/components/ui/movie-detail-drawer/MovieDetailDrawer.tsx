@@ -47,7 +47,7 @@ function MovieDetailDrawerInner({
   onClose,
   onPlay,
 }: MovieDetailDrawerProps) {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [loadedSrc, setLoadedSrc] = useState('');
   const { colors, isDark } = useTheme();
 
   const resolvedGenres = useResolvedGenres(movie?.genre);
@@ -70,26 +70,22 @@ function MovieDetailDrawerInner({
     : (movieDetail?.production_countries?.[0]?.name ?? null);
   const language  = detail?.spoken_languages?.[0]?.name ?? null;
 
+  const imgLoaded = !backdropSrc || loadedSrc === backdropSrc;
+
   useEffect(() => {
-    if (!open || !movie) return;
-
-    setImgLoaded(false);
-
-    if (!backdropSrc) {
-      setImgLoaded(true);
-      return;
-    }
+    if (!open || !backdropSrc) return;
+    if (loadedSrc === backdropSrc) return;
 
     const img = new Image();
-    img.onload = () => setImgLoaded(true);
-    img.onerror = () => setImgLoaded(true);
+    img.onload  = () => setLoadedSrc(backdropSrc);
+    img.onerror = () => setLoadedSrc(backdropSrc);
     img.src = backdropSrc;
 
     return () => {
-      img.onload = null;
+      img.onload  = null;
       img.onerror = null;
     };
-  }, [open, movie?.id, backdropSrc]);
+  }, [open, backdropSrc, loadedSrc]);
 
   if (!movie) return null;
 
