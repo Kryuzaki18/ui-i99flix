@@ -12,6 +12,7 @@ import {
   Skeleton,
   Tooltip,
   Flex,
+  Collapse,
 } from "antd";
 import {
   PlayCircleOutlined,
@@ -252,6 +253,32 @@ function MovieDetailDrawerInner({
             {tmdbId && (
               <>
                 <CastSection tmdbId={tmdbId} mediaType={movie.mediaType} />
+                <Divider />
+              </>
+            )}
+
+            {isTV && tvDetail?.seasons && tvDetail.seasons.length > 0 && (
+              <>
+                <Collapse
+                  ghost
+                  size="small"
+                  items={[{
+                    key: 'seasons',
+                    label: <Text strong style={{ color: colors.textMuted }}>Seasons ({tvDetail.seasons.length})</Text>,
+                    children: (
+                      <Flex vertical gap={6}>
+                        {tvDetail.seasons.map((s) => (
+                          <Flex key={s.id} justify="space-between" align="center">
+                            <Text style={{ color: colors.textSecondary }}>{s.name}</Text>
+                            <Text style={{ color: colors.textMuted, fontSize: 12 }}>
+                              {s.episode_count} ep{s.episode_count !== 1 ? 's' : ''}
+                            </Text>
+                          </Flex>
+                        ))}
+                      </Flex>
+                    ),
+                  }]}
+                />
                 <Divider />
               </>
             )}

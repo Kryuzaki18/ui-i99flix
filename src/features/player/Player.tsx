@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/useWatchQuery";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import {
   Typography,
@@ -15,6 +16,7 @@ import {
   ArrowLeftOutlined,
   SunOutlined,
   MoonOutlined,
+  CheckCircleFilled,
 } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/useMoviesQuery";
 import { useTmdbTvDetailQuery, useTmdbMovieDetailQuery } from "../../api/useTmdbQuery";
@@ -138,8 +140,83 @@ export default function Player() {
   const totalEpisodesForSeason = selectedSeasonData?.episode_count || 30;
 
   const [playing, setPlaying] = useState(false);
+  const recordWatch = useRecordWatchMutation();
 
-  const handlePlay = useCallback(() => setPlaying(true), []);
+  const { data: watchHistory } = useWatchHistoryQuery();
+
+  const watchEntry = useMemo(
+    () => watchHistory?.find((e) => movie && e.movieId === String(movie.id)),
+    [watchHistory, movie?.id],
+  );
+
+  const watchedEpisodes = useMemo(() => {
+    if (!watchEntry?.episodes?.length) return new Set<string>();
+    return new Set(watchEntry.episodes.map((ep) => `${ep.season}-${ep.episode}`));
+  }, [watchEntry?.episodes]);
+
+  // Pre-select the last-watched season/episode.
+  // Skip if the URL already carried explicit season/episode params.
+  const hasUrlSeason  = searchParams.has("season");
+  const hasUrlEpisode = searchParams.has("episode");
+  const didInitEpisodeRef = useRef(false);
+
+  useEffect(() => {
+    if (!isTv) return;
+    if (hasUrlSeason && hasUrlEpisode) return;
+    if (didInitEpisodeRef.current) return;
+    if (!watchEntry?.episodes?.length) return;
+
+    const last = [...watchEntry.episodes].sort((a, b) =>
+      b.watchedAt.localeCompare(a.watchedAt),
+    )[0];
+
+    setSeason(last.season);
+    setEpisode(last.episode);
+    didInitEpisodeRef.current = true;
+  }, [isTv, hasUrlSeason, hasUrlEpisode, watchEntry?.episodes]);
+
+  const wasWatched = !!watchEntry;
+
+  const handlePlay = useCallback(() => {
+    if (movie) {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: movie.mediaType ?? "movie",
+        thumbnail: movie.thumbnail,
+        ...(isTv ? { season, episode } : {}),
+      });
+    }
+    setPlaying(true);
+  }, [movie, isTv, season, episode, recordWatch]);
+
+  const handleSeasonChange = useCallback((s: number) => {
+    setSeason(s);
+    if (playing && isTv && movie) {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: "tv",
+        thumbnail: movie.thumbnail,
+        season:    s,
+        episode,
+      });
+    }
+  }, [playing, isTv, movie, episode, recordWatch]);
+
+  const handleEpisodeChange = useCallback((ep: number) => {
+    setEpisode(ep);
+    if (playing && isTv && movie) {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: "tv",
+        thumbnail: movie.thumbnail,
+        season,
+        episode:   ep,
+      });
+    }
+  }, [playing, isTv, movie, season, recordWatch]);
 
   usePageTitle(
     movie?.title,
@@ -203,6 +280,27 @@ export default function Player() {
             />
             <div className="player-page__vignette" />
 
+            {wasWatched && (
+              <Tag
+                icon={<CheckCircleFilled />}
+                color="success"
+                style={{
+                  position:     "absolute",
+                  top:          12,
+                  left:         12,
+                  zIndex:       3,
+                  borderRadius: 12,
+                  fontWeight:   600,
+                  fontSize:     12,
+                  padding:      "2px 10px",
+                }}
+              >
+                {isTv
+                  ? `${watchedEpisodes.size} episode${watchedEpisodes.size !== 1 ? "s" : ""} watched`
+                  : "Watched"}
+              </Tag>
+            )}
+
             <Flex
               align="center"
               justify="center"
@@ -246,9 +344,10 @@ export default function Player() {
           <TvEpisodeSelector
             season={season}
             episode={episode}
-            onSeasonChange={setSeason}
-            onEpisodeChange={setEpisode}
-            totalSeasons={tvDetail?.number_of_seasons || 20}
+            onSeasonChange={handleSeasonChange}
+            onEpisodeChange={handleEpisodeChange}
+            watchedEpisodes={watchedEpisodes}
+            seasons={tvDetail?.seasons}
             totalEpisodes={totalEpisodesForSeason}
           />
         )}

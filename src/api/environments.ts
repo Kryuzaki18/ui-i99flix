@@ -25,6 +25,10 @@ export const API_ROUTES = {
       `${API_BASE}/watchlist/${encodeURIComponent(String(movieId))}`,
   },
 
+  WATCH: {
+    BASE: `${API_BASE}/watch`,
+  },
+
   USER: {
     CHANGE_PASSWORD: `${API_BASE}/change-password`,
     DELETE_ACCOUNT: `${API_BASE}/account`,

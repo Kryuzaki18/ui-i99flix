@@ -3,9 +3,11 @@ import {
   PlayCircleOutlined,
   LinkOutlined,
   CloseOutlined,
+  CheckCircleFilled,
 } from "@ant-design/icons";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import type { Movie } from "../../models/movieModel";
+import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/useWatchQuery";
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
@@ -34,6 +36,21 @@ export default function VideoPlayer({
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const { colors } = useTheme();
+  const recordWatch = useRecordWatchMutation();
+
+  const { data: watchHistory } = useWatchHistoryQuery();
+
+  const watchEntry = useMemo(
+    () => watchHistory?.find((e) => movie && e.movieId === String(movie.id)),
+    [watchHistory, movie?.id],
+  );
+
+  const watchedEpisodes = useMemo(() => {
+    if (!watchEntry?.episodes?.length) return new Set<string>();
+    return new Set(watchEntry.episodes.map((ep) => `${ep.season}-${ep.episode}`));
+  }, [watchEntry?.episodes]);
+
+  const wasWatched = !!watchEntry;
 
   const { data: tvDetail, isLoading: isTvLoading } = useTmdbTvDetailQuery(
     movie?.mediaType === "tv" ? Number(movie.id) : null,
@@ -45,14 +62,34 @@ export default function VideoPlayer({
     tvDetail?.seasons?.find((s) => s.season_number === season)?.episode_count ??
     30;
 
+  // Tracks whether we've already applied the last-watched episode for this session
+  const didInitEpisodeRef = useRef(false);
+
+  // Reset everything when the modal closes or the movie changes
   useEffect(() => {
     if (!open) {
       setPlaying(false);
       setServer(0);
       setSeason(1);
       setEpisode(1);
+      didInitEpisodeRef.current = false;
     }
   }, [open, movie?.id]);
+
+  // Pre-select the last-watched season/episode when watch history is available
+  useEffect(() => {
+    if (!open || !movie || movie.mediaType !== "tv") return;
+    if (didInitEpisodeRef.current) return;
+    if (!watchEntry?.episodes?.length) return;
+
+    const last = [...watchEntry.episodes].sort((a, b) =>
+      b.watchedAt.localeCompare(a.watchedAt),
+    )[0];
+
+    setSeason(last.season);
+    setEpisode(last.episode);
+    didInitEpisodeRef.current = true;
+  }, [open, movie?.id, movie?.mediaType, watchEntry?.episodes]);
 
   usePageTitle(
     open ? movie?.title : null,
@@ -61,7 +98,46 @@ export default function VideoPlayer({
     open && movie?.mediaType === "tv" ? episode : undefined,
   );
 
-  const handlePlay = useCallback(() => setPlaying(true), []);
+  const handlePlay = useCallback(() => {
+    if (movie) {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: movie.mediaType ?? "movie",
+        thumbnail: movie.thumbnail,
+        ...(movie.mediaType === "tv" ? { season, episode } : {}),
+      });
+    }
+    setPlaying(true);
+  }, [movie, season, episode, recordWatch]);
+
+  const handleSeasonChange = useCallback((s: number) => {
+    setSeason(s);
+    if (playing && movie?.mediaType === "tv") {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: "tv",
+        thumbnail: movie.thumbnail,
+        season:    s,
+        episode,
+      });
+    }
+  }, [playing, movie, episode, recordWatch]);
+
+  const handleEpisodeChange = useCallback((ep: number) => {
+    setEpisode(ep);
+    if (playing && movie?.mediaType === "tv") {
+      recordWatch.mutate({
+        movieId:   String(movie.id),
+        title:     movie.title,
+        mediaType: "tv",
+        thumbnail: movie.thumbnail,
+        season,
+        episode:   ep,
+      });
+    }
+  }, [playing, movie, season, recordWatch]);
 
   if (!movie) return null;
 
@@ -112,6 +188,27 @@ export default function VideoPlayer({
                 className="player__backdrop"
               />
               <div className="player__vignette" />
+
+              {wasWatched && (
+                <Tag
+                  icon={<CheckCircleFilled />}
+                  color="success"
+                  style={{
+                    position:     "absolute",
+                    top:          12,
+                    left:         12,
+                    zIndex:       3,
+                    borderRadius: 12,
+                    fontWeight:   600,
+                    fontSize:     12,
+                    padding:      "2px 10px",
+                  }}
+                >
+                  {movie.mediaType === "tv"
+                    ? `${watchedEpisodes.size} episode${watchedEpisodes.size !== 1 ? "s" : ""} watched`
+                    : "Watched"}
+                </Tag>
+              )}
 
               <Flex align="center" justify="center" className="player__overlay">
                 <PlayCircleOutlined
@@ -204,10 +301,11 @@ export default function VideoPlayer({
                 <TvEpisodeSelector
                   season={season}
                   episode={episode}
-                  onSeasonChange={setSeason}
-                  onEpisodeChange={setEpisode}
-                  totalSeasons={tvDetail?.number_of_seasons ?? 20}
+                  onSeasonChange={handleSeasonChange}
+                  onEpisodeChange={handleEpisodeChange}
+                  seasons={tvDetail?.seasons}
                   totalEpisodes={totalEpisodesForSeason}
+                  watchedEpisodes={watchedEpisodes}
                 />
               )}
             </>

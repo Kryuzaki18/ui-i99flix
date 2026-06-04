@@ -15,6 +15,11 @@ export const watchlistKeys = {
   list: () => [...watchlistKeys.all, 'list'] as const,
 } as const;
 
+export const watchKeys = {
+  all:     ['watch'] as const,
+  history: () => [...watchKeys.all, 'history'] as const,
+} as const;
+
 export const tmdbKeys = {
   all: ['tmdb'] as const,
 
