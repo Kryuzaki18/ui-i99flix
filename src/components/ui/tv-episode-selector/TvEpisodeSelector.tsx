@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Select, Button, Flex, Tooltip } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
+import ScrollableRow from '../scrollable-row/ScrollableRow';
 
 const MAX_EPISODES_PER_SEASON = 30;
 
@@ -17,7 +18,6 @@ interface TvEpisodeSelectorProps {
   onEpisodeChange: (e: number) => void;
   seasons?: TvSeasonInfo[];
   totalEpisodes?: number;
-  /** Set of "season-episode" keys already watched, e.g. new Set(["1-3", "2-1"]) */
   watchedEpisodes?: Set<string>;
 }
 
@@ -43,7 +43,7 @@ export default function TvEpisodeSelector({
   });
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%'}}>
       <Select
         value={season}
         onChange={(v) => { onSeasonChange(v); onEpisodeChange(1); }}
@@ -53,12 +53,12 @@ export default function TvEpisodeSelector({
         popupMatchSelectWidth={false}
       />
 
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'] }}>
+      <ScrollableRow>
         <Flex gap={6} style={{ flexWrap: 'nowrap', width: 'max-content', padding: '0.5rem 0' }}>
           {Array.from({ length: episodeCount }, (_, i) => {
-            const ep        = i + 1;
-            const isActive  = ep === episode;
-            const isWatched = watchedEpisodes?.has(`${season}-${ep}`) ?? false;
+            const ep             = i + 1;
+            const isActive       = ep === episode;
+            const isWatched      = watchedEpisodes?.has(`${season}-${ep}`) ?? false;
             const showWatchedStyle = isWatched && !isActive;
 
             const item = (
@@ -72,13 +72,10 @@ export default function TvEpisodeSelector({
                     : undefined
                   }
                   style={{
-                    minWidth:   36,
+                    minWidth: 36,
                     fontWeight: isActive ? 700 : 400,
                     flexShrink: 0,
-                    ...(showWatchedStyle && {
-                      borderColor: '#52c41a',
-                      color:       '#52c41a',
-                    }),
+                    ...(showWatchedStyle && { borderColor: '#52c41a', color: '#52c41a' }),
                   }}
                   aria-label={`Episode ${ep}${isWatched ? ' (watched)' : ''}`}
                   aria-pressed={isActive}
@@ -91,12 +88,8 @@ export default function TvEpisodeSelector({
                     width:        isActive ? 24 : 20,
                     height:       3,
                     borderRadius: 2,
-                    background:   isWatched
-                      ? '#52c41a'
-                      : isActive
-                      ? '#1677ff'
-                      : 'rgba(128,128,128,0.18)',
-                    transition: 'all 0.2s ease',
+                    background:   isWatched ? '#52c41a' : isActive ? '#1677ff' : 'rgba(128,128,128,0.18)',
+                    transition:   'all 0.2s ease',
                   }}
                 />
               </Flex>
@@ -109,7 +102,7 @@ export default function TvEpisodeSelector({
             );
           })}
         </Flex>
-      </div>
+      </ScrollableRow>
     </div>
   );
 }

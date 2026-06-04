@@ -1,0 +1,33 @@
+.scrollable-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.scrollable-row__track {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollable-row__track::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-row__arrow {
+  flex-shrink: 0;
+  padding: 0 !important;
+}
+
+.scrollable-row__arrow .anticon {
+  font-size: 11px;
+}
+
+@media (min-width: 768px) {
+  .scrollable-row__arrow .anticon {
+    font-size: 14px;
+  }
+}

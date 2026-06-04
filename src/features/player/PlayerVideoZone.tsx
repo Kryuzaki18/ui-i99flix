@@ -110,7 +110,7 @@ export default function PlayerVideoZone({
         )}
       </Flex>
 
-      <div style={{ padding: "0.3rem 0.5rem" }}>
+      <div style={{ padding: "0 0.5rem 0.5rem" }}>
         <ServerSelector activeServer={servers} onServerChange={onServerChange} />
       </div>
     </>

@@ -1,5 +1,6 @@
 import { Button, Flex } from "antd";
 import { EMBED_SERVERS } from "../../../api/environments";
+import ScrollableRow from "../scrollable-row/ScrollableRow";
 
 interface ServerSelectorProps {
   activeServer: number;
@@ -11,22 +12,8 @@ export default function ServerSelector({
   onServerChange,
 }: ServerSelectorProps) {
   return (
-    <div
-      style={{
-        overflowX: "auto",
-        overflowY: "hidden",
-        WebkitOverflowScrolling:
-          "touch" as React.CSSProperties["WebkitOverflowScrolling"],
-      }}
-    >
-      <Flex
-        gap={6}
-        style={{
-          flexWrap: "nowrap",
-          width: "max-content",
-          paddingBottom: "0.3rem",
-        }}
-      >
+    <ScrollableRow>
+      <Flex gap={6} style={{ flexWrap: "nowrap", width: "max-content", padding: "0.3rem 0" }}>
         {EMBED_SERVERS.map((server, i) => (
           <Button
             key={server.label}
@@ -38,6 +25,6 @@ export default function ServerSelector({
           </Button>
         ))}
       </Flex>
-    </div>
+    </ScrollableRow>
   );
 }
