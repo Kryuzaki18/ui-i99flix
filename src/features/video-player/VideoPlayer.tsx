@@ -5,7 +5,7 @@ import {
   CloseOutlined,
   CheckCircleFilled,
 } from "@ant-design/icons";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import type { Movie } from "../../models/movieModel";
 import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/useWatchQuery";
 import { useTheme } from "../../context/ThemeContext";
@@ -32,6 +32,7 @@ export default function VideoPlayer({
   onClose,
 }: VideoPlayerProps) {
   const [playing, setPlaying] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
   const [server, setServer] = useState(0);
   const [manualSeason, setManualSeason]   = useState<number | null>(null);
   const [manualEpisode, setManualEpisode] = useState<number | null>(null);
@@ -120,6 +121,30 @@ export default function VideoPlayer({
     }
   }, [playing, movie, season, recordWatch]);
 
+  useEffect(() => {
+    if (!open) {
+      setCountdown(null);
+      setPlaying(false);
+      return;
+    }
+    setServer(0);
+    setPlaying(false);
+    setCountdown(5);
+  }, [open]);
+
+  useEffect(() => {
+    if (countdown === null || playing) return;
+    if (countdown === 0) {
+      handlePlay();
+      return;
+    }
+    const t = setTimeout(
+      () => setCountdown((c) => (c !== null ? c - 1 : null)),
+      1000,
+    );
+    return () => clearTimeout(t);
+  }, [countdown, playing, handlePlay]);
+
   if (!movie) return null;
 
   return (
@@ -192,10 +217,16 @@ export default function VideoPlayer({
               )}
 
               <Flex align="center" justify="center" className="player__overlay">
-                <PlayCircleOutlined
-                  className="player__play-icon"
-                  onClick={handlePlay}
-                />
+                {countdown !== null ? (
+                  <span key={countdown} className="player__countdown-number">
+                    {countdown}
+                  </span>
+                ) : (
+                  <PlayCircleOutlined
+                    className="player__play-icon"
+                    onClick={handlePlay}
+                  />
+                )}
               </Flex>
 
               <div className="player__title-overlay">

@@ -121,6 +121,30 @@
   font-size: 11px;
 }
 
+.player__countdown-number {
+  z-index: 10;
+  color: #fff;
+  font-size: clamp(52px, 12vw, 96px);
+  font-weight: 900;
+  line-height: 1;
+  display: inline-block;
+  text-shadow:
+    0 0 40px rgba(255, 154, 60, 0.8),
+    0 2px 12px rgba(0, 0, 0, 0.6);
+  animation: player-countdown-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes player-countdown-pop {
+  from {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 360px) {
   .player__title-rate {
     display: none !important;
