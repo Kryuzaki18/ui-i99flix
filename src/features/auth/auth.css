@@ -55,24 +55,36 @@
   z-index: 3;
 }
 
-.auth-showcase__cards {
+.auth-showcase__bottom {
   position: absolute;
-  bottom: 220px;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 3;
-  padding: 10px 36px;
-  overflow: hidden;
+  padding-bottom: 28px;
+}
+
+.auth-showcase__cards {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 20px 36px 10px;
+}
+
+.auth-showcase__cards::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-showcase__movie-card {
-  width: 110px;
+  flex-shrink: 0;
+  width: clamp(80px, 8vw, 110px);
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
     outline 0.2s ease;
   animation: cardFloat 6s ease-in-out infinite;
   outline: 2px solid transparent;
@@ -82,29 +94,24 @@
   outline: 2px solid #e50914;
 }
 
-.auth-showcase__movie-card:nth-child(2) {
-  animation-delay: 0.8s;
-}
-
-.auth-showcase__movie-card:nth-child(3) {
-  animation-delay: 1.6s;
-}
-
-.auth-showcase__movie-card:nth-child(4) {
-  animation-delay: 2.4s;
-}
-
-.auth-showcase__movie-card:nth-child(5) {
-  animation-delay: 3.2s;
-}
+.auth-showcase__movie-card:nth-child(2)  { animation-delay: 0.8s; }
+.auth-showcase__movie-card:nth-child(3)  { animation-delay: 1.6s; }
+.auth-showcase__movie-card:nth-child(4)  { animation-delay: 2.4s; }
+.auth-showcase__movie-card:nth-child(5)  { animation-delay: 3.2s; }
+.auth-showcase__movie-card:nth-child(6)  { animation-delay: 4.0s; }
+.auth-showcase__movie-card:nth-child(7)  { animation-delay: 4.8s; }
+.auth-showcase__movie-card:nth-child(8)  { animation-delay: 5.6s; }
+.auth-showcase__movie-card:nth-child(9)  { animation-delay: 6.4s; }
+.auth-showcase__movie-card:nth-child(10) { animation-delay: 7.2s; }
 
 .auth-showcase__movie-card:hover {
-  transform: translateY(-6px) scale(1.04);
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
 }
 
 .auth-showcase__movie-card img {
   width: 100%;
-  height: 155px;
+  height: clamp(112px, 11.5vw, 155px);
   object-fit: cover;
   display: block;
 }
@@ -113,19 +120,28 @@
   display: none;
 }
 
-.auth-showcase__info {
+.auth-showcase__scroll-btn {
   position: absolute;
-  bottom: 36px;
-  left: 36px;
-  right: 36px;
-  z-index: 3;
+  z-index: 5;
+}
+
+.auth-showcase__scroll-btn--left {
+  left: 6px;
+}
+
+.auth-showcase__scroll-btn--right {
+  right: 6px;
+}
+
+.auth-showcase__info {
+  position: relative;
+  min-height: 140px;
 }
 
 .auth-showcase__info-content {
   position: absolute;
-  bottom: 42px;
-  left: 0;
-  right: 0;
+  inset: 0;
+  padding: 0 36px;
   opacity: 0;
   transition: opacity 0.7s ease;
   pointer-events: none;
@@ -189,8 +205,7 @@
 }
 
 .auth-showcase__dots {
-  padding-top: 4px;
-  margin-top: 170px;
+  padding: 10px 36px 0;
 }
 
 .auth-showcase__dot {
