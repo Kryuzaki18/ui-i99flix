@@ -21,7 +21,7 @@ import { useTheme } from "../../context/ThemeContext";
 import {
   useChangePasswordMutation,
   useForgotPasswordMutation,
-} from "../../api/useAuthQuery";
+} from "../../api/auth/useAuthQuery";
 import { ApiError } from "../../services/apiService";
 import messageService from "../../services/messageService";
 
@@ -60,7 +60,7 @@ export default function SecurityPanel() {
           );
           changeForm.resetFields();
         },
-        onError: (err) => {
+        onError: (err: unknown) => {
           setChangeError(
             err instanceof ApiError ? err.message : "Failed to update password. Please try again.",
           );
@@ -200,7 +200,7 @@ export default function SecurityPanel() {
                   { email: user!.email },
                   {
                     onSuccess: () => messageService.success("Password reset link sent to your email."),
-                    onError: (err) =>
+                    onError: (err: unknown) =>
                       messageService.error(
                         err instanceof ApiError ? err.message : "Failed to send reset link.",
                       ),

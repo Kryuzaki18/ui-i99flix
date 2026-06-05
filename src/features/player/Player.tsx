@@ -6,11 +6,11 @@ import { useMovieDetailQuery } from "../../api/tmdb/useMoviesQuery";
 import {
   useTmdbTvDetailQuery,
   useTmdbMovieDetailQuery,
-} from "../../api/useTmdbQuery";
+} from "../../api/tmdb/useTmdbQuery";
 import {
   useRecordWatchMutation,
   useWatchHistoryQuery,
-} from "../../api/useWatchQuery";
+} from "../../api/watch/useWatchQuery";
 import { tmdbTvDetailToMovie } from "../../utils/tmdbAdapter";
 import useResolvedGenres from "../../hooks/useResolvedGenres";
 import usePageTitle from "../../hooks/usePageTitle";
