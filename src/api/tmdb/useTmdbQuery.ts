@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { tmdbKeys } from './queryKeys';
+import { tmdbKeys } from '../queryKeys';
 import {
   fetchTmdbMoviesPopular,
   fetchTmdbMoviesTopRated,

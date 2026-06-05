@@ -8,7 +8,7 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "../../../context/ThemeContext";
-import { useResetPasswordMutation } from "../../../api/useAuthQuery";
+import { useResetPasswordMutation } from "../../../api/auth/useAuthQuery";
 import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;

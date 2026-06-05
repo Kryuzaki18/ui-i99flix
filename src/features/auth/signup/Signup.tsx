@@ -19,7 +19,7 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "../../../context/ThemeContext";
-import { useSignupMutation } from "../../../api/useAuthQuery";
+import { useSignupMutation } from "../../../api/auth/useAuthQuery";
 import { ApiError } from "../../../services/apiService";
 import SocialLoginButtons from "../../../components/auth/SocialLoginButtons";
 

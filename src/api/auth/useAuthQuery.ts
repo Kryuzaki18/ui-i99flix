@@ -10,8 +10,8 @@ import {
   verifyEmail,
   changePassword,
   deleteAccount,
-} from "../services/authService";
-import { useAuthStore } from "../store/authStore";
+} from "../../services/authService";
+import { useAuthStore } from "../../store/authStore";
 import type {
   ChangePasswordPayload,
   ForgotPasswordPayload,
@@ -19,7 +19,7 @@ import type {
   SigninPayload,
   SignupPayload,
   SocialSigninPayload,
-} from "../models/authModel";
+} from "../../models/authModel";
 
 export const authKeys = {
   session: ["auth", "session"] as const,

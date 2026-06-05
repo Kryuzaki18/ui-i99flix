@@ -1,6 +1,6 @@
-import { apiGet } from '../services/apiService';
-import { API_ROUTES } from './environments';
-import { useTmdbStore } from '../store/tmdbStore';
+import { apiGet } from '../../services/apiService';
+import { API_ROUTES } from '../environments';
+import { useTmdbStore } from '../../store/tmdbStore';
 import type {
   TmdbPaginatedResponse,
   TmdbMovieListItem,
@@ -11,7 +11,7 @@ import type {
   TmdbProductionCompany,
   TmdbProductionCountry,
   TmdbSpokenLanguage,
-} from '../models/tmdbModel';
+} from '../../models/tmdbModel';
 
 let movieGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;
 let tvGenresPromise: Promise<{ genres: TmdbGenre[] }> | null = null;

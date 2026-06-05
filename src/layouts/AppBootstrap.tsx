@@ -4,8 +4,8 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import AppSplash from '../components/common/AppSplash';
 import { useAuthStore } from '../store/authStore';
 import { useTmdbStore } from '../store/tmdbStore';
-import { useSessionQuery } from '../api/useAuthQuery';
-import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../api/tmdbApi';
+import { useSessionQuery } from '../api/auth/useAuthQuery';
+import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from '../api/tmdb/tmdbApi';
 
 const AUTH_PATHS = [
   '/login',

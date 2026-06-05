@@ -18,7 +18,7 @@ import {
   useTrendingMoviesQuery,
   useNewReleasesQuery,
   useTopRatedMoviesQuery,
-} from "../../api/useMoviesQuery";
+} from "../../api/tmdb/useMoviesQuery";
 import "./Home.css";
 
 export default function Home() {

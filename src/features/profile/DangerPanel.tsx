@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "../../store/authStore";
 import { useTheme } from "../../context/ThemeContext";
-import { useDeleteAccountMutation } from "../../api/useAuthQuery";
+import { useDeleteAccountMutation } from "../../api/auth/useAuthQuery";
 import { ApiError } from "../../services/apiService";
 import messageService from "../../services/messageService";
 

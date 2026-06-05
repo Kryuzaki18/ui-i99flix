@@ -7,7 +7,7 @@ import {
   MailOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "../../../context/ThemeContext";
-import { useVerifyEmailQuery } from "../../../api/useAuthQuery";
+import { useVerifyEmailQuery } from "../../../api/auth/useAuthQuery";
 import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;

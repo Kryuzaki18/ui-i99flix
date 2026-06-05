@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Button, Spin, Result, Flex } from "antd";
 import { SunOutlined, MoonOutlined } from "@ant-design/icons";
-import { useMovieDetailQuery } from "../../api/useMoviesQuery";
+import { useMovieDetailQuery } from "../../api/tmdb/useMoviesQuery";
 import {
   useTmdbTvDetailQuery,
   useTmdbMovieDetailQuery,

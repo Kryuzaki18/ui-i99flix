@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
 import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
-import { useWatchlistQuery } from "../../api/useWatchlistQuery";
+import { useWatchlistQuery } from "../../api/watchlist/useWatchlistQuery";
 import { watchlistItemToMovie } from "../../services/watchlistService";
 import { useWatchlistStore } from "../../store/watchlistStore";
 import { usePlayerStore } from "../../store/playerStore";

@@ -7,7 +7,7 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "../../../context/ThemeContext";
-import { useForgotPasswordMutation } from "../../../api/useAuthQuery";
+import { useForgotPasswordMutation } from "../../../api/auth/useAuthQuery";
 import { ApiError } from "../../../services/apiService";
 
 const { Title, Text } = Typography;

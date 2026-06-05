@@ -9,7 +9,7 @@ import {
   type AuthProvider,
 } from 'firebase/auth';
 import { auth } from '../../config/firebase';
-import { useSocialSigninMutation } from '../../api/useAuthQuery';
+import { useSocialSigninMutation } from '../../api/auth/useAuthQuery';
 import { ApiError } from '../../services/apiService';
 
 const { Text } = Typography;

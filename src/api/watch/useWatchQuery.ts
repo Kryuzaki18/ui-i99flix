@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWatchHistory, recordWatch } from '../services/watchService';
-import type { RecordWatchPayload } from '../services/watchService';
-import { watchKeys } from './queryKeys';
-import { useAuthStore } from '../store/authStore';
+import { getWatchHistory, recordWatch } from '../../services/watchService';
+import type { RecordWatchPayload } from '../../services/watchService';
+import { watchKeys } from '../queryKeys';
+import { useAuthStore } from '../../store/authStore';
 
 export function useWatchHistoryQuery() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);

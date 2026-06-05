@@ -18,7 +18,7 @@ import {
 } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { useBrowseStore, selectActiveFilters } from "../../store/browseStore";
 import { usePlayerStore } from "../../store/playerStore";
-import { useBrowseQuery } from "../../api/useBrowseQuery";
+import { useBrowseQuery } from "../../api/tmdb/useBrowseQuery";
 import { PAGE_SIZE_OPTIONS } from "../../constants";
 import { useTheme } from "../../context/ThemeContext";
 import BrowseFilters from "./BrowseFilters";

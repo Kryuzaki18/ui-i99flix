@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { tmdbKeys } from './queryKeys';
+import { tmdbKeys } from '../queryKeys';
 import {
   fetchTmdbMoviesTrending,
   fetchTmdbMoviesPopular,
@@ -7,9 +7,9 @@ import {
   fetchTmdbMoviesTopRated,
   fetchTmdbMovieDetail,
 } from './tmdbApi';
-import { tmdbMovieListItemToMovie, tmdbMovieDetailToMovie } from '../utils/tmdbAdapter';
-import { useMovieGenreMap } from '../hooks/useGenreMap';
-import type { Movie } from '../models/movieModel';
+import { tmdbMovieListItemToMovie, tmdbMovieDetailToMovie } from '../../utils/tmdbAdapter';
+import { useMovieGenreMap } from '../../hooks/useGenreMap';
+import type { Movie } from '../../models/movieModel';
 
 const STALE_TIME = 5 * 60 * 1000;
 

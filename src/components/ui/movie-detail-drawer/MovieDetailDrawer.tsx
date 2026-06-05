@@ -29,7 +29,7 @@ import useResolvedGenres from '../../../hooks/useResolvedGenres';
 import CastSection from "../cast-section/CastSection";
 import ExpandableText from "../expandable-text/ExpandableText";
 import useWatchlistStatus from '../../../hooks/useWatchlistStatus';
-import { useTmdbMovieDetailQuery, useTmdbTvDetailQuery } from '../../../api/useTmdbQuery';
+import { useTmdbMovieDetailQuery, useTmdbTvDetailQuery } from '../../../api/tmdb/useTmdbQuery';
 import "./MovieDetailDrawer.css";
 
 const { Title, Text } = Typography;

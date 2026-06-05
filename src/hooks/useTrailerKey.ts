@@ -1,4 +1,4 @@
-import { useTmdbMovieVideosQuery } from '../api/useTmdbQuery';
+import { useTmdbMovieVideosQuery } from '../api/tmdb/useTmdbQuery';
 
 export function useTrailerKey(movieId: number | null): {
   trailerKey: string | null;

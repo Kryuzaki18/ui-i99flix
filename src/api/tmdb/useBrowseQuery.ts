@@ -1,18 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { tmdbKeys } from './queryKeys';
+import { tmdbKeys } from '../queryKeys';
 import {
   fetchTmdbMoviesDiscover,
   fetchTmdbMoviesSearch,
   fetchTmdbTvDiscover,
   fetchTmdbTvSearch,
 } from './tmdbApi';
-import { tmdbMovieListItemToMovie, tmdbTvListItemToMovie } from '../utils/tmdbAdapter';
-import { useBrowseStore, selectActiveFilters } from '../store/browseStore';
-import { useTmdbStore } from '../store/tmdbStore';
-import { useDebounce } from '../hooks/useDebounce';
-import { useCombinedGenreMap } from '../hooks/useGenreMap';
-import { YEAR_RANGES } from '../constants/yearRanges';
-import type { Movie } from '../models/movieModel';
+import { tmdbMovieListItemToMovie, tmdbTvListItemToMovie } from '../../utils/tmdbAdapter';
+import { useBrowseStore, selectActiveFilters } from '../../store/browseStore';
+import { useTmdbStore } from '../../store/tmdbStore';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useCombinedGenreMap } from '../../hooks/useGenreMap';
+import { YEAR_RANGES } from '../../constants/yearRanges';
+import type { Movie } from '../../models/movieModel';
 
 export interface BrowseResult {
   movies:     Movie[];

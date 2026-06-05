@@ -3,7 +3,7 @@ import {
   useWatchlistQuery,
   useAddToWatchlistMutation,
   useRemoveFromWatchlistMutation,
-} from '../api/useWatchlistQuery';
+} from '../api/watchlist/useWatchlistQuery';
 
 interface WatchlistStatus {
   inWatchlist: boolean;

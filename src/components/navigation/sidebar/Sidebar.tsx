@@ -12,7 +12,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { useTheme } from "../../../context/ThemeContext";
-import { useSignoutMutation } from "../../../api/useAuthQuery";
+import { useSignoutMutation } from "../../../api/auth/useAuthQuery";
 import { useAuthStore } from "../../../store/authStore";
 import "./Sidebar.css";
 

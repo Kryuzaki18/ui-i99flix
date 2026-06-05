@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useWatchHistoryQuery } from "../api/useWatchQuery";
+import { useWatchHistoryQuery } from "../api/watch/useWatchQuery";
 import type { Movie } from "../models/movieModel";
 
 interface WatchedStatus {

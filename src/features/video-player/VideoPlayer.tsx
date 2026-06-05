@@ -7,12 +7,12 @@ import {
 } from "@ant-design/icons";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import type { Movie } from "../../models/movieModel";
-import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/useWatchQuery";
+import { useRecordWatchMutation, useWatchHistoryQuery } from "../../api/watch/useWatchQuery";
 import { useTheme } from "../../context/ThemeContext";
 import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import TvEpisodeSelector from "../../components/ui/tv-episode-selector/TvEpisodeSelector";
-import { useTmdbTvDetailQuery } from "../../api/useTmdbQuery";
+import { useTmdbTvDetailQuery } from "../../api/tmdb/useTmdbQuery";
 import useResolvedGenres from "../../hooks/useResolvedGenres";
 import usePageTitle from "../../hooks/usePageTitle";
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";

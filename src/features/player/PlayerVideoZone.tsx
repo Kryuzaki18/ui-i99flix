@@ -5,7 +5,7 @@ import ServerSelector from "../../components/ui/server-selector/ServerSelector";
 import ServerIframe from "../../components/ui/server-iframe/ServerIframe";
 import { useTheme } from "../../context/ThemeContext";
 import type { Movie } from "../../models/movieModel";
-import type { TmdbTvDetail } from "../../api/tmdbApi";
+import type { TmdbTvDetail } from "../../api/tmdb/tmdbApi";
 
 interface PlayerVideoZoneProps {
   movie:                  Movie;

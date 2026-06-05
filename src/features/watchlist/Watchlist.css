@@ -9,11 +9,6 @@
 .watchlist__toolbar {
   padding: 16px;
   margin-bottom: 24px;
-  position: sticky;
-  top: 64px;
-  z-index: 50;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgb(224, 224, 232);
 }
 
@@ -43,9 +38,18 @@
   color: rgba(229, 9, 20, 0.3);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .watchlist__toolbar {
-    top: 56px;
     padding: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .watchlist__toolbar {
+    position: sticky;
+    top: 64px;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 }

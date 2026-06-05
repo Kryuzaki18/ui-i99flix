@@ -1,6 +1,6 @@
 import { Avatar, Skeleton, Tooltip, Typography, Flex } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { useTmdbMovieCreditsQuery, useTmdbTvCreditsQuery } from "../../../api/useTmdbQuery";
+import { useTmdbMovieCreditsQuery, useTmdbTvCreditsQuery } from "../../../api/tmdb/useTmdbQuery";
 import { useTheme } from "../../../context/ThemeContext";
 import "./CastSection.css";
 

@@ -12,7 +12,7 @@ import { API_ROUTES } from "../../api/environments";
 import { useTmdbStore } from "../../store/tmdbStore";
 import type { Movie } from "../../models/movieModel";
 import type { TmdbMovieListItem } from "../../models/tmdbModel";
-import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from "../../api/tmdbApi";
+import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from "../../api/tmdb/tmdbApi";
 import {
   tmdbMovieListItemToMovie,
   buildGenreMap,
