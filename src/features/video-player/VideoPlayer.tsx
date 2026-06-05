@@ -296,6 +296,8 @@ export default function VideoPlayer({
                   ? `/player/${movie.id}?type=tv&season=${season}&episode=${episode}`
                   : `/player/${movie.id}`;
               window.open(url, "_blank", "noopener,noreferrer");
+              setPlaying(false);
+              setCountdown(null);
             }}
             style={{
               fontSize: 11,
