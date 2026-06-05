@@ -83,8 +83,13 @@ export interface EmbedServer {
 export const EMBED_SERVERS: EmbedServer[] = [
   {
     label: "vidsrc.pm",
-    movie: (id) => `https://vidsrc.pm/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.pm/embed/tv/${id}/${s}/${e}`,
+    movie: (id) => `https://vidsrc.pm/embed/movie/${id}?autoplay=1`,
+    tv: (id, s, e) => `https://vidsrc.pm/embed/tv/${id}/${s}/${e}?autoplay=1`,
+  },
+  {
+    label: "vaplayer.ru", //https://vidapi.ru/api
+    movie: (id) => `https://vaplayer.ru/embed/movie/${id}?autoplay=1`,
+    tv: (id, s, e) => `https://vaplayer.ru/embed/tv/${id}/${s}/${e}?autoplay=1`,
   },
   {
     label: "vidking.net",
@@ -92,48 +97,8 @@ export const EMBED_SERVERS: EmbedServer[] = [
     tv: (id, s, e) => `https://www.vidking.net/embed/tv/${id}/${s}/${e}`,
   },
   {
-    label: "player.videasy",
-    movie: (id) => `https://player.videasy.net/movie/${id}`,
-    tv: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}`,
-  },
-  {
-    label: "vsembed.su",
-    movie: (id) => `https://vsembed.su/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vsembed.su/embed/tv/${id}/${s}/${e}`,
-  },
-  // {
-  //   label: "VidSrc.to",
-  //   movie: (id) => `https://vidsrc.to/embed/movie/${id}`,
-  //   tv: (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
-  // },
-  // {
-  //   label: "2embed.online",
-  //   movie: (id) => `https://www.2embed.online/embed/movie/${id}`,
-  //   tv: (id, s, e) => `https://www.2embed.online/embed/tv/${id}/${s}/${e}`,
-  // },
-  {
-    label: "VidSrc.me",
-    movie: (id) => `https://vidsrc.me/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.me/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    label: "VidSrc.mov",
-    movie: (id) => `https://vidsrc.mov/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.mov/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    label: "VidSrc.fyi",
-    movie: (id) => `https://vidsrc.fyi/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.fyi/embed/tv/${id}/${s}/${e}`,
-  },
-  {
-    label: "VidSrc.io",
-    movie: (id) => `https://vidsrc.io/embed/movie/${id}`,
-    tv: (id, s, e) => `https://vidsrc.io/embed/tv/${id}/${s}/${e}`,
-  },
-  // {
-  //   label: "VidSrc.cc",
-  //   movie: (id) => `https://vidsrc.cc/v2/embed/movie/${id}`,
-  //   tv: (id, s, e) => `https://vidsrc.cc/v2/embed/tv/${id}/${s}/${e}`,
-  // },
+    label: "player.videasy", //https://www.videasy.net/docs
+    movie: (id) => `https://player.videasy.net/movie/${id}?autoplay=1`,
+    tv: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?autoplay=1`,
+  }
 ];

@@ -37,7 +37,7 @@ export default function ServerIframe({
     <>
       <iframe
         key={`${server}-${mediaId}-${season}-${episode}`}
-        src={src + "?autoplay=1"}
+        src={src}
         className={className}
         referrerPolicy="no-referrer"
         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
