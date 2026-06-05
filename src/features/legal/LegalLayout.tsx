@@ -48,7 +48,7 @@ export default function LegalLayout({
             {
               title: (
                 <Link to="/" style={{ color: colors.textMuted, fontSize: 13 }}>
-                  <ArrowLeftOutlined style={{ marginRight: 6 }} />
+                  <ArrowLeftOutlined style={{ marginRight: 6, fontSize: 12 }} />
                   Home
                 </Link>
               ),
