@@ -40,7 +40,7 @@ export default function BrowseFilters() {
     <>
       <div
         className="browse-filters"
-        style={{ background: colors.bgCard, border: `1px solid ${colors.border}` }}
+        style={{ backgroundColor: colors.bgCard, border: `1px solid ${colors.border}` }}
       >
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} sm={12} md={8} lg={8}>

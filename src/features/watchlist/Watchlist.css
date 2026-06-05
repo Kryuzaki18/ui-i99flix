@@ -8,8 +8,30 @@
 
 .watchlist__toolbar {
   padding: 16px;
-  border-radius: 10px;
   margin-bottom: 24px;
+  position: sticky;
+  top: 64px;
+  z-index: 50;
+  border: 1px solid transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.watchlist__toolbar.is-stuck {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .watchlist__toolbar {
+  background: rgba(13, 13, 26, 0.88);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] .watchlist__toolbar {
+  background: rgba(240, 242, 245, 0.92);
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 .watchlist__grid {
@@ -27,4 +49,11 @@
 .watchlist__empty-icon {
   font-size: 64px;
   color: rgba(229, 9, 20, 0.3);
+}
+
+@media (max-width: 480px) {
+  .watchlist__toolbar {
+    top: 56px;
+    padding: 12px;
+  }
 }

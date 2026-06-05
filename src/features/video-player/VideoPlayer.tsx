@@ -129,7 +129,7 @@ export default function VideoPlayer({
     }
     setServer(0);
     setPlaying(false);
-    setCountdown(5);
+    setCountdown(3);
   }, [open]);
 
   useEffect(() => {

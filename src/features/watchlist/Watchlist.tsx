@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import {
   Typography,
   Row,
@@ -33,6 +34,21 @@ const { Title, Text } = Typography;
 export default function Watchlist() {
   const { colors } = useTheme();
   const navigate = useNavigate();
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const toolbarRef  = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        toolbarRef.current?.classList.toggle("is-stuck", !entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: "-65px 0px 0px 0px" },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
   const { playMovie, openDetail } = usePlayerStore();
 
   const {
@@ -81,13 +97,9 @@ export default function Watchlist() {
         </div>
       </Flex>
 
-      <div
-        className="watchlist__toolbar"
-        style={{
-          background: colors.bgCard,
-          border: `1px solid ${colors.border}`,
-        }}
-      >
+      <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
+
+      <div ref={toolbarRef} className="watchlist__toolbar" style={{ backgroundColor: colors.bgCard }}>
         <Row gutter={[12, 12]} align="middle">
           <Col xs={24} sm={12} md={6} lg={7}>
             <Input
