@@ -23,6 +23,7 @@
 .browse-filters {
   padding: 16px 20px;
   margin-bottom: 28px;
+  border: 1px solid rgb(224, 224, 232);
 }
 
 .browse-genre-pills {
@@ -67,7 +68,6 @@
 
 [data-theme='light'] .browse-pagination {
   background: rgba(240, 242, 245, 0.92);
-  border-color: rgba(0, 0, 0, 0.06);
 }
 
 .browse-pagination .ant-pagination {

@@ -12,16 +12,9 @@
   position: sticky;
   top: 64px;
   z-index: 50;
-  border: 1px solid transparent;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition:
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.watchlist__toolbar.is-stuck {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgb(224, 224, 232);
 }
 
 [data-theme="dark"] .watchlist__toolbar {
@@ -31,7 +24,6 @@
 
 [data-theme="light"] .watchlist__toolbar {
   background: rgba(240, 242, 245, 0.92);
-  border-color: rgba(0, 0, 0, 0.06);
 }
 
 .watchlist__grid {

@@ -1,22 +1,5 @@
-import { useRef, useEffect } from "react";
-import {
-  Typography,
-  Row,
-  Col,
-  Empty,
-  Space,
-  Segmented,
-  Button,
-  Input,
-  Select,
-  Flex,
-} from "antd";
-import {
-  AppstoreOutlined,
-  BarsOutlined,
-  SearchOutlined,
-  HeartOutlined,
-} from "@ant-design/icons";
+import { Typography, Row, Col, Empty, Space, Button, Flex } from "antd";
+import { HeartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import MovieCard from "../../components/ui/movie-card/MovieCard";
@@ -27,6 +10,7 @@ import { watchlistItemToMovie } from "../../services/watchlistService";
 import { useWatchlistStore } from "../../store/watchlistStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useTheme } from "../../context/ThemeContext";
+import WatchlistFilters from "./WatchlistFilters";
 import "./Watchlist.css";
 
 const { Title, Text } = Typography;
@@ -34,33 +18,9 @@ const { Title, Text } = Typography;
 export default function Watchlist() {
   const { colors } = useTheme();
   const navigate = useNavigate();
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const toolbarRef  = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        toolbarRef.current?.classList.toggle("is-stuck", !entry.isIntersecting);
-      },
-      { threshold: 0, rootMargin: "-65px 0px 0px 0px" },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
   const { playMovie, openDetail } = usePlayerStore();
 
-  const {
-    search,
-    sortBy,
-    layout,
-    mediaFilter,
-    setSearch,
-    setSortBy,
-    setLayout,
-    setMediaFilter,
-  } = useWatchlistStore();
+  const { search, sortBy, layout, mediaFilter } = useWatchlistStore();
 
   const { data: watchlistItems = [], isLoading } = useWatchlistQuery();
 
@@ -97,60 +57,7 @@ export default function Watchlist() {
         </div>
       </Flex>
 
-      <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
-
-      <div ref={toolbarRef} className="watchlist__toolbar" style={{ backgroundColor: colors.bgCard }}>
-        <Row gutter={[12, 12]} align="middle">
-          <Col xs={24} sm={12} md={6} lg={7}>
-            <Input
-              placeholder="Search..."
-              prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              allowClear
-              maxLength={35}
-              style={{ borderRadius: 8 }}
-            />
-          </Col>
-          <Col xs={24} sm={12} md={5} lg={5}>
-            <Select
-              value={sortBy}
-              onChange={setSortBy}
-              style={{ width: "100%" }}
-              options={[
-                { label: "Newest first", value: "newest" },
-                { label: "Oldest first", value: "oldest" },
-                { label: "A → Z", value: "az" },
-                { label: "Highest rated", value: "rating" },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={10} lg={8}>
-            <Segmented
-              value={mediaFilter}
-              onChange={(v) => setMediaFilter(v as "all" | "movie" | "tv")}
-              block
-              options={[
-                { value: "all", label: "All" },
-                { value: "movie", label: "Movies" },
-                { value: "tv", label: "TV Series" },
-              ]}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={3} lg={4}>
-            <Flex justify="flex-end">
-              <Segmented
-                value={layout}
-                onChange={(v) => setLayout(v as "grid" | "list")}
-                options={[
-                  { value: "grid", icon: <AppstoreOutlined /> },
-                  { value: "list", icon: <BarsOutlined /> },
-                ]}
-              />
-            </Flex>
-          </Col>
-        </Row>
-      </div>
+      <WatchlistFilters />
 
       {isLoading ? (
         layout === "grid" ? (
