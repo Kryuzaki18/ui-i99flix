@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import {
   Typography,
   Row,
@@ -9,13 +9,13 @@ import {
   Tabs,
   Flex,
 } from "antd";
-import {
-  VideoCameraOutlined,
-  PlaySquareOutlined,
-} from "@ant-design/icons";
+import { VideoCameraOutlined, PlaySquareOutlined } from "@ant-design/icons";
 import MovieCard from "../../components/ui/movie-card/MovieCard";
 import MovieListRow from "../../components/ui/movie-list-row/MovieListRow";
-import { MovieCardSkeleton, MovieListRowSkeleton } from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
+import {
+  MovieCardSkeleton,
+  MovieListRowSkeleton,
+} from "../../components/ui/movie-card-skeleton/MovieCardSkeleton";
 import { useBrowseStore, selectActiveFilters } from "../../store/browseStore";
 import { usePlayerStore } from "../../store/playerStore";
 import { useBrowseQuery } from "../../api/useBrowseQuery";
@@ -32,43 +32,34 @@ const TMDB_PAGE_SIZE = 20;
 export default function Browse() {
   const { colors } = useTheme();
 
-  const mediaType   = useBrowseStore((s) => s.mediaType);
+  const mediaType = useBrowseStore((s) => s.mediaType);
   const setMediaType = useBrowseStore((s) => s.setMediaType);
-  const setPage      = useBrowseStore((s) => s.setPage);
-  const setPageSize  = useBrowseStore((s) => s.setPageSize);
-  const { searchQuery, page, pageSize, layout } = useBrowseStore(selectActiveFilters);
+  const setPage = useBrowseStore((s) => s.setPage);
+  const setPageSize = useBrowseStore((s) => s.setPageSize);
+  const { searchQuery, page, pageSize, layout } =
+    useBrowseStore(selectActiveFilters);
 
   const { playMovie, openDetail } = usePlayerStore();
-
-  const result    = useBrowseQuery();
-  const items     = result.data?.movies ?? [];
-  const total     = result.data?.total ?? 0;
+  const result = useBrowseQuery();
+  
+  const items = result.data?.movies ?? [];
+  const total = result.data?.total ?? 0;
   const totalPages = result.data?.totalPages ?? 1;
-  const isLoading  = result.isLoading;
+  const isLoading = result.isLoading;
   const isFetching = result.isFetching;
 
-  const sentinelRef   = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
-  const resultsRef    = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        paginationRef.current?.classList.toggle("is-stuck", !entry.isIntersecting);
-      },
-      { threshold: 0, rootMargin: "-65px 0px 0px 0px" },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
-
-  const displayItems  = pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
-  const cappedTotal   = Math.min(total, totalPages * pageSize);
+  const displayItems =
+    pageSize < TMDB_PAGE_SIZE ? items.slice(0, pageSize) : items;
+  const cappedTotal = Math.min(total, totalPages * pageSize);
   const skeletonCount = Math.min(pageSize, 8);
-  const skeletonKeys  = Array.from({ length: skeletonCount }, (_, n) => `sk-${n}`);
-  const isMovie       = mediaType === "movie";
+  const skeletonKeys = Array.from(
+    { length: skeletonCount },
+    (_, n) => `sk-${n}`,
+  );
+  const isMovie = mediaType === "movie";
 
   const handlePageChange = (p: number, ps: number) => {
     setPage(p);
@@ -76,7 +67,12 @@ export default function Browse() {
     const el = resultsRef.current;
     if (el) {
       const paginationHeight = paginationRef.current?.offsetHeight ?? 0;
-      const top = el.getBoundingClientRect().top + window.scrollY - 64 - paginationHeight - 8;
+      const top =
+        el.getBoundingClientRect().top +
+        window.scrollY -
+        64 -
+        paginationHeight -
+        8;
       window.scrollTo({ top, behavior: "smooth" });
     }
   };
@@ -101,7 +97,8 @@ export default function Browse() {
     <Empty
       description={
         <Text style={{ color: colors.textMuted }}>
-          No {isMovie ? "movies" : "TV series"} found. Try a different search or filter.
+          No {isMovie ? "movies" : "TV series"} found. Try a different search or
+          filter.
         </Text>
       }
       style={{ padding: "60px 0" }}
@@ -115,9 +112,19 @@ export default function Browse() {
       ))}
     </Row>
   ) : (
-    <Space ref={resultsRef} orientation="vertical" size={12} style={{ width: "100%" }}>
+    <Space
+      ref={resultsRef}
+      orientation="vertical"
+      size={12}
+      style={{ width: "100%" }}
+    >
       {displayItems.map((item) => (
-        <MovieListRow key={item.id} movie={item} onPlay={playMovie} onDetail={openDetail} />
+        <MovieListRow
+          key={item.id}
+          movie={item}
+          onPlay={playMovie}
+          onDetail={openDetail}
+        />
       ))}
     </Space>
   );
@@ -125,17 +132,30 @@ export default function Browse() {
   const tabContent = (
     <>
       <BrowseFilters />
-      <div ref={sentinelRef} style={{ height: 1, marginBottom: -1 }} />
-      <Flex ref={paginationRef} vertical align="center" gap={8} className="browse-pagination">
+      <Flex
+        ref={paginationRef}
+        vertical
+        align="center"
+        gap={8}
+        className="browse-pagination"
+      >
         {cappedTotal > 0 && (
-          <Text className="browse-pagination__total" style={{ color: colors.textMuted }}>
-            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, cappedTotal)} of{" "}
+          <Text
+            className="browse-pagination__total"
+            style={{ color: colors.textMuted }}
+          >
+            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, cappedTotal)}{" "}
+            of{" "}
             <Text strong style={{ color: colors.textPrimary }}>
               {cappedTotal.toLocaleString()}
             </Text>{" "}
             {isMovie ? "movies" : "series"}
             {searchQuery && (
-              <> for "<Text style={{ color: colors.accent }}>{searchQuery}</Text>"</>
+              <>
+                {" "}
+                for "<Text style={{ color: colors.accent }}>{searchQuery}</Text>
+                "
+              </>
             )}
           </Text>
         )}
@@ -144,7 +164,10 @@ export default function Browse() {
           pageSize={pageSize}
           total={cappedTotal}
           onChange={handlePageChange}
-          onShowSizeChange={(_, ps) => { setPageSize(ps); setPage(1); }}
+          onShowSizeChange={(_, ps) => {
+            setPageSize(ps);
+            setPage(1);
+          }}
           showSizeChanger
           pageSizeOptions={PAGE_SIZE_OPTIONS}
           disabled={total === 0 || isFetching}
@@ -158,7 +181,9 @@ export default function Browse() {
   return (
     <div>
       <div className="browse-header">
-        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>Browse</Title>
+        <Title level={2} style={{ marginBottom: 4, marginTop: 0 }}>
+          Browse
+        </Title>
         <Text style={{ color: colors.textMuted }}>
           Discover movies and TV series — search, filter by genre or year.
         </Text>
@@ -171,12 +196,22 @@ export default function Browse() {
         items={[
           {
             key: "movie",
-            label: <Space size={6}><VideoCameraOutlined />Movies</Space>,
+            label: (
+              <Space size={6}>
+                <VideoCameraOutlined />
+                Movies
+              </Space>
+            ),
             children: tabContent,
           },
           {
             key: "tv",
-            label: <Space size={6}><PlaySquareOutlined />TV Series</Space>,
+            label: (
+              <Space size={6}>
+                <PlaySquareOutlined />
+                TV Series
+              </Space>
+            ),
             children: tabContent,
           },
         ]}
