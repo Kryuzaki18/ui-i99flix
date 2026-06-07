@@ -6,7 +6,7 @@ import AppBootstrap from './layouts/AppBootstrap';
 import AppLayout from './layouts/AppLayout';
 import AppSplash from './components/common/AppSplash';
 import AuthLayout from './features/auth/AuthLayout';
-import GuestRoute from './components/routing/GuestRoute';
+import GuestRoute from './routes/GuestRoute';
 import { buildAntdTheme } from './config/antdTheme';
 
 const Login          = lazy(() => import('./features/auth/login/Login'));

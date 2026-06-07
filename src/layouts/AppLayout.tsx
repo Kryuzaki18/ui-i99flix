@@ -6,7 +6,7 @@ import Sidebar from '../components/navigation/sidebar/Sidebar';
 import VideoPlayer from '../features/video-player/VideoPlayer';
 import MovieDetailDrawer from '../components/ui/movie-detail-drawer/MovieDetailDrawer';
 import AppSplash from '../components/common/AppSplash';
-import ProtectedRoute from '../components/routing/ProtectedRoute';
+import ProtectedRoute from '../routes/ProtectedRoute';
 import { useHomeStore } from '../store/homeStore';
 import { usePlayerStore } from '../store/playerStore';
 import { useTheme } from '../context/ThemeContext';
