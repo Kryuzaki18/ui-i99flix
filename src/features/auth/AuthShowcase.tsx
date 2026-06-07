@@ -161,8 +161,6 @@ export default function AuthShowcase() {
       ))}
 
       <div className="auth-showcase__overlay" />
-      <div className="auth-showcase__edge-fade" />
-
       <div className="auth-showcase__orb auth-showcase__orb--1" />
       <div className="auth-showcase__orb auth-showcase__orb--2" />
       <div className="auth-showcase__orb auth-showcase__orb--3" />

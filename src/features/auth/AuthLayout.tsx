@@ -2,7 +2,8 @@ import { Suspense } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import AuthShowcase from "./AuthShowcase";
-import { Flex } from "antd";
+import { Button, Flex } from "antd";
+import { SunOutlined, MoonOutlined } from "@ant-design/icons";
 import "./auth.css";
 
 const FOOTER_LINKS = [
@@ -12,7 +13,7 @@ const FOOTER_LINKS = [
 ];
 
 export default function AuthLayout() {
-  const { colors } = useTheme();
+  const { colors, isDark, toggle } = useTheme();
 
   return (
     <Flex className="auth-layout" style={{ backgroundColor: colors.bgBase }}>
@@ -25,6 +26,26 @@ export default function AuthLayout() {
         className="auth-panel"
         style={{ backgroundColor: colors.bgBase, flexShrink: 0 }}
       >
+        <Button
+          type="text"
+          onClick={toggle}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          className="auth-panel__theme-toggle"
+          icon={
+            isDark ? (
+              <SunOutlined
+                style={{ fontSize: 18, color: colors.starRating }}
+                aria-hidden="true"
+              />
+            ) : (
+              <MoonOutlined
+                style={{ fontSize: 18, color: colors.accent }}
+                aria-hidden="true"
+              />
+            )
+          }
+        />
+
         <Flex
           className="auth-panel__inner"
           justify="center"
