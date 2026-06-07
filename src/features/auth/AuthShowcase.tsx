@@ -6,7 +6,6 @@ import {
   RightOutlined,
 } from "@ant-design/icons";
 import { Tag, Flex, Button } from "antd";
-import { useTheme } from "../../context/ThemeContext";
 import { GENRE_COLORS } from "../../constants/genres";
 import { API_ROUTES } from "../../api/environments";
 import { useTmdbStore } from "../../store/tmdbStore";
@@ -57,8 +56,6 @@ export default function AuthShowcase() {
   const [canRight, setCanRight] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { isDark } = useTheme();
-
   useEffect(() => {
     let cancelled = false;
     fetchShowcaseMovies()
@@ -139,15 +136,7 @@ export default function AuthShowcase() {
   );
 
   return (
-    <div
-      className="auth-showcase"
-      style={
-        {
-          "--auth-edge-color": isDark ? "#0d0d1a" : "#f0f2f5",
-          flex: 1,
-        } as React.CSSProperties
-      }
-    >
+    <div className="auth-showcase">
       {movies.map((movie, i) => (
         <div
           key={movie.id}

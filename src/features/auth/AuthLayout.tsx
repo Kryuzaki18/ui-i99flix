@@ -24,7 +24,7 @@ export default function AuthLayout() {
         align="center"
         justify="space-between"
         className="auth-panel"
-        style={{ backgroundColor: colors.bgBase, flexShrink: 0 }}
+        style={{ flexShrink: 0 }}
       >
         <Button
           type="text"
