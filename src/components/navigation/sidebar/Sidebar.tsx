@@ -110,7 +110,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       mask={{ blur: true }}
       closable={false}
       styles={{
-        body: { background: colors.bgBase, padding: 0 },
+        body: { backgroundColor: colors.bgBase, padding: 0 },
       }}
     >
       <div

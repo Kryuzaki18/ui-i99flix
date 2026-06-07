@@ -29,7 +29,7 @@ function PlayerHeader() {
       gap={12}
       className="player-page__header"
       style={{
-        background: colors.bgBase,
+        backgroundColor: colors.bgBase,
         borderBottom: `1px solid ${colors.border}`,
         flexShrink: 0,
       }}
@@ -224,7 +224,7 @@ export default function Player() {
         align="center"
         justify="center"
         className="player-page"
-        style={{ background: "#000" }}
+        style={{ backgroundColor: "#000" }}
       >
         <Spin size="large" />
       </Flex>
@@ -238,7 +238,7 @@ export default function Player() {
         align="center"
         justify="center"
         className="player-page"
-        style={{ background: colors.bgBase }}
+        style={{ backgroundColor: colors.bgBase }}
       >
         <Result
           status="404"

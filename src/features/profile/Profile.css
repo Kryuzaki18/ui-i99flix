@@ -8,7 +8,7 @@
 }
 
 .profile__avatar {
-  background: rgba(229, 9, 20, 0.15);
+  background-color: rgba(229, 9, 20, 0.15);
   color: #e50914;
   font-weight: 700;
   font-size: 22px;

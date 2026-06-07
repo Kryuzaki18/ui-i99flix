@@ -38,7 +38,7 @@ export default function AppLayout() {
   }, [location]);
 
   return (
-    <Layout style={{ minHeight: '100dvh', background: colors.bgBase }}>
+    <Layout style={{ minHeight: '100dvh', backgroundColor: colors.bgBase }}>
       <Nav onMenuOpen={openSidebar} />
       <Sidebar open={sidebarOpen} onClose={closeSidebar} />
 
@@ -64,7 +64,7 @@ export default function AppLayout() {
 
       <Footer
         style={{
-          background: colors.footerBg,
+          backgroundColor: colors.footerBg,
           borderTop: `1px solid ${colors.border}`,
           textAlign: 'center',
           padding: '24px 48px',

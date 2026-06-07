@@ -35,7 +35,7 @@ export default function ForgotPassword() {
   const forgotMutation = useForgotPasswordMutation();
 
   const primaryBtn: React.CSSProperties = {
-    background: colors.accent,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
     height: 50,
     borderRadius: 10,
@@ -76,7 +76,7 @@ export default function ForgotPassword() {
               width: 80,
               height: 80,
               borderRadius: "50%",
-              background: "rgba(229,9,20,0.12)",
+              backgroundColor: "rgba(229,9,20,0.12)",
             }}
           >
             <MailOutlined style={{ fontSize: 36, color: colors.accent }} />
@@ -161,7 +161,7 @@ export default function ForgotPassword() {
       <Card
         style={{
           width: "100%",
-          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          backgroundColor: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
           border: `1px solid ${colors.border}`,
           borderRadius: 16,
           boxShadow: isDark

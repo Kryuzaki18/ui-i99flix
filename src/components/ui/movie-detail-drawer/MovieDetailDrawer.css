@@ -86,7 +86,7 @@
 }
 
 .detail-drawer__play-btn {
-  background: #e50914 !important;
+  background-color: #e50914 !important;
   border-color: #e50914 !important;
   font-weight: 600 !important;
   height: 48px !important;
@@ -106,11 +106,11 @@
 }
 
 .detail-drawer__cast-row::-webkit-scrollbar-track {
-  background: transparent;
+  background-color: transparent;
 }
 
 .detail-drawer__cast-row::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
 }
 

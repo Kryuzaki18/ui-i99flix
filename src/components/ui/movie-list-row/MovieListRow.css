@@ -35,7 +35,7 @@
 .movie-list-row__thumb-placeholder {
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.04);
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .movie-list-row__body {
@@ -84,13 +84,13 @@
 }
 
 .movie-list-row__btn-gray {
-  background: rgba(128, 128, 128, 0.15) !important;
+  background-color: rgba(128, 128, 128, 0.15) !important;
   border-color: rgba(128, 128, 128, 0.25) !important;
   color: rgba(128, 128, 128, 0.85) !important;
 }
 
 .movie-list-row__btn-gray:hover {
-  background: rgba(128, 128, 128, 0.28) !important;
+  background-color: rgba(128, 128, 128, 0.28) !important;
   border-color: rgba(128, 128, 128, 0.4) !important;
 }
 

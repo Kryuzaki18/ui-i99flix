@@ -177,7 +177,7 @@ export default function SecurityPanel() {
             htmlType="submit"
             size="large"
             loading={changeMutation.isPending}
-            style={{ background: colors.accent, borderColor: colors.accent, fontWeight: 600 }}
+            style={{ backgroundColor: colors.accent, borderColor: colors.accent, fontWeight: 600 }}
           >
             {settingFirstPassword ? "Set password" : "Update password"}
           </Button>

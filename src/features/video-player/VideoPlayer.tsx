@@ -162,7 +162,7 @@ export default function VideoPlayer({
           padding: 0,
           overflow: "hidden",
         },
-        mask: { backdropFilter: "blur(1px)", background: "rgba(0,0,0,0.85)" },
+        mask: { backdropFilter: "blur(1px)", backgroundColor: "rgba(0,0,0,0.85)" },
         container: {
           padding: 0,
           overflow: "hidden",

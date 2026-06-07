@@ -9,7 +9,7 @@ export function MovieCardSkeleton() {
     <div
       className="mcs"
       style={{
-        background: colors.bgCard,
+        backgroundColor: colors.bgCard,
         border: `1px solid ${colors.border}`,
       }}
     >
@@ -45,7 +45,7 @@ export function MovieListRowSkeleton() {
       align="stretch"
       className="mlrs"
       style={{
-        background: colors.bgCard,
+        backgroundColor: colors.bgCard,
         border: `1px solid ${colors.border}`,
       }}
     >

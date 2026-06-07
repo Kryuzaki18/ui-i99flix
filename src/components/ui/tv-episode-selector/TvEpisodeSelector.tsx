@@ -102,7 +102,7 @@ export default function TvEpisodeSelector({
                     width: isActive ? 24 : 20,
                     height: 3,
                     borderRadius: 2,
-                    background: isWatched
+                    backgroundColor: isWatched
                       ? "#52c41a"
                       : isActive
                         ? "#1677ff"

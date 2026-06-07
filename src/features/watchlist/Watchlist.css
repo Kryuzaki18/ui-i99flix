@@ -13,12 +13,12 @@
 }
 
 [data-theme="dark"] .watchlist__toolbar {
-  background: rgba(13, 13, 26, 0.88);
+  background-color: rgba(13, 13, 26, 0.88);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
 [data-theme="light"] .watchlist__toolbar {
-  background: rgba(240, 242, 245, 0.92);
+  background-color: rgba(240, 242, 245, 0.92);
 }
 
 .watchlist__grid {

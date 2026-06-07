@@ -17,7 +17,7 @@ function IconBadge({ icon, bg }: { icon: React.ReactNode; bg: string }) {
     <Flex
       align="center"
       justify="center"
-      style={{ width: 80, height: 80, borderRadius: "50%", background: bg }}
+      style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: bg }}
     >
       {icon}
     </Flex>
@@ -32,7 +32,7 @@ export default function VerifyEmail() {
   const { isPending, isSuccess, error } = useVerifyEmailQuery(token);
 
   const primaryBtn: React.CSSProperties = {
-    background: colors.accent,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
     height: 50,
     borderRadius: 10,
@@ -97,7 +97,7 @@ export default function VerifyEmail() {
               width: 80,
               height: 80,
               borderRadius: "50%",
-              background: "rgba(229,9,20,0.08)",
+              backgroundColor: "rgba(229,9,20,0.08)",
             }}
           >
             <MailOutlined style={{ fontSize: 36, color: colors.accent }} />

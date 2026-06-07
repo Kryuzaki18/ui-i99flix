@@ -76,7 +76,7 @@ function HeroBannerInner({ movies, onPlay, onDetail }: HeroBannerProps) {
   return (
     <section
       className="hero-banner"
-      style={{ background: colors.skeletonBg }}
+      style={{ backgroundColor: colors.skeletonBg }}
       aria-label={`Featured movies — currently showing: ${movie.title}`}
       aria-roledescription="carousel"
     >

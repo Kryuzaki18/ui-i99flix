@@ -92,7 +92,7 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
               size="large"
               aria-label={`Play ${movie.title}`}
               onClick={() => onPlay(movie)}
-              style={{ background: colors.accent, borderColor: colors.accent }}
+              style={{ backgroundColor: colors.accent, borderColor: colors.accent }}
             />
           </Tooltip>
           <Tooltip title="More Info">
@@ -153,7 +153,7 @@ function MovieCardInner({ movie, onPlay, onDetail }: MovieCardProps) {
       hoverable
       className="movie-card"
       style={{
-        background: colors.bgCard,
+        backgroundColor: colors.bgCard,
         border: `1px solid ${colors.border}`,
       }}
       styles={{ body: { padding: 0 } }}

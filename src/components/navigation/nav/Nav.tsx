@@ -81,7 +81,7 @@ function NavInner({ onMenuOpen }: NavProps) {
       className="nav-header"
       role="banner"
       style={{
-        background: colors.bgNav,
+        backgroundColor: colors.bgNav,
         borderBottom: `1px solid ${colors.borderSubtle}`,
         boxShadow: isDark ? "none" : "0 1px 8px rgba(0,0,0,0.08)",
       }}

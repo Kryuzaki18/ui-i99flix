@@ -72,7 +72,7 @@ export default function CastSection({ tmdbId, mediaType, label = "Cast", labelCo
                       : undefined
                   }
                   icon={!member.profile_path ? <UserOutlined /> : undefined}
-                  style={{ flexShrink: 0, background: colors.skeletonBg }}
+                  style={{ flexShrink: 0, backgroundColor: colors.skeletonBg }}
                 />
                 <Text
                   className="cast-section__name"

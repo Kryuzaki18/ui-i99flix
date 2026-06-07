@@ -99,7 +99,7 @@ export default function BrowseFilters() {
             onClick={() => { setGenre(g.value); setPage(1); }}
             style={{
               border: `1px solid ${selectedGenre === g.value ? colors.accent : colors.border}`,
-              background:  selectedGenre === g.value ? colors.accent : "transparent",
+              backgroundColor: selectedGenre === g.value ? colors.accent : "transparent",
               color:       selectedGenre === g.value ? "#fff" : colors.textMuted,
               fontWeight:  selectedGenre === g.value ? 600 : 400,
               flexShrink: 0,

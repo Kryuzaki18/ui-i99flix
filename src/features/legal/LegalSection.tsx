@@ -54,7 +54,7 @@ export function HighlightBox({ children }: HighlightBoxProps) {
   return (
     <div
       style={{
-        background: 'rgba(229,9,20,0.08)',
+        backgroundColor: 'rgba(229,9,20,0.08)',
         borderLeft: '3px solid #e50914',
         borderRadius: '0 8px 8px 0',
         padding: '14px 18px',

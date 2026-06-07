@@ -71,7 +71,7 @@
 }
 
 .hero-banner__btn-play {
-  background: #e50914 !important;
+  background-color: #e50914 !important;
   border-color: #e50914 !important;
   font-weight: 600 !important;
   height: 44px !important;
@@ -79,7 +79,7 @@
 }
 
 .hero-banner__btn-info {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
   color: #fff !important;
   font-weight: 600 !important;
@@ -92,7 +92,7 @@
   position: absolute !important;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5) !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
   border-color: transparent !important;
   color: #fff !important;
   z-index: 2;
@@ -125,12 +125,12 @@
 
 .hero-banner__dot--active {
   width: 24px;
-  background: #e50914;
+  background-color: #e50914;
 }
 
 .hero-banner__dot--inactive {
   width: 8px;
-  background: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .hero-banner__dot:focus-visible {

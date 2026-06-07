@@ -28,7 +28,7 @@ const { Title, Text } = Typography;
 function SignupSuccess({ onSignIn }: { onSignIn: () => void }) {
   const { colors } = useTheme();
   const primaryBtn: React.CSSProperties = {
-    background: colors.accent,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
     height: 50,
     borderRadius: 10,
@@ -40,7 +40,7 @@ function SignupSuccess({ onSignIn }: { onSignIn: () => void }) {
       <Flex
         align="center"
         justify="center"
-        style={{ width: 80, height: 80, borderRadius: "50%", background: "rgba(82,196,26,0.12)" }}
+        style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: "rgba(82,196,26,0.12)" }}
       >
         <CheckCircleFilled style={{ fontSize: 38, color: "#52c41a" }} />
       </Flex>
@@ -76,7 +76,7 @@ export default function Signup() {
   const signupMutation = useSignupMutation();
 
   const primaryBtn: React.CSSProperties = {
-    background: colors.accent,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
     height: 50,
     borderRadius: 10,
@@ -177,7 +177,7 @@ export default function Signup() {
       <Card
         style={{
           width: "100%",
-          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          backgroundColor: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
           border: `1px solid ${colors.border}`,
           borderRadius: 16,
           boxShadow: isDark

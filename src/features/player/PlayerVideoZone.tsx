@@ -95,7 +95,7 @@ export default function PlayerVideoZone({
         gap="small"
         align="center"
         justify="space-between"
-        style={{ background: colors.bgBase, padding: "0.5rem", position: "relative" }}
+        style={{ backgroundColor: colors.bgBase, padding: "0.5rem", position: "relative" }}
       >
         {isTv && (
           <TvEpisodeSelector

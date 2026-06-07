@@ -22,7 +22,7 @@ export default function EmailPreview() {
     <div
       style={{
         minHeight: "100dvh",
-        background: colors.bgBase,
+        backgroundColor: colors.bgBase,
         padding: "32px 48px",
       }}
     >
@@ -51,7 +51,7 @@ export default function EmailPreview() {
           border: `1px solid ${colors.border}`,
           borderRadius: 12,
           overflow: "hidden",
-          background: "#07070f",
+          backgroundColor: "#07070f",
         }}
       >
         <iframe

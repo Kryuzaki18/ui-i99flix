@@ -30,7 +30,7 @@ export default function AppSplash({ visible, slowStart = false }: AppSplashProps
         alignItems: 'center',
         justifyContent: 'center',
         gap: 24,
-        background: '#0d0d1a',
+        backgroundColor: '#0d0d1a',
         zIndex: 9999,
         opacity: visible ? 1 : 0,
         transition: `opacity ${FADE_DURATION}ms ease`,
@@ -43,7 +43,7 @@ export default function AppSplash({ visible, slowStart = false }: AppSplashProps
           width: 180,
           height: 3,
           borderRadius: 2,
-          background: 'rgba(255,255,255,0.08)',
+          backgroundColor: 'rgba(255,255,255,0.08)',
           overflow: 'hidden',
           position: 'relative',
         }}
@@ -55,7 +55,7 @@ export default function AppSplash({ visible, slowStart = false }: AppSplashProps
             left: 0,
             height: '100%',
             width: '40%',
-            background: darkColors.accent,
+            backgroundColor: darkColors.accent,
             borderRadius: 2,
             animation: 'splashBar 1.4s ease-in-out infinite',
           }}

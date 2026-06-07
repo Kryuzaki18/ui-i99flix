@@ -34,7 +34,7 @@ function IconBadge({ icon, bg }: { icon: React.ReactNode; bg: string }) {
     <Flex
       align="center"
       justify="center"
-      style={{ width: 80, height: 80, borderRadius: "50%", background: bg }}
+      style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: bg }}
     >
       {icon}
     </Flex>
@@ -51,7 +51,7 @@ export default function ResetPassword() {
   const token = searchParams.get("token") ?? "";
 
   const primaryBtn: React.CSSProperties = {
-    background: colors.accent,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
     height: 50,
     borderRadius: 10,
@@ -199,7 +199,7 @@ export default function ResetPassword() {
       <Card
         style={{
           width: "100%",
-          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          backgroundColor: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
           border: `1px solid ${colors.border}`,
           borderRadius: 16,
           boxShadow: isDark

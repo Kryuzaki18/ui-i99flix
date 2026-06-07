@@ -71,7 +71,7 @@ export default function Profile() {
             items={MENU_ITEMS}
             onClick={({ key }) => setSection(key as ProfileSection)}
             className="profile__menu"
-            style={{ background: "transparent", border: "none" }}
+            style={{ backgroundColor: "transparent", border: "none" }}
           />
         </Col>
 

@@ -71,7 +71,7 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
       align="stretch"
       className="movie-list-row"
       style={{
-        background: colors.bgCard,
+        backgroundColor: colors.bgCard,
         border: `1px solid ${colors.border}`,
       }}
     >
@@ -155,7 +155,7 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
               icon={<PlayCircleOutlined />}
               onClick={() => onPlay(movie)}
               aria-label={`Play ${movie.title}`}
-              style={{ background: colors.accent, borderColor: colors.accent }}
+              style={{ backgroundColor: colors.accent, borderColor: colors.accent }}
             />
           </Tooltip>
           <Tooltip title="More Info" trigger={TOOLTIP_TRIGGER}>

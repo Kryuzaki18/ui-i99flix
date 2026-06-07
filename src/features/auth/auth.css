@@ -155,7 +155,7 @@
 
 .auth-showcase__info-badge {
   display: inline-flex;
-  background: rgba(229, 9, 20, 0.9);
+  background-color: rgba(229, 9, 20, 0.9);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -212,7 +212,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.35);
   transition: all 0.3s ease;
   cursor: pointer;
   border: none;
@@ -227,7 +227,7 @@
 }
 
 .auth-showcase__dot.is-active {
-  background: #e50914;
+  background-color: #e50914;
   width: 28px;
   border-radius: 5px;
 }

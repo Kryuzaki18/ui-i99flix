@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
 
       <Section title="4. Cookies and Sessions">
         <P>
-          i99flix uses a single secure, httpOnly cookie named <code style={{ background: 'rgba(229,9,20,0.1)', padding: '2px 6px', borderRadius: 4, fontSize: 13 }}>session</code> to
+          i99flix uses a single secure, httpOnly cookie named <code style={{ backgroundColor: 'rgba(229,9,20,0.1)', padding: '2px 6px', borderRadius: 4, fontSize: 13 }}>session</code> to
           maintain your login state. This cookie:
         </P>
         <Ul items={[

@@ -28,7 +28,7 @@ export default function PlayerMeta({
   return (
     <div
       className="player-page__info"
-      style={{ background: colors.bgBase, borderTop: `1px solid ${colors.border}`, flex: 1 }}
+      style={{ backgroundColor: colors.bgBase, borderTop: `1px solid ${colors.border}`, flex: 1 }}
     >
       <div className="player-page__info-inner">
         <div className="player-page__info-main">

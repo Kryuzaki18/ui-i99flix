@@ -94,7 +94,7 @@ function MovieDetailDrawerInner({
       open={open}
       onClose={onClose}
       styles={{
-        body: { background: colors.bgBase, padding: 0 },
+        body: { backgroundColor: colors.bgBase, padding: 0 },
         header: { textAlign: "center", fontWeight: "bold" },
         mask: { backdropFilter: "blur(4px)" },
       }}
@@ -106,7 +106,7 @@ function MovieDetailDrawerInner({
     >
       <div
         className="detail-drawer__backdrop-wrap"
-        style={{ background: colors.skeletonBg }}
+        style={{ backgroundColor: colors.skeletonBg }}
       >
         {!imgLoaded && (
           <Skeleton.Image active className="detail-drawer__skeleton-img" />

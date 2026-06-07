@@ -25,7 +25,7 @@ export default function LegalLayout({
   const { colors } = useTheme();
 
   return (
-    <Layout style={{ minHeight: '100dvh', background: colors.bgBase }}>
+    <Layout style={{ minHeight: '100dvh', backgroundColor: colors.bgBase }}>
       <div
         style={{
           borderBottom: `1px solid ${colors.border}`,
@@ -33,7 +33,7 @@ export default function LegalLayout({
           display: 'flex',
           alignItems: 'center',
           gap: 16,
-          background: colors.bgBase,
+          backgroundColor: colors.bgBase,
           position: 'sticky',
           top: 0,
           zIndex: 10,

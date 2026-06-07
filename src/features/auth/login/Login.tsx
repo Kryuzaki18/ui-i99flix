@@ -108,7 +108,7 @@ export default function Login() {
       <Card
         style={{
           width: "100%",
-          background: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
+          backgroundColor: isDark ? "rgba(255,255,255,0.04)" : colors.bgCard,
           border: `1px solid ${colors.border}`,
           borderRadius: 16,
           boxShadow: isDark
@@ -205,7 +205,7 @@ export default function Login() {
               }
               iconPlacement="end"
               style={{
-                background: colors.accent,
+                backgroundColor: colors.accent,
                 borderColor: colors.accent,
                 height: 50,
                 borderRadius: 10,

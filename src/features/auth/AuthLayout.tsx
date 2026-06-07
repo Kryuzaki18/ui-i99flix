@@ -15,7 +15,7 @@ export default function AuthLayout() {
   const { colors } = useTheme();
 
   return (
-    <Flex className="auth-layout" style={{ background: colors.bgBase }}>
+    <Flex className="auth-layout" style={{ backgroundColor: colors.bgBase }}>
       <AuthShowcase />
 
       <Flex
@@ -23,7 +23,7 @@ export default function AuthLayout() {
         align="center"
         justify="space-between"
         className="auth-panel"
-        style={{ background: colors.bgBase, flexShrink: 0 }}
+        style={{ backgroundColor: colors.bgBase, flexShrink: 0 }}
       >
         <Flex
           className="auth-panel__inner"

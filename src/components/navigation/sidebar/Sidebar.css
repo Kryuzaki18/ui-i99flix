@@ -12,7 +12,7 @@
 }
 
 .sidebar__logo-text {
-  font-size: 18px !important;
+  font-size: 18px;
   letter-spacing: -0.5px;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .sidebar__avatar {
-  background: #e50914 !important;
+  background-color: #e50914;
 }
 
 .sidebar__user-name {
@@ -34,8 +34,8 @@
 }
 
 .sidebar__menu {
-  background: transparent !important;
-  border: none !important;
+  background-color: transparent;
+  border: none;
   padding: 8px 0;
 }
 

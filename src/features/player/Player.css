@@ -59,7 +59,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #000;
+  background-color: #000;
   max-height: 72dvh;
   overflow: hidden;
 }
@@ -81,7 +81,7 @@
 .player-page__iframe-wrap {
   position: relative;
   overflow: hidden;
-  background: #000;
+  background-color: #000;
 }
 
 .player-page__iframe {

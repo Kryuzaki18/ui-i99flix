@@ -23,7 +23,7 @@ function StatCard({ icon, value, label }: StatCardProps) {
     <div
       style={{
         flex: '1 1 160px',
-        background: colors.bgCard,
+        backgroundColor: colors.bgCard,
         border: `1px solid ${colors.border}`,
         borderRadius: 12,
         padding: '24px 20px',
@@ -96,7 +96,7 @@ export default function About() {
             <div
               key={title}
               style={{
-                background: colors.bgCard,
+                backgroundColor: colors.bgCard,
                 border: `1px solid ${colors.border}`,
                 borderRadius: 10,
                 padding: '18px 16px',
@@ -119,7 +119,7 @@ export default function About() {
             <span
               key={tech}
               style={{
-                background: 'rgba(229,9,20,0.1)',
+                backgroundColor: 'rgba(229,9,20,0.1)',
                 border: '1px solid rgba(229,9,20,0.25)',
                 color: darkColors.accent,
                 borderRadius: 6,
