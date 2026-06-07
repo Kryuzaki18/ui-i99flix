@@ -58,4 +58,9 @@ export const tmdbKeys = {
   searchMulti: (params: object) => [...tmdbKeys.all, 'search', params] as const,
   genresMovie: ()               => [...tmdbKeys.all, 'genres', 'movie'] as const,
   genresTv:    ()               => [...tmdbKeys.all, 'genres', 'tv']    as const,
+
+  showcase: {
+    all:     ()           => [...tmdbKeys.all, 'showcase']               as const,
+    trailer: (id: number) => [...tmdbKeys.showcase.all(), 'trailer', id] as const,
+  },
 } as const;

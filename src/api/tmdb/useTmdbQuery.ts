@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { tmdbKeys } from '../queryKeys';
 import {
+  fetchShowcaseTrailer,
   fetchTmdbMoviesPopular,
   fetchTmdbMoviesTopRated,
   fetchTmdbMoviesNowPlaying,
@@ -34,6 +35,15 @@ import {
 
 const LIST_STALE_TIME   = 5  * 60 * 1000;
 const DETAIL_STALE_TIME = 10 * 60 * 1000;
+
+export function useShowcaseTrailerQuery(id: number | null) {
+  return useQuery({
+    queryKey: tmdbKeys.showcase.trailer(id ?? 0),
+    queryFn:  () => fetchShowcaseTrailer(id!),
+    enabled:  id !== null && id > 0,
+    staleTime: DETAIL_STALE_TIME,
+  });
+}
 
 export function useTmdbMoviesPopularQuery(params: PageParams = {}) {
   return useQuery({

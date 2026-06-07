@@ -343,6 +343,14 @@ export async function fetchTmdbSearchMulti(
   });
 }
 
+export async function fetchShowcaseTrailer(
+  id: number,
+  options?: { signal?: AbortSignal },
+): Promise<TmdbVideosResponse> {
+  const safeId = validateId(id, 'movieId');
+  return apiGet(API_ROUTES.TMDB.SHOWCASE_TRAILER(safeId), { signal: options?.signal });
+}
+
 export async function fetchTmdbGenresMovie(
   options?: { signal?: AbortSignal },
 ): Promise<{ genres: TmdbGenre[] }> {

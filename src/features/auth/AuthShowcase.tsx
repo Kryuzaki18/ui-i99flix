@@ -20,7 +20,6 @@ import {
   tmdbMovieListItemToMovie,
   buildGenreMap,
 } from "../../utils/tmdbAdapter";
-import { useTrailerModal } from "./useTrailerModal";
 import TrailerModal from "./TrailerModal";
 
 const SLIDE_INTERVAL = 5000;
@@ -63,7 +62,19 @@ export default function AuthShowcase() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const trailer = useTrailerModal();
+  const [trailerOpen, setTrailerOpen] = useState(false);
+  const [trailerMovie, setTrailerMovie] = useState<Movie | null>(null);
+
+  const openTrailer = useCallback((e: React.MouseEvent, movie: Movie) => {
+    e.stopPropagation();
+    setTrailerMovie(movie);
+    setTrailerOpen(true);
+  }, []);
+
+  const closeTrailer = useCallback(() => {
+    setTrailerOpen(false);
+    setTrailerMovie(null);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -222,7 +233,7 @@ export default function AuthShowcase() {
                 <Button
                   icon={<PlayCircleOutlined />}
                   className="auth-showcase__trailer-btn"
-                  onClick={(e) => trailer.openTrailer(e, movie)}
+                  onClick={(e) => openTrailer(e, movie)}
                 >
                   Watch Trailer
                 </Button>
@@ -267,7 +278,7 @@ export default function AuthShowcase() {
                     align="center"
                     justify="center"
                     className="auth-showcase__card-trailer-overlay"
-                    onClick={(e) => trailer.openTrailer(e, movie)}
+                    onClick={(e) => openTrailer(e, movie)}
                     aria-label={`Watch trailer for ${movie.title}`}
                   >
                     <PlayCircleOutlined className="auth-showcase__card-trailer-icon" />
@@ -307,11 +318,9 @@ export default function AuthShowcase() {
       )}
 
       <TrailerModal
-        open={trailer.open}
-        title={trailer.title}
-        trailerKey={trailer.trailerKey}
-        loading={trailer.loading}
-        onClose={trailer.closeTrailer}
+        open={trailerOpen}
+        movie={trailerMovie}
+        onClose={closeTrailer}
       />
     </div>
   );
