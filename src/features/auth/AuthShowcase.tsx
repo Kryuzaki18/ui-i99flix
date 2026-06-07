@@ -4,6 +4,7 @@ import {
   FireFilled,
   LeftOutlined,
   RightOutlined,
+  PlayCircleOutlined,
 } from "@ant-design/icons";
 import { Tag, Flex, Button } from "antd";
 import { GENRE_COLORS } from "../../constants/genres";
@@ -11,11 +12,16 @@ import { API_ROUTES } from "../../api/environments";
 import { useTmdbStore } from "../../store/tmdbStore";
 import type { Movie } from "../../models/movieModel";
 import type { TmdbMovieListItem } from "../../models/tmdbModel";
-import { fetchTmdbGenresMovie, fetchTmdbGenresTv } from "../../api/tmdb/tmdbApi";
+import {
+  fetchTmdbGenresMovie,
+  fetchTmdbGenresTv,
+} from "../../api/tmdb/tmdbApi";
 import {
   tmdbMovieListItemToMovie,
   buildGenreMap,
 } from "../../utils/tmdbAdapter";
+import { useTrailerModal } from "./useTrailerModal";
+import TrailerModal from "./TrailerModal";
 
 const SLIDE_INTERVAL = 5000;
 const SHOWCASE_COUNT = 10;
@@ -56,6 +62,9 @@ export default function AuthShowcase() {
   const [canRight, setCanRight] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const trailer = useTrailerModal();
+
   useEffect(() => {
     let cancelled = false;
     fetchShowcaseMovies()
@@ -135,6 +144,7 @@ export default function AuthShowcase() {
     [goToSlide],
   );
 
+
   return (
     <div className="auth-showcase">
       {movies.map((movie, i) => (
@@ -167,6 +177,7 @@ export default function AuthShowcase() {
                   align="center"
                   gap={6}
                   className="auth-showcase__info-badge"
+                  style={{ display: "inline-flex" }}
                 >
                   <FireFilled />
                   Trending
@@ -208,6 +219,13 @@ export default function AuthShowcase() {
                     {movie.description}
                   </p>
                 )}
+                <Button
+                  icon={<PlayCircleOutlined />}
+                  className="auth-showcase__trailer-btn"
+                  onClick={(e) => trailer.openTrailer(e, movie)}
+                >
+                  Watch Trailer
+                </Button>
               </div>
             ))}
           </div>
@@ -245,7 +263,15 @@ export default function AuthShowcase() {
                   style={{ flexShrink: 0 }}
                 >
                   <img src={movie.thumbnail} alt={movie.title} loading="lazy" />
-                  <div className="auth-showcase__card-label">{movie.title}</div>
+                  <Flex
+                    align="center"
+                    justify="center"
+                    className="auth-showcase__card-trailer-overlay"
+                    onClick={(e) => trailer.openTrailer(e, movie)}
+                    aria-label={`Watch trailer for ${movie.title}`}
+                  >
+                    <PlayCircleOutlined className="auth-showcase__card-trailer-icon" />
+                  </Flex>
                 </div>
               ))}
             </Flex>
@@ -279,6 +305,14 @@ export default function AuthShowcase() {
           )}
         </Flex>
       )}
+
+      <TrailerModal
+        open={trailer.open}
+        title={trailer.title}
+        trailerKey={trailer.trailerKey}
+        loading={trailer.loading}
+        onClose={trailer.closeTrailer}
+      />
     </div>
   );
 }

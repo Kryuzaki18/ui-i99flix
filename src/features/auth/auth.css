@@ -75,6 +75,7 @@
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+  position: relative;
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -127,6 +128,30 @@
   display: block;
 }
 
+.auth-showcase__card-trailer-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.auth-showcase__movie-card:hover .auth-showcase__card-trailer-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
+.auth-showcase__card-trailer-icon {
+  font-size: 26px;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+}
+
+.auth-showcase__movie-card:hover .auth-showcase__card-trailer-icon {
+  opacity: 1;
+}
+
 .auth-showcase__card-label {
   display: none;
 }
@@ -146,7 +171,7 @@
 
 .auth-showcase__info {
   position: relative;
-  min-height: 140px;
+  min-height: 190px;
 }
 
 .auth-showcase__info-content {
@@ -165,7 +190,6 @@
 }
 
 .auth-showcase__info-badge {
-  display: inline-flex;
   background-color: rgba(229, 9, 20, 0.9);
   color: #fff;
   font-size: 11px;
@@ -214,6 +238,25 @@
   overflow: hidden;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   max-height: calc(1.5em * 2);
+}
+
+.auth-showcase__trailer-btn {
+  margin-top: 12px;
+  background-color: rgba(229, 9, 20, 0.85) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  height: 36px !important;
+  border-radius: 20px !important;
+  padding-inline: 18px !important;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.2s ease, transform 0.15s ease !important;
+}
+
+.auth-showcase__trailer-btn:hover {
+  background-color: rgba(229, 9, 20, 1) !important;
+  transform: scale(1.03);
 }
 
 .auth-showcase__dots {
@@ -326,11 +369,20 @@
   }
 }
 
+
 .auth-panel__theme-toggle {
   position: absolute;
   top: 12px;
   right: 12px;
   z-index: 2;
+}
+
+[data-theme="light"] .auth-autofill-override input:-webkit-autofill,
+[data-theme="light"] .auth-autofill-override input:-webkit-autofill:hover,
+[data-theme="light"] .auth-autofill-override input:-webkit-autofill:focus,
+[data-theme="light"] .auth-autofill-override input:-webkit-autofill:active {
+  --autofill-text: #111111;
+  --autofill-bg: #ffffff;
 }
 
 .auth-panel__inner {
@@ -348,13 +400,6 @@
   caret-color: var(--autofill-text, #ffffff);
 }
 
-[data-theme="light"] .auth-autofill-override input:-webkit-autofill,
-[data-theme="light"] .auth-autofill-override input:-webkit-autofill:hover,
-[data-theme="light"] .auth-autofill-override input:-webkit-autofill:focus,
-[data-theme="light"] .auth-autofill-override input:-webkit-autofill:active {
-  --autofill-text: #111111;
-  --autofill-bg: #ffffff;
-}
 
 .auth-panel__footer {
   width: 100%;

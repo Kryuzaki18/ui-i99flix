@@ -36,6 +36,7 @@ export const API_ROUTES = {
 
   TMDB: {
     SHOWCASE: `${API_BASE}/tmdb/showcase`,
+    SHOWCASE_TRAILER: (id: number) => `${API_BASE}/tmdb/showcase/trailer/${id}`,
     MOVIES: {
       POPULAR: `${API_BASE}/tmdb/movies/popular`,
       TOP_RATED: `${API_BASE}/tmdb/movies/top-rated`,

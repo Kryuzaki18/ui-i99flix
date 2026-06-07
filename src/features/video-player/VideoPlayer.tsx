@@ -38,20 +38,18 @@ export default function VideoPlayer({
   const [manualEpisode, setManualEpisode] = useState<number | null>(null);
   const { colors } = useTheme();
   const recordWatch = useRecordWatchMutation();
-
   const { data: watchHistory } = useWatchHistoryQuery();
 
   const watchEntry = useMemo(
     () => watchHistory?.find((e) => movie && e.movieId === String(movie.id)),
     [watchHistory, movie],
   );
+  const wasWatched = !!watchEntry;
 
   const watchedEpisodes = useMemo(() => {
     if (!watchEntry?.episodes?.length) return new Set<string>();
     return new Set(watchEntry.episodes.map((ep) => `${ep.season}-${ep.episode}`));
   }, [watchEntry]);
-
-  const wasWatched = !!watchEntry;
 
   const lastWatched = useMemo(() => {
     if (!open || movie?.mediaType !== 'tv' || !watchEntry?.episodes?.length) return null;
