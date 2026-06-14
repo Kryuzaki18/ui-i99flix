@@ -32,6 +32,7 @@ export default function TrailerModal({ open, movie, onClose }: TrailerModalProps
     <Modal
       open={open}
       onCancel={onClose}
+      mask={{ closable: false }}
       footer={null}
       centered
       width="80vw"
