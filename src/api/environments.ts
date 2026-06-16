@@ -100,6 +100,12 @@ export const EMBED_SERVERS: EmbedServer[] = [
   {
     label: "player.videasy", //https://www.videasy.net/docs
     movie: (id) => `https://player.videasy.net/movie/${id}?autoplay=1`,
-    tv: (id, s, e) => `https://player.videasy.net/tv/${id}/${s}/${e}?autoplay=1`,
-  }
+    tv: (id, s, e) =>
+      `https://player.videasy.net/tv/${id}/${s}/${e}?autoplay=1`,
+  },
+  {
+    label: "vsembed.su",
+    movie: (id) => `https://vsembed.su/embed/movie/${id}?autoplay=1`,
+    tv: (id, s, e) => `https://vsembed.su/embed/tv/${id}/${s}/${e}?autoplay=1`,
+  },
 ];
