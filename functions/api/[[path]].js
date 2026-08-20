@@ -5,9 +5,12 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const targetUrl = `${API_URL}/${path}${url.search}`;
 
+  const headers = new Headers(request.headers);
+  headers.delete('host');
+
   const proxyRequest = new Request(targetUrl, {
     method:  request.method,
-    headers: request.headers,
+    headers,
     body:    ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
     redirect: 'follow',
   });
