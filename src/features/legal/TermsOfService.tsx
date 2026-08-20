@@ -148,7 +148,7 @@ export default function TermsOfService() {
       <Section title="12. Contact">
         <P>
           If you have questions about these Terms of Service, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>.
+          <a href="mailto:app.i99flix@gmail.com" style={{ color: darkColors.accent }}>app.i99flix@gmail.com</a>.
         </P>
       </Section>
     </LegalLayout>

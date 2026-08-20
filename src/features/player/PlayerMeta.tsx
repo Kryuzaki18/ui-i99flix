@@ -1,4 +1,5 @@
 import { Typography, Space, Tag, Flex } from "antd";
+import { StarFilled } from "@ant-design/icons";
 import CastSection from "../../components/ui/cast-section/CastSection";
 import ExpandableText from "../../components/ui/expandable-text/ExpandableText";
 import { useTheme } from "../../context/ThemeContext";
@@ -49,7 +50,9 @@ export default function PlayerMeta({
             )}
             <Flex vertical gap={2} className="player-page__meta-item">
               <Text className="player-page__meta-label" style={{ color: colors.textMuted }}>Rating</Text>
-              <Text strong style={{ color: colors.starRating }}>★ {movie.rating}</Text>
+              <Text strong style={{ color: colors.starRating }}>
+                <StarFilled /> {movie.rating}
+              </Text>
             </Flex>
           </Flex>
 

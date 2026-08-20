@@ -93,7 +93,7 @@ export default function PrivacyPolicy() {
         <P>
           Your account data is retained for as long as your account is active. If you
           wish to delete your account and all associated data, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>{' '}
+          <a href="mailto:app.i99flix@gmail.com" style={{ color: darkColors.accent }}>app.i99flix@gmail.com</a>{' '}
           and we will process your request within 30 days.
         </P>
       </Section>
@@ -134,7 +134,7 @@ export default function PrivacyPolicy() {
       <Section title="10. Contact">
         <P>
           For privacy-related questions or data deletion requests, contact us at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>kjedumapit@gmail.com</a>.
+          <a href="mailto:app.i99flix@gmail.com" style={{ color: darkColors.accent }}>app.i99flix@gmail.com</a>.
         </P>
       </Section>
     </LegalLayout>

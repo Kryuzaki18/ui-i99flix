@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Button, Spin, Result, Flex } from "antd";
-import { SunOutlined, MoonOutlined } from "@ant-design/icons";
+import { SunOutlined, MoonOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useMovieDetailQuery } from "../../api/tmdb/useMoviesQuery";
 import {
   useTmdbTvDetailQuery,
@@ -35,7 +35,7 @@ function PlayerHeader() {
       }}
     >
       <Link to="/" className="player-page__back-link" style={{ flexShrink: 0 }}>
-        <Button type="text" icon={<span>←</span>}>
+        <Button type="text" icon={<ArrowLeftOutlined />}>
           <span className="player-page__back-label">Back</span>
         </Button>
       </Link>

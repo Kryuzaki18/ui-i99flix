@@ -1,7 +1,13 @@
-import { Typography } from 'antd';
+import { Flex, Typography } from 'antd';
 import {
   PlayCircleOutlined,
   TeamOutlined,
+  VideoCameraOutlined,
+  SearchOutlined,
+  SafetyCertificateOutlined,
+  BulbOutlined,
+  MobileOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../../context/ThemeContext';
 import LegalLayout from './LegalLayout';
@@ -86,12 +92,12 @@ export default function About() {
       <Section title="What we offer">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16, marginBottom: 8 }}>
           {[
-            { icon: '🎬', title: 'Vast Library', desc: 'Thousands of movies and TV shows across every genre.' },
-            { icon: '🔍', title: 'Smart Discovery', desc: 'Browse trending, top-rated, and upcoming titles.' },
-            { icon: '🔐', title: 'Secure Accounts', desc: 'Email/password and social sign-in with JWT sessions.' },
-            { icon: '🌙', title: 'Dark & Light', desc: 'Full dark and light theme support.' },
-            { icon: '📱', title: 'Responsive', desc: 'Works on desktop, tablet, and mobile.' },
-            { icon: '⚡', title: 'Fast', desc: 'Built with Vite, React 19, and a lean Fastify API.' },
+            { icon: <VideoCameraOutlined />, title: 'Vast Library', desc: 'Thousands of movies and TV shows across every genre.' },
+            { icon: <SearchOutlined />, title: 'Smart Discovery', desc: 'Browse trending, top-rated, and upcoming titles.' },
+            { icon: <SafetyCertificateOutlined />, title: 'Secure Accounts', desc: 'Email/password and social sign-in with JWT sessions.' },
+            { icon: <BulbOutlined />, title: 'Dark & Light', desc: 'Full dark and light theme support.' },
+            { icon: <MobileOutlined />, title: 'Responsive', desc: 'Works on desktop, tablet, and mobile.' },
+            { icon: <ThunderboltOutlined />, title: 'Fast', desc: 'Built with Vite, React 19, and a lean Fastify API.' },
           ].map(({ icon, title, desc }) => (
             <div
               key={title}
@@ -101,10 +107,15 @@ export default function About() {
                 borderRadius: 10,
                 padding: '18px 16px',
               }}
-            >
-              <div style={{ fontSize: 24, marginBottom: 8 }}>{icon}</div>
-              <div style={{ fontWeight: 700, color: colors.textPrimary, marginBottom: 4 }}>{title}</div>
+            > 
+            <Flex vertical gap={2}>
+              <Flex align="center" gap={8}>
+                <span style={{ fontSize: 22, color: darkColors.accent }}>{icon}</span>
+                <span style={{ fontWeight: 700, color: colors.textPrimary }}>{title}</span>
+              </Flex>
               <Text style={{ color: colors.textMuted, fontSize: 13 }}>{desc}</Text>
+            </Flex>
+              
             </div>
           ))}
         </div>
@@ -150,8 +161,8 @@ export default function About() {
       <Section title="Contact">
         <P>
           For questions, feedback, or takedown requests, reach out at{' '}
-          <a href="mailto:kjedumapit@gmail.com" style={{ color: darkColors.accent }}>
-            kjedumapit@gmail.com
+          <a href="mailto:app.i99flix@gmail.com" style={{ color: darkColors.accent }}>
+            app.i99flix@gmail.com
           </a>
           .
         </P>

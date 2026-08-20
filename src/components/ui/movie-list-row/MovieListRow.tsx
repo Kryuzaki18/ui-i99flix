@@ -7,6 +7,7 @@ import {
   HeartOutlined,
   HeartFilled,
   PictureOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 
 import type { Movie } from "../../../models/movieModel";
@@ -146,7 +147,9 @@ function MovieListRowInner({ movie, onPlay, onDetail }: MovieListRowProps) {
         style={{ flexShrink: 0 }}
         className="movie-list-row__actions"
       >
-        <Text className="movie-list-row__rating">★ {movie.rating}</Text>
+        <Text className="movie-list-row__rating">
+          <StarFilled /> {movie.rating}
+        </Text>
         <Space size={8}>
           <Tooltip title="Play" trigger={TOOLTIP_TRIGGER}>
             <Button
