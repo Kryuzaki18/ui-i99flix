@@ -18,8 +18,8 @@ export default function ScrollableRow({ children, scrollAmount = 120 }: Scrollab
     if (!el) return;
 
     const check = () => {
-      setCanScrollLeft(el.scrollLeft > 1);
-      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+      setCanScrollLeft(el.scrollLeft > 4);
+      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
     };
 
     check();

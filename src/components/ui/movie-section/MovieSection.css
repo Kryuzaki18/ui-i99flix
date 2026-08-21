@@ -3,10 +3,11 @@
   flex-wrap: nowrap;
   width: max-content;
   gap: 16px;
-  padding: 4px 2px 12px;
+  padding: 4px 0 12px;
 }
 
 .movie-section__item {
   flex: 0 0 auto;
   width: 270px;
+  scroll-snap-align: start;
 }
