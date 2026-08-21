@@ -1,12 +1,10 @@
 .scrollable-row {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+  position: relative;
   width: 100%;
 }
 
 .scrollable-row__track {
-  flex: 1;
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -18,8 +16,33 @@
 }
 
 .scrollable-row__arrow {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 28px !important;
+  height: 28px !important;
   padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(20, 20, 20, 0.9) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(172, 167, 167, 0.5) !important;
+}
+
+.scrollable-row__arrow:hover {
+  background-color: rgba(20, 20, 20, 0.9) !important;
+}
+
+.scrollable-row__arrow--left {
+  left: 4px;
+}
+
+.scrollable-row__arrow--right {
+  right: 4px;
 }
 
 .scrollable-row__arrow .anticon {
@@ -27,6 +50,11 @@
 }
 
 @media (min-width: 768px) {
+  .scrollable-row__arrow {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
   .scrollable-row__arrow .anticon {
     font-size: 14px;
   }

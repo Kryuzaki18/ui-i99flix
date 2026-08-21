@@ -1,9 +1,11 @@
-import { Typography, Row, Col, Space, Flex } from 'antd';
+import { Typography, Space, Flex } from 'antd';
 import MovieCard from '../movie-card/MovieCard';
 import MovieListRow from '../movie-list-row/MovieListRow';
 import { MovieCardSkeleton, MovieListRowSkeleton } from '../movie-card-skeleton/MovieCardSkeleton';
+import ScrollableRow from '../scrollable-row/ScrollableRow';
 import { usePlayerStore } from '../../../store/playerStore';
 import type { Movie } from '../../../models/movieModel';
+import './MovieSection.css';
 
 const { Title } = Typography;
 
@@ -21,14 +23,14 @@ export default function MovieSection({ id, title, icon, movies, isLoading, layou
 
   const gridContent = isLoading
     ? Array.from({ length: 8 }).map((_, i) => (
-        <Col key={i} xs={24} sm={12} md={8} lg={6} xl={6}>
+        <div key={i} className="movie-section__item">
           <MovieCardSkeleton />
-        </Col>
+        </div>
       ))
     : movies.map((movie) => (
-        <Col key={movie.id} xs={24} sm={12} md={8} lg={6} xl={6}>
+        <div key={movie.id} className="movie-section__item">
           <MovieCard movie={movie} onPlay={playMovie} onDetail={openDetail} />
-        </Col>
+        </div>
       ));
 
   const listContent = isLoading
@@ -49,7 +51,9 @@ export default function MovieSection({ id, title, icon, movies, isLoading, layou
       </Flex>
 
       {layout === 'grid' ? (
-        <Row gutter={[16, 16]}>{gridContent}</Row>
+        <ScrollableRow scrollAmount={640}>
+          <div className="movie-section__track">{gridContent}</div>
+        </ScrollableRow>
       ) : (
         <Space orientation="vertical" size={12} style={{ width: '100%' }}>
           {listContent}

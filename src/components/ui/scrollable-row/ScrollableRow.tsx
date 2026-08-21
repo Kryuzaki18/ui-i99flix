@@ -35,8 +35,6 @@ export default function ScrollableRow({ children, scrollAmount = 120 }: Scrollab
     };
   }, []);
 
-  const hasArrows = canScrollLeft || canScrollRight;
-
   const scrollTo = (dir: 'left' | 'right') =>
     scrollRef.current?.scrollBy({
       left: dir === 'left' ? -scrollAmount : scrollAmount,
@@ -45,27 +43,27 @@ export default function ScrollableRow({ children, scrollAmount = 120 }: Scrollab
 
   return (
     <div className="scrollable-row">
-      {hasArrows && (
-        <Button
-          type="text"
-          icon={<LeftOutlined />}
-          onClick={() => canScrollLeft && scrollTo('left')}
-          aria-label="Scroll left"
-          className="scrollable-row__arrow"
-        />
-      )}
-
       <div ref={scrollRef} className="scrollable-row__track">
         {children}
       </div>
 
-      {hasArrows && (
+      {canScrollLeft && (
+        <Button
+          type="text"
+          icon={<LeftOutlined />}
+          onClick={() => scrollTo('left')}
+          aria-label="Scroll left"
+          className="scrollable-row__arrow scrollable-row__arrow--left"
+        />
+      )}
+
+      {canScrollRight && (
         <Button
           type="text"
           icon={<RightOutlined />}
-          onClick={() => canScrollRight && scrollTo('right')}
+          onClick={() => scrollTo('right')}
           aria-label="Scroll right"
-          className="scrollable-row__arrow"
+          className="scrollable-row__arrow scrollable-row__arrow--right"
         />
       )}
     </div>

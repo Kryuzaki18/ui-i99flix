@@ -1,0 +1,12 @@
+.movie-section__track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  gap: 16px;
+  padding: 4px 2px 12px;
+}
+
+.movie-section__item {
+  flex: 0 0 auto;
+  width: 270px;
+}
